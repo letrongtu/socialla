@@ -1,7 +1,20 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: "/dashboard/:path*",
+        has: [
+          {
+            type: "cookie",
+            key: "token", // Check if the cookie exists
+          },
+        ],
+        destination: "/login", // Redirect to login if the token is not present
+      },
+    ];
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
