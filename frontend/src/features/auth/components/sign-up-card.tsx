@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { SignInFlow } from "../types";
+import { toast } from "sonner";
+import { setCookie } from "cookies-next";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,10 +14,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { CircleHelp, Eye, EyeClosed } from "lucide-react";
+import { CircleHelp, Eye, EyeClosed, TriangleAlert } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+
 import { DatePicker } from "./date-picker";
+import { UseUserSignUp } from "../api/use-user-signup";
 
 interface SignUpCardProps {
   setState: (state: SignInFlow) => void;
@@ -24,18 +29,70 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [date, setDate] = useState<Date>();
+  const [errorMessages, setErrorMessages] = useState<string[] | null>(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const { signUp, isPending } = UseUserSignUp();
+
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    signUp(
+      { firstName, lastName, date, email, password },
+      {
+        onSuccess: (response) => {
+          toast.success(response?.message);
+
+          setState("signIn");
+          clearForm();
+        },
+        onError: (error) => {
+          if (Array.isArray(error.response?.data)) {
+            const errorMessages = error.response?.data.map(
+              (error) => error.description
+            );
+            setErrorMessages(errorMessages);
+          } else {
+            setErrorMessages([error.response?.data as string]);
+          }
+        },
+        onSettled: () => {
+          setTimeout(() => {
+            setErrorMessages(null);
+          }, 5000);
+        },
+      }
+    );
+  };
+
+  const clearForm = () => {
+    setFirstName("");
+    setLastName("");
+    setDate(undefined);
+    setEmail("");
+    setPassword("");
+  };
 
   return (
     <Card className="w-full h-full p-8 bg-[#ffffff] shadow-lg">
       <CardContent className="space-y-5 px-0 pb-0">
         <div className="flex flex-col">
           <div className="flex flex-col gap-y-3 items-center">
+            {errorMessages && (
+              <div className="w-full p-2 rounded-sm bg-rose-200 space-y-1">
+                <TriangleAlert className="size-5 text-rose-500" />
+                {errorMessages.map((errorMessage) => (
+                  <p key={errorMessage} className="text-sm text-rose-500">
+                    {errorMessage}
+                  </p>
+                ))}
+              </div>
+            )}
+
             <Button
-              disabled={false}
+              disabled={isPending}
               onClick={() => {}}
               variant="outline"
               className="w-full h-[50px] relative"
@@ -45,7 +102,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
             </Button>
 
             <Button
-              disabled={false}
+              disabled={isPending}
               onClick={() => {}}
               variant="outline"
               className="w-full h-[50px] relative"
@@ -61,12 +118,12 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
             <Separator className="w-[43%]" />
           </div>
 
-          <form className="space-y-3">
+          <form onSubmit={handleSignUp} className="space-y-3">
             <div className="flex gap-x-3">
               <Input
                 className="focus-visible:shadow-md focus-visible:shadow-[#283959]"
-                disabled={false}
-                value=""
+                disabled={isPending}
+                value={firstName}
                 onChange={(e) => {
                   setFirstName(e.target.value);
                 }}
@@ -77,8 +134,8 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
 
               <Input
                 className="focus-visible:shadow-md focus-visible:shadow-[#283959]"
-                disabled={false}
-                value=""
+                disabled={isPending}
+                value={lastName}
                 onChange={(e) => {
                   setLastName(e.target.value);
                 }}
@@ -95,11 +152,12 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
                   <PopoverTrigger>
                     <CircleHelp className="size-4" />
                   </PopoverTrigger>
-                  <PopoverContent className="text-sm text-muted-foreground">
+                  <PopoverContent>
                     Providing your birthday helps make sure that you get the
                     right Facebook experience for your age.
                   </PopoverContent>
                 </Popover>
+                <p className="font-normal">(optional)</p>
               </div>
 
               <DatePicker date={date} setDate={setDate} />
@@ -107,7 +165,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
 
             <Input
               className="focus-visible:shadow-md focus-visible:shadow-[#283959]"
-              disabled={false}
+              disabled={isPending}
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -120,7 +178,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
             <div className="flex relative items-center">
               <Input
                 className="focus-visible:shadow-md focus-visible:shadow-[#283959]"
-                disabled={false}
+                disabled={isPending}
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -130,7 +188,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
                 required
               />
               <Button
-                disabled={false}
+                disabled={isPending}
                 variant="transparent"
                 type="button"
                 onClick={() => setIsPasswordVisible(!isPasswordVisible)}
@@ -141,7 +199,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
             </div>
 
             <Button
-              disabled={false}
+              disabled={isPending}
               type="submit"
               className="w-full h-[50px] bg-[#283959] text-lg"
               size="lg"

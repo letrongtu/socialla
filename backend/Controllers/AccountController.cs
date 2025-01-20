@@ -30,7 +30,7 @@ namespace backend.Controllers
         public async Task<IActionResult> SignUp([FromBody] SignUpDto signUpDto){
             try{
                 if(!ModelState.IsValid){
-                    return BadRequest(ModelState);
+                    return BadRequest(FormatModelStateErrros());
                 }
 
                 if (!Regex.IsMatch(signUpDto.Email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
@@ -77,7 +77,7 @@ namespace backend.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto){
             if(!ModelState.IsValid){
-                return BadRequest(ModelState);
+                return BadRequest(FormatModelStateErrros());
             }
 
             var user = await _userManager.Users.FirstOrDefaultAsync(user => user.Email == loginDto.Email);
@@ -90,7 +90,25 @@ namespace backend.Controllers
                 return Unauthorized("Invalid Email or Incorrect Password");
             }
 
-             return Ok(new { Message = "Login successfully", UserId = user.Id, Token = _tokenService.CreateToken(user)});
+            return Ok(new { Message = "Login successfully", UserId = user.Id, Token = _tokenService.CreateToken(user)});
+        }
+
+        private object FormatModelStateErrros(){
+            var errors = ModelState
+            .Where(message => message.Value != null && message.Value.Errors.Any())
+            .Select(message => new
+                {
+                    Field = message.Key,
+                    Errors = message.Value?.Errors?.Select(e => e.ErrorMessage) ?? Enumerable.Empty<string>()
+                })
+            .ToList();
+
+            Console.WriteLine(errors);
+
+            return new {
+                Message = "Validation failed",
+                Errors = errors
+            };
         }
     }
 }
