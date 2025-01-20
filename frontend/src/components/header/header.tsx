@@ -12,6 +12,8 @@ import {
 import { MdGroups } from "react-icons/md";
 import { HeaderPageButton } from "./header-page-button";
 import { HeaderUtilButton } from "./header-util-button";
+import { UserButton } from "./user-button";
+import { useRouter } from "next/navigation";
 
 const pages = [
   { label: "Home", icon: Home },
@@ -28,18 +30,30 @@ const utilButtons = [
 ];
 
 export const Header = () => {
+  const router = useRouter();
+
   const [currentPage, setCurrentPage] = useState("Home");
   const [currentUtilButton, setCurrentUtilButton] = useState<string | null>(
     null
   );
 
+  //TODO: Onclick Search button
   return (
     <div className="flex flex-row justify-between bg-[#ffffff] px-5">
       <div className="flex justify-center items-center py-3">
-        <p className="text-4xl font-bold text-[#283959]">Socialla</p>
+        <button
+          onClick={() => {
+            router.push("/");
+          }}
+          className="text-4xl font-bold text-[#283959]"
+        >
+          Socialla
+        </button>
         <div className="p-1.5 rounded-full bg-[#c9ccd1]/30 ml-6 lg:w-72 lg:flex lg:gap-x-2 lg:items-center">
-          <Search className="text-[#606770]" />
-          <p className="text-sm text-muted-foreground">Search Socialla</p>
+          <Search className="text-[#606770] size-6" />
+          <p className="hidden lg:inline-block text-sm text-muted-foreground">
+            Search Socialla
+          </p>
         </div>
       </div>
 
@@ -68,6 +82,8 @@ export const Header = () => {
             {utilButton.chilren}
           </HeaderUtilButton>
         ))}
+
+        <UserButton />
       </div>
     </div>
   );

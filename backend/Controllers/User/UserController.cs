@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Mappers.User;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -33,7 +34,7 @@ namespace backend.Controllers.User
             }
 
             // Return user
-            return Ok(user);
+            return Ok(user.ToReturnCurrentUserDto());
         }
     }
 }
