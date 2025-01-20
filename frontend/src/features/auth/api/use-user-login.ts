@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { useMemo, useState } from "react";
 
-const api = "http://localhost:5096/api/";
+const baseURL = "http://localhost:5096/api";
 
 type RequestType = {
   email: string;
@@ -39,7 +39,7 @@ export const UseUserLogin = () => {
       setStatus("pending");
 
       const response = await axios.post<ResponeType>(
-        api + "account/login",
+        `${baseURL}/account/login`,
         values
       );
 

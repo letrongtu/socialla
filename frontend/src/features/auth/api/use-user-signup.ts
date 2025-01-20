@@ -1,7 +1,7 @@
 import axios, { Axios, AxiosError } from "axios";
 import { useMemo, useState } from "react";
 
-const api = "http://localhost:5096/api/";
+const baseURL = "http://localhost:5096/api";
 
 type RequestType = {
   firstName: string;
@@ -42,7 +42,7 @@ export const UseUserSignUp = () => {
       setStatus("pending");
 
       const response = await axios.post<ResponeType>(
-        api + "account/sign-up",
+        `${baseURL}/account/sign-up"`,
         values
       );
 

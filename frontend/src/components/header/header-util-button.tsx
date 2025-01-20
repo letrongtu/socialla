@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
+import { useCurrentUser } from "@/features/auth/api/use-current-user";
 
 interface HeaderUtilButtonProps {
   label: string;
@@ -26,6 +27,8 @@ export const HeaderUtilButton = ({
   isActive,
   icon: Icon,
 }: HeaderUtilButtonProps) => {
+  const { data, isLoading } = useCurrentUser();
+  console.log(data);
   const isOpen = currentButton === label;
 
   return (
