@@ -44,8 +44,6 @@ const SignInCard = ({ setState }: SignInCardProps) => {
             setCookie("userId", response.userId, { maxAge: 60 * 60 * 24 });
           }
 
-          //TODO: Validate cookies
-
           router.push("/");
           clearForm();
         },

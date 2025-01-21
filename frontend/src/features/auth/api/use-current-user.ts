@@ -5,6 +5,7 @@ import { getCookie, hasCookie } from "cookies-next";
 const baseURL = "http://localhost:5096/api";
 
 type ResponseType = {
+  id: string | undefined;
   firstName: string | undefined;
   lastName: string | undefined;
   dateOfBirth: Date | undefined;

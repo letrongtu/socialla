@@ -13,8 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-import { ChevronDown, Loader2, LogOut, Moon } from "lucide-react";
-import { Separator } from "../ui/separator";
+import { ChevronDown, LogOut, Moon } from "lucide-react";
 
 export const UserButton = ({}) => {
   const router = useRouter();
@@ -24,7 +23,7 @@ export const UserButton = ({}) => {
     return null;
   }
 
-  const { firstName, lastName, profilePictureUrl } = data;
+  const { id, firstName, lastName, profilePictureUrl } = data;
 
   const avatarFallback = firstName?.charAt(0).toUpperCase();
 
@@ -61,7 +60,9 @@ export const UserButton = ({}) => {
         className="w-80 bg-[#ffffff] space-y-1 rounded-lg"
       >
         <DropdownMenuItem
-          onClick={() => {}}
+          onClick={() => {
+            router.push(`/profile/${id}`);
+          }}
           className="text-md m-2 mb-4 font-semibold cursor-pointer rounded-lg bg-[#ffffff] shadow-md shadow-slate-300"
         >
           <div className="w-full h-full py-3 px-3 flex items-center rounded-lg gap-x-3 hover:bg-[#c9ccd1]/30">

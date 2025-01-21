@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { IconType } from "react-icons/lib";
 
 import { cn } from "@/lib/utils";
@@ -16,11 +17,15 @@ export const HeaderPageButton = ({
   isActive,
   icon: Icon,
 }: HeaderPageButtonProps) => {
-  //TODO: Redirect to the label
+  const router = useRouter();
+
   return (
     <Hint label={label}>
       <button
-        onClick={() => onClick(label)}
+        onClick={() => {
+          onClick(label);
+          router.push(`/${label.toLowerCase()}`);
+        }}
         className={cn(
           "flex h-full w-32 items-center justify-center transition-all duration-200",
           isActive

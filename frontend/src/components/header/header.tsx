@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 
 import {
@@ -7,7 +9,6 @@ import {
   Layers2,
   MessagesSquare,
   Bell,
-  UserRound,
 } from "lucide-react";
 import { MdGroups } from "react-icons/md";
 import { HeaderPageButton } from "./header-page-button";
@@ -17,8 +18,8 @@ import { useRouter } from "next/navigation";
 
 const pages = [
   { label: "Home", icon: Home },
-  { label: "Video", icon: TvMinimalPlay },
-  { label: "Group", icon: MdGroups },
+  { label: "Videos", icon: TvMinimalPlay },
+  { label: "Groups", icon: MdGroups },
 ];
 
 //TODO: Change the chilren to proper one
@@ -26,7 +27,6 @@ const utilButtons = [
   { label: "Menu", icon: Layers2, chilren: <div>Hello</div> },
   { label: "Messenger", icon: MessagesSquare, chilren: <div>Hello</div> },
   { label: "Notifications", icon: Bell, chilren: <div>Hello</div> },
-  { label: "Account", icon: UserRound, chilren: <div>Hello</div> },
 ];
 
 export const Header = () => {
