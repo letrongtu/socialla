@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
+import { JotaiProvider } from "@/components/ui/jotai-provider";
+import Modal from "@/components/modal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,8 +31,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Toaster />
-        {children}
+        <JotaiProvider>
+          <Modal />
+          <Toaster />
+          {children}
+        </JotaiProvider>
       </body>
     </html>
   );

@@ -38,13 +38,13 @@ export const HeaderUtilButton = ({
           <button
             onClick={() => setCurrentButton(isOpen ? null : label)}
             className={cn(
-              "flex w-11 h-11 items-center justify-center rounded-full bg-[#c9ccd1]/30 transition-all duration-200",
+              "flex w-11 h-11 items-center justify-center rounded-full bg-[#c9ccd1]/30 hover:bg-slate-100 transition-all duration-200 group",
               isActive && "bg-[#283959]/30"
             )}
           >
             <Icon
               className={cn(
-                "w-full text-black size-6",
+                "w-full text-black size-6 group-hover:size-7 group-hover:text-[#283959]",
                 isActive && "text-[#283959]"
               )}
             />

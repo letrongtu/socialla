@@ -49,11 +49,14 @@ export const Header = () => {
         >
           Socialla
         </button>
-        <div className="p-1.5 rounded-full bg-[#c9ccd1]/30 ml-6 lg:w-72 lg:flex lg:gap-x-2 lg:items-center">
-          <Search className="text-[#606770] size-6" />
-          <p className="hidden lg:inline-block text-sm text-muted-foreground">
-            Search Socialla
-          </p>
+
+        <div className="flex flex-grow">
+          <div className="p-1.5 rounded-full bg-[#c9ccd1]/30 ml-6 lg:flex lg:gap-x-2 lg:items-center lg:w-52 flex-grow">
+            <Search className="text-[#606770] size-6" />
+            <p className="hidden lg:inline-block text-sm text-muted-foreground">
+              Search Socialla
+            </p>
+          </div>
         </div>
       </div>
 

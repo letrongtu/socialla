@@ -27,15 +27,15 @@ export const HeaderPageButton = ({
           router.push(`/${label.toLowerCase()}`);
         }}
         className={cn(
-          "flex h-full w-32 items-center justify-center transition-all duration-200",
+          "flex h-full w-20 md:24 lg:w-32 items-center justify-center transition-all duration-200 group",
           isActive
             ? "border-b-4 border-b-[#283959]"
-            : "h-[80%] border-4 border-hidden hover:bg-[#c9ccd1]/30 hover:rounded-sm"
+            : "h-[80%] border-4 border-hidden hover:bg-slate-100 hover:rounded-sm"
         )}
       >
         <Icon
           className={cn(
-            "w-full text-[#606770] size-7",
+            "w-full text-[#606770] size-7 group-hover:size-8 group-hover:text-[#283959]",
             isActive ? "text-[#283959]" : "text-[#606770]"
           )}
         />
