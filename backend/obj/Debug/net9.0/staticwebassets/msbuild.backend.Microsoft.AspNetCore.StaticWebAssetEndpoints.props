@@ -1,0 +1,76 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/00b2aa05-f20a-4050-8350-4dea7922664b/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\00b2aa05-f20a-4050-8350-4dea7922664b\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"2990111"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:51:53 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/00b2aa05-f20a-4050-8350-4dea7922664b/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.rg033zkkdt.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\00b2aa05-f20a-4050-8350-4dea7922664b\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"rg033zkkdt"},{"Name":"integrity","Value":"sha256-G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0="},{"Name":"label","Value":"_content/backend/Uploads/Users/00b2aa05-f20a-4050-8350-4dea7922664b/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2990111"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:51:53 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/00b2aa05-f20a-4050-8350-4dea7922664b/socialla.ouldm5xbii.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\00b2aa05-f20a-4050-8350-4dea7922664b\socialla.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ouldm5xbii"},{"Name":"integrity","Value":"sha256-4Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns="},{"Name":"label","Value":"_content/backend/Uploads/Users/00b2aa05-f20a-4050-8350-4dea7922664b/socialla.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:51:53 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/00b2aa05-f20a-4050-8350-4dea7922664b/socialla.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\00b2aa05-f20a-4050-8350-4dea7922664b\socialla.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-4Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:51:53 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/05812f1e-9159-4ab0-a44e-05333fa3aed9/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\05812f1e-9159-4ab0-a44e-05333fa3aed9\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"2990111"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:52:54 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/05812f1e-9159-4ab0-a44e-05333fa3aed9/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.rg033zkkdt.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\05812f1e-9159-4ab0-a44e-05333fa3aed9\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"rg033zkkdt"},{"Name":"integrity","Value":"sha256-G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0="},{"Name":"label","Value":"_content/backend/Uploads/Users/05812f1e-9159-4ab0-a44e-05333fa3aed9/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2990111"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:52:54 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/05812f1e-9159-4ab0-a44e-05333fa3aed9/socialla.ouldm5xbii.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\05812f1e-9159-4ab0-a44e-05333fa3aed9\socialla.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ouldm5xbii"},{"Name":"integrity","Value":"sha256-4Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns="},{"Name":"label","Value":"_content/backend/Uploads/Users/05812f1e-9159-4ab0-a44e-05333fa3aed9/socialla.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:52:54 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/05812f1e-9159-4ab0-a44e-05333fa3aed9/socialla.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\05812f1e-9159-4ab0-a44e-05333fa3aed9\socialla.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-4Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:52:54 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/safas/socialla.ouldm5xbii.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\safas\socialla.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ouldm5xbii"},{"Name":"integrity","Value":"sha256-4Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns="},{"Name":"label","Value":"_content/backend/Uploads/Users/safas/socialla.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:27:38 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/safas/socialla.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\safas\socialla.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-4Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:27:38 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/safasasd/socialla.ouldm5xbii.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\safasasd\socialla.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ouldm5xbii"},{"Name":"integrity","Value":"sha256-4Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns="},{"Name":"label","Value":"_content/backend/Uploads/Users/safasasd/socialla.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:29:09 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/safasasd/socialla.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\safasasd\socialla.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-4Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Tue, 21 Jan 2025 12:29:09 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>

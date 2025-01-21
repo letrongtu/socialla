@@ -1,6 +1,7 @@
 using api.Data;
 using backend.Interfaces;
 using backend.Models;
+using backend.Repository;
 using backend.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -92,6 +93,7 @@ builder.Services.AddAuthentication(options =>{
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserValidator<AppUser>, CustomUserValidator<AppUser>>();
+builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 
 var app = builder.Build();
 
@@ -101,13 +103,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles();
+
+app.UseCors("AllowFrontend");
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseCors("AllowFrontend");
 
 app.Run();

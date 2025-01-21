@@ -1,0 +1,49 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\00b2aa05-f20a-4050-8350-4dea7922664b\\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\Users\\00b2aa05-f20a-4050-8350-4dea7922664b\\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg"
+    },
+    {
+      "Id": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\00b2aa05-f20a-4050-8350-4dea7922664b\\socialla.png",
+      "PackagePath": "staticwebassets\\Uploads\\Users\\00b2aa05-f20a-4050-8350-4dea7922664b\\socialla.png"
+    },
+    {
+      "Id": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\05812f1e-9159-4ab0-a44e-05333fa3aed9\\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\Users\\05812f1e-9159-4ab0-a44e-05333fa3aed9\\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg"
+    },
+    {
+      "Id": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\05812f1e-9159-4ab0-a44e-05333fa3aed9\\socialla.png",
+      "PackagePath": "staticwebassets\\Uploads\\Users\\05812f1e-9159-4ab0-a44e-05333fa3aed9\\socialla.png"
+    },
+    {
+      "Id": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\safas\\socialla.png",
+      "PackagePath": "staticwebassets\\Uploads\\Users\\safas\\socialla.png"
+    },
+    {
+      "Id": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\safasasd\\socialla.png",
+      "PackagePath": "staticwebassets\\Uploads\\Users\\safasasd\\socialla.png"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.backend.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.backend.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.backend.props",
+      "PackagePath": "build\\backend.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.backend.props",
+      "PackagePath": "buildMultiTargeting\\backend.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.backend.props",
+      "PackagePath": "buildTransitive\\backend.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
