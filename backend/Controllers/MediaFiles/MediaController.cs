@@ -26,89 +26,89 @@ namespace backend.Controllers.MediaFiles
             _userManager = userManager;
         }
 
-        [HttpPost("upload")]
-        [Authorize]
-        public async Task<IActionResult> Upload(IFormFile file, string userId){
-            if(file == null || file.Length == 0){
-                return BadRequest("No file uploaded.");
-            }
+        // [HttpPost("upload")]
+        // [Authorize]
+        // public async Task<IActionResult> Upload(IFormFile file, string userId){
+        //     if(file == null || file.Length == 0){
+        //         return BadRequest("No file uploaded.");
+        //     }
 
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                return BadRequest("User ID cannot be null or empty.");
-            }
+        //     if (string.IsNullOrWhiteSpace(userId))
+        //     {
+        //         return BadRequest("User ID cannot be null or empty.");
+        //     }
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(user => user.Id == userId);
+        //     var user = await _userManager.Users.FirstOrDefaultAsync(user => user.Id == userId);
 
-            if (user == null)
-            {
-                return NotFound("User not found");
-            }
+        //     if (user == null)
+        //     {
+        //         return NotFound("User not found");
+        //     }
 
-            var fileType = Path.GetExtension(file.FileName).ToLower();
-            var allowedFileTypes = new [] { ".jpg", ".png", ".jpeg", ".gif", ".mp4", ".mov" };
+        //     var fileType = Path.GetExtension(file.FileName).ToLower();
+        //     var allowedFileTypes = new [] { ".jpg", ".png", ".jpeg", ".gif", ".mp4", ".mov" };
 
-            if(!allowedFileTypes.Contains(fileType)){
-                return BadRequest("Unsupported file type");
-            }
+        //     if(!allowedFileTypes.Contains(fileType)){
+        //         return BadRequest("Unsupported file type");
+        //     }
 
-            var uploadPath = GetFilePath(userId);
+        //     var uploadPath = GetFilePath(userId);
 
-            if(!Directory.Exists(uploadPath)){
-                Directory.CreateDirectory(uploadPath);
-            }
+        //     if(!Directory.Exists(uploadPath)){
+        //         Directory.CreateDirectory(uploadPath);
+        //     }
 
-            var filePath = Path.Combine(uploadPath, file.FileName);
-            using (var stream = new FileStream(filePath, FileMode.Create)){
-                await file.CopyToAsync(stream);
-            }
+        //     var filePath = Path.Combine(uploadPath, file.FileName);
+        //     using (var stream = new FileStream(filePath, FileMode.Create)){
+        //         await file.CopyToAsync(stream);
+        //     }
 
-            var hostUrl= $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
-            var publicUrl = hostUrl  + "/Uploads/Users/" + userId + "/" + file.FileName;
+        //     var hostUrl= $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
+        //     var publicUrl = hostUrl  + "/Uploads/Users/" + userId + "/" + file.FileName;
 
-            return Ok(new {FileName = file.FileName, FileUrl = publicUrl});
-        }
+        //     return Ok(new {FileName = file.FileName, FileUrl = publicUrl});
+        // }
 
-        [HttpPost("db-upload")]
-        [Authorize]
-        public async Task<IActionResult> DbUpload(IFormFile file, string userId){
-            if(file == null || file.Length == 0){
-                return BadRequest("No file uploaded.");
-            }
+        // [HttpPost("db-upload")]
+        // [Authorize]
+        // public async Task<IActionResult> DbUpload(IFormFile file, string userId){
+        //     if(file == null || file.Length == 0){
+        //         return BadRequest("No file uploaded.");
+        //     }
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(user => user.Id == userId);
+        //     var user = await _userManager.Users.FirstOrDefaultAsync(user => user.Id == userId);
 
-            if (user == null)
-            {
-                return NotFound("User not found");
-            }
+        //     if (user == null)
+        //     {
+        //         return NotFound("User not found");
+        //     }
 
-            var fileType = Path.GetExtension(file.FileName).ToLower();
-            var allowedFileTypes = new [] { ".jpg", ".png", ".jpeg", ".gif", ".mp4", ".mov" };
+        //     var fileType = Path.GetExtension(file.FileName).ToLower();
+        //     var allowedFileTypes = new [] { ".jpg", ".png", ".jpeg", ".gif", ".mp4", ".mov" };
 
-            if(!allowedFileTypes.Contains(fileType)){
-                return BadRequest("Unsupported file type");
-            }
+        //     if(!allowedFileTypes.Contains(fileType)){
+        //         return BadRequest("Unsupported file type");
+        //     }
 
-            using var memoryStream = new MemoryStream();
+        //     using var memoryStream = new MemoryStream();
 
-            await file.CopyToAsync(memoryStream);
+        //     await file.CopyToAsync(memoryStream);
 
-            var mediaFile = new MediaFile
-            {
-                FileName = file.FileName,
-                Data = memoryStream.ToArray(),
-                ContentType = file.ContentType
-            };
+        //     var mediaFile = new MediaFile
+        //     {
+        //         FileName = file.FileName,
+        //         Data = memoryStream.ToArray(),
+        //         ContentType = file.ContentType
+        //     };
 
-            await _mediaRepo.UploadDBAsync(mediaFile);
+        //     await _mediaRepo.UploadDBAsync(mediaFile);
 
-            return Ok(new { FileId = mediaFile.Id });
-        }
+        //     return Ok(new { FileId = mediaFile.Id });
+        // }
 
         [HttpPost("multi-upload")]
-
-        public async Task<IActionResult> MultiUpload(List<IFormFile> files, string userId){
+        [Authorize]
+        public async Task<IActionResult> MultiUpload([FromForm] List<IFormFile> files, [FromForm] string userId){
             if(files == null || files.Count == 0){
                 return BadRequest("No files uploaded.");
             }
@@ -165,6 +165,7 @@ namespace backend.Controllers.MediaFiles
 
         //TODO: Add PostID to all URL
         [HttpPost("db-multi-upload")]
+        [Authorize]
         public async Task<IActionResult> DBMultiUpload(List<IFormFile> files, string userId){
             if(files == null || files.Count == 0){
                 return BadRequest("No files uploaded.");
