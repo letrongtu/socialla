@@ -12,17 +12,29 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-4Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Wed, 22 Jan 2025 10:27:31 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/1e798cda-f76a-47ad-b9c8-8e7242975784/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\1e798cda-f76a-47ad-b9c8-8e7242975784\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"2990111"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0=\u0022"},{"Name":"Last-Modified","Value":"Wed, 22 Jan 2025 10:47:40 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/1e798cda-f76a-47ad-b9c8-8e7242975784/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.rg033zkkdt.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\1e798cda-f76a-47ad-b9c8-8e7242975784\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"rg033zkkdt"},{"Name":"integrity","Value":"sha256-G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0="},{"Name":"label","Value":"_content/backend/Uploads/Users/1e798cda-f76a-47ad-b9c8-8e7242975784/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2990111"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0=\u0022"},{"Name":"Last-Modified","Value":"Wed, 22 Jan 2025 10:47:40 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/1e798cda-f76a-47ad-b9c8-8e7242975784/socialla.ouldm5xbii.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\1e798cda-f76a-47ad-b9c8-8e7242975784\socialla.png'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ouldm5xbii"},{"Name":"integrity","Value":"sha256-4Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns="},{"Name":"label","Value":"_content/backend/Uploads/Users/1e798cda-f76a-47ad-b9c8-8e7242975784/socialla.png"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Wed, 22 Jan 2025 10:41:27 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Wed, 22 Jan 2025 12:13:43 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/1e798cda-f76a-47ad-b9c8-8e7242975784/socialla.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\1e798cda-f76a-47ad-b9c8-8e7242975784\socialla.png'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-4Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Wed, 22 Jan 2025 10:41:27 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"13369"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224Inq25DVf6Qg\u002BzceBMp6hRd96pNr6yOakXxjtl035ns=\u0022"},{"Name":"Last-Modified","Value":"Wed, 22 Jan 2025 12:13:43 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
   </ItemGroup>
 </Project>

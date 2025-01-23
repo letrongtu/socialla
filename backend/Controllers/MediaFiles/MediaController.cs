@@ -106,7 +106,7 @@ namespace backend.Controllers.MediaFiles
         //     return Ok(new { FileId = mediaFile.Id });
         // }
 
-        [HttpPost("multi-upload")]
+        [HttpPost("local-multi-upload")]
         [Authorize]
         public async Task<IActionResult> MultiUpload([FromForm] List<IFormFile> files, [FromForm] string userId){
             if(files == null || files.Count == 0){
@@ -157,10 +157,10 @@ namespace backend.Controllers.MediaFiles
                 var hostUrl= $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
                 var publicUrl = hostUrl  + "/Uploads/Users/" + userId + "/" + file.FileName;
 
-                uploadResults.Add(new {FileName = file.FileName, FileUrl = publicUrl});
+                uploadResults.Add(new {FileUrl = publicUrl});
             }
 
-            return Ok(uploadResults);
+            return Ok(new {Message = "Files uploaded successfully!", UploadedFileUrls = uploadResults});
         }
 
         //TODO: Add PostID to all URL
@@ -180,7 +180,7 @@ namespace backend.Controllers.MediaFiles
 
             if (user == null)
             {
-                return NotFound("User not found");
+                return NotFound("User who uploads the files, not found");
             }
 
             var allowedFileTypes = new [] { ".jpg", ".png", ".jpeg", ".gif", ".mp4", ".mov" };
@@ -217,7 +217,7 @@ namespace backend.Controllers.MediaFiles
                 uploadResults.Add(new { FileId = mediaFile.Id });
             }
 
-            return Ok(uploadResults);
+            return Ok(new {Message = "Files uploaded successfully!", UploadedFileIds = uploadResults});
         }
 
         [NonAction]

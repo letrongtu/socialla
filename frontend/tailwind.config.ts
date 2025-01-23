@@ -57,6 +57,9 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      gridTemplateRows: {
+        rowImageLayout: "repeat(5, minmax(0, 100px))",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

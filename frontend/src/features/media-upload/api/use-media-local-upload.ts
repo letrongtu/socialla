@@ -9,8 +9,8 @@ type RequestType = {
 };
 
 type ResponeType = {
+  message: string;
   results: {
-    FileName: string;
     FileUrl: string;
   }[];
 } | null;
@@ -23,7 +23,7 @@ type Options = {
 
 export const UseMediaLocalUpload = () => {
   const [data, setData] = useState<ResponeType>(null);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<AxiosError | null>(null);
   const [status, setStatus] = useState<
     "success" | "error" | "pending" | "settled" | null
   >(null);
@@ -46,10 +46,8 @@ export const UseMediaLocalUpload = () => {
 
       formData.append("userId", values.userId);
 
-      // formData.append("userId", values.userId || "");
-
       const response = await axios.post<ResponeType>(
-        `${baseURL}/media/multi-upload`,
+        `${baseURL}/media/local-multi-upload`,
         formData
       );
 

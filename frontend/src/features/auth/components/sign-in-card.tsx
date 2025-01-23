@@ -48,7 +48,6 @@ const SignInCard = ({ setState }: SignInCardProps) => {
           clearForm();
         },
         onError: (error) => {
-          console.log(error);
           if (Array.isArray(error.response?.data)) {
             const errorMessages = error.response?.data.map(
               (error) => error.description
