@@ -75,7 +75,7 @@ export const MediaUploadInput = ({
             <p className="text-xs text-muted-foreground">or drag and drop</p>
           </div>
         ) : (
-          <ImageLayout imageFiles={uploadedFiles} />
+          <ImageLayout mediaFiles={uploadedFiles} />
         )}
 
         <div
