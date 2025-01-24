@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
 import { useCreatePostModal } from "../store/use-create-post-modal";
 import { UseMediaLocalUpload } from "@/features/media-upload/api/use-media-local-upload";
+import { FeelingType, FeelingPicker } from "./feeling-picker";
 
 import {
   Dialog,
@@ -27,11 +28,13 @@ import { Button } from "@/components/ui/button";
 import { Hint } from "@/components/ui/hint";
 import { MediaUploadInput } from "@/components/media-upload/media-upload-input";
 
-import { Globe } from "lucide-react";
-import { IoCaretDown } from "react-icons/io5";
 import { FaPhotoVideo } from "react-icons/fa";
 import { FaRegFaceGrin } from "react-icons/fa6";
-import { FeelingType, FeelingPickerModal } from "./feeling-picker-modal";
+import { PostAudienceTrigger } from "@/components/post-audience-picker/post-audience-trigger";
+import {
+  PostAudiences,
+  PostAudiencePicker,
+} from "@/components/post-audience-picker/post-audience-picker";
 
 export const CreatePostModal = () => {
   const router = useRouter();
@@ -40,6 +43,7 @@ export const CreatePostModal = () => {
   const { localUploadMedia, isPending } = UseMediaLocalUpload();
   const [openCreatePostModal, setOpenCreatePostModal] = useCreatePostModal();
 
+  const [openPostAudiencePicker, setOpenPostAudiencePicker] = useState(false);
   const [openFeelingPickerModal, setOpenFeelingPickerModal] = useState(false);
   const [openUploadMedia, setOpenUploadMedia] = useState(false);
 
@@ -48,19 +52,24 @@ export const CreatePostModal = () => {
   const [currentFeeling, setCurrentFeeling] = useState<FeelingType | null>(
     null
   );
+  const [postAudience, setPostAudience] = useState("Friends");
 
   if (!data) {
     return null;
   }
 
-  const { id, firstName, lastName, profilePictureUrl } = data;
+  const { id: userId, firstName, lastName, profilePictureUrl } = data;
 
   const avatarFallback = firstName?.charAt(0).toUpperCase();
   const placeholder = `What's on your mind, ${firstName}?`;
 
+  const currentAudience =
+    PostAudiences.find((audience) => audience.visibility === postAudience) ||
+    PostAudiences[0];
+
   const handleMediaUpload = () => {
     localUploadMedia(
-      { files: uploadedFiles, userId: id ? id : "" },
+      { files: uploadedFiles, userId: userId ? userId : "" },
       {
         onSuccess: (response) => {
           handlePostSuccess();
@@ -99,7 +108,7 @@ export const CreatePostModal = () => {
             <div className="flex gap-x-3">
               <button
                 onClick={() => {
-                  router.push(`/profile/${id}`);
+                  router.push(`/profile/${userId}`);
                 }}
               >
                 <Avatar className="rounded size-10 hover:opacity-75 transition">
@@ -120,12 +129,11 @@ export const CreatePostModal = () => {
                   )}
                 </p>
 
-                {/*TODO: Post audience feature */}
-                <button className="max-w-20 py-1 flex items-center justify-center space-x-1 rounded-lg bg-[#c9ccd1]/30 hover:bg-slate-100">
-                  <Globe className="size-3" />
-                  <p className="text-xs font-medium">Global</p>
-                  <IoCaretDown className="size-3" />
-                </button>
+                <PostAudienceTrigger
+                  label={currentAudience.visibility}
+                  icon={currentAudience.icon}
+                  setOpenPostAudiencePicker={setOpenPostAudiencePicker}
+                />
               </div>
             </div>
 
@@ -181,11 +189,20 @@ export const CreatePostModal = () => {
       )}
 
       {openFeelingPickerModal && (
-        <FeelingPickerModal
+        <FeelingPicker
           openFeelingPickerModal={openFeelingPickerModal}
           setOpenFeelingPickerModal={setOpenFeelingPickerModal}
           currentFeeling={currentFeeling}
           setCurrentFeeling={setCurrentFeeling}
+        />
+      )}
+
+      {openPostAudiencePicker && (
+        <PostAudiencePicker
+          currentPostAudience={postAudience}
+          setPostAudience={setPostAudience}
+          openPostAudiencePicker={openPostAudiencePicker}
+          setOpenPostAudiencePicker={setOpenPostAudiencePicker}
         />
       )}
     </>

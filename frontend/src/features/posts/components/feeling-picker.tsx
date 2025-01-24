@@ -18,19 +18,19 @@ export type FeelingType = {
   emoji: string | null;
 };
 
-interface FeelingPickerModalProps {
+interface FeelingPickerProps {
   openFeelingPickerModal: boolean;
   setOpenFeelingPickerModal: (openFeelingPickerModal: boolean) => void;
   currentFeeling: FeelingType | null;
   setCurrentFeeling: (currentFeeling: FeelingType) => void;
 }
 
-export const FeelingPickerModal = ({
+export const FeelingPicker = ({
   openFeelingPickerModal,
   setOpenFeelingPickerModal,
   currentFeeling,
   setCurrentFeeling,
-}: FeelingPickerModalProps) => {
+}: FeelingPickerProps) => {
   const feelingWithEmojis = feelingsData.map((feeling) => {
     const emoji = Object.entries(emojiData).find(
       ([_, data]) => data.slug === feeling.emojiSlug
@@ -78,7 +78,7 @@ export const FeelingPickerModal = ({
               onClick={() => {
                 setOpenFeelingPickerModal(false);
               }}
-              className="absolute top-0 left-0 w-8 h-8 flex justify-center items-center rounded-full bg-[#c9ccd1] hover:bg-[#c9ccd1]/70 cursor-pointer"
+              className="absolute top-0 left-0 w-8 h-8 flex justify-center items-center rounded-full bg-[#c9ccd1] hover:bg-[#c9ccd1]/50 cursor-pointer"
             >
               <IoIosArrowRoundBack className="size-6" />
             </div>
