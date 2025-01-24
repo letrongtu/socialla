@@ -6,10 +6,14 @@ import { EmojiPopover } from "./emoji-popover";
 import { BsEmojiSmile } from "react-icons/bs";
 
 interface CreatePostEditorProps {
+  setPostContent: (content: string[]) => void;
   placeholder?: string;
 }
 
-const CreatePostEditor = ({ placeholder }: CreatePostEditorProps) => {
+const CreatePostEditor = ({
+  setPostContent,
+  placeholder,
+}: CreatePostEditorProps) => {
   const [open, _] = useCreatePostModal();
 
   const [editorState, setEditorState] = useState(() =>
@@ -26,6 +30,12 @@ const CreatePostEditor = ({ placeholder }: CreatePostEditorProps) => {
 
   const handleChange = (editorState: EditorState) => {
     setEditorState(editorState);
+
+    const contentState = editorState.getCurrentContent();
+    const plainText = contentState.getPlainText();
+    const lines = plainText.split("\n");
+
+    setPostContent(lines);
   };
 
   const handleEmojiSelect = (emoji: any) => {

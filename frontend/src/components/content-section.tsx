@@ -14,7 +14,7 @@ export const ContentSection = () => {
     return null;
   }
 
-  const { id, firstName, lastName, profilePictureUrl } = data;
+  const { id, firstName, profilePictureUrl } = data;
 
   const avatarFallback = firstName?.charAt(0).toUpperCase();
 
