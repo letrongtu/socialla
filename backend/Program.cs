@@ -94,6 +94,7 @@ builder.Services.AddAuthentication(options =>{
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserValidator<AppUser>, CustomUserValidator<AppUser>>();
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 var app = builder.Build();
 

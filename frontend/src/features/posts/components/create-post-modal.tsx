@@ -32,6 +32,7 @@ import { FaPhotoVideo } from "react-icons/fa";
 import { FaRegFaceGrin } from "react-icons/fa6";
 import { PostAudienceTrigger } from "@/components/post-audience-picker/post-audience-trigger";
 import {
+  DefaultPostAudience,
   PostAudiences,
   PostAudiencePicker,
 } from "@/components/post-audience-picker/post-audience-picker";
@@ -52,8 +53,9 @@ export const CreatePostModal = () => {
   const [currentFeeling, setCurrentFeeling] = useState<FeelingType | null>(
     null
   );
-  const [postAudience, setPostAudience] = useState("Friends");
+  const [postAudience, setPostAudience] = useState(DefaultPostAudience);
 
+  //current user data
   if (!data) {
     return null;
   }
@@ -63,10 +65,12 @@ export const CreatePostModal = () => {
   const avatarFallback = firstName?.charAt(0).toUpperCase();
   const placeholder = `What's on your mind, ${firstName}?`;
 
+  //post audience
   const currentAudience =
     PostAudiences.find((audience) => audience.visibility === postAudience) ||
     PostAudiences[0];
 
+  //request
   const handleMediaUpload = () => {
     localUploadMedia(
       { files: uploadedFiles, userId: userId ? userId : "" },
@@ -86,6 +90,7 @@ export const CreatePostModal = () => {
     setUploadedFiles([]);
     setOpenCreatePostModal(false);
     setPostContent([]);
+    setPostAudience(DefaultPostAudience);
   };
 
   return (

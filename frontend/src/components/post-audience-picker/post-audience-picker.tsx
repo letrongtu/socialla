@@ -27,6 +27,8 @@ export const PostAudiences = [
   { visibility: "Only Me", icon: FaLock },
 ];
 
+export const DefaultPostAudience = PostAudiences[0].visibility;
+
 interface PostAudiencePickerProps {
   currentPostAudience: string;
   setPostAudience: (currentPostAudience: string) => void;
