@@ -18,6 +18,24 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\6bda1ef8-dd80-4459-9ddf-72a78d58962e\7565438-hd_1080_1920_25fps - Copy (2).mp4'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\6bda1ef8-dd80-4459-9ddf-72a78d58962e\7565438-hd_1080_1920_25fps - Copy.mp4'))">
+      <SourceType>Package</SourceType>
+      <SourceId>backend</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/backend</BasePath>
+      <RelativePath>Uploads/Users/6bda1ef8-dd80-4459-9ddf-72a78d58962e/7565438-hd_1080_1920_25fps - Copy.mp4</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>5zobaya2e2</Fingerprint>
+      <Integrity>MYW7o/aCPIMoBF6uvZ+JBXAAoAms5U5059ugjNWoqEU=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\6bda1ef8-dd80-4459-9ddf-72a78d58962e\7565438-hd_1080_1920_25fps - Copy.mp4'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\6bda1ef8-dd80-4459-9ddf-72a78d58962e\7565438-hd_1080_1920_25fps.mp4'))">
       <SourceType>Package</SourceType>
       <SourceId>backend</SourceId>

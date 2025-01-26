@@ -6,13 +6,15 @@ const CreatePostEditor = dynamic(
 );
 
 import { toast } from "sonner";
-import { useState } from "react";
+import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
 import { UseCreatePost } from "../api/use-create-post";
 import { UseMediaLocalUpload } from "@/features/media-upload/api/use-media-local-upload";
 import { useCreatePostModal } from "../store/use-create-post-modal";
+import { useFeelingPicker } from "../store/use-feeling-picker";
+import { useUploadMediaModal } from "../store/use-upload-media-modal";
 import { FeelingType, FeelingPicker } from "./feeling-picker";
 
 import {
@@ -27,7 +29,7 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Hint } from "@/components/ui/hint";
-import { MediaUploadInput } from "@/components/media-upload/media-upload-input";
+import { MediaUploadInput } from "@/features/media-upload/components/media-upload-input";
 
 import { FaPhotoVideo } from "react-icons/fa";
 import { FaRegFaceGrin } from "react-icons/fa6";
@@ -47,10 +49,11 @@ export const CreatePostModal = () => {
   const { mutate: createPostMutate, isPending: isCreatePostPending } =
     UseCreatePost();
 
+  const [openFeelingPickerModal, setOpenFeelingPickerModal] =
+    useFeelingPicker();
   const [openCreatePostModal, setOpenCreatePostModal] = useCreatePostModal();
+  const [openUploadMedia, setOpenUploadMedia] = useUploadMediaModal();
   const [openPostAudiencePicker, setOpenPostAudiencePicker] = useState(false);
-  const [openFeelingPickerModal, setOpenFeelingPickerModal] = useState(false);
-  const [openUploadMedia, setOpenUploadMedia] = useState(false);
 
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
@@ -83,7 +86,7 @@ export const CreatePostModal = () => {
     PostAudiences[0];
 
   //request
-  const handlePostUpload = () => {
+  const handlePostWithoutFilesUpload = () => {
     createPostMutate(
       {
         content: postContent,
@@ -106,19 +109,27 @@ export const CreatePostModal = () => {
     );
   };
 
-  const handlePostSubmit = () => {
+  const handleUploadMedia = () => {
     localUploadMedia(
       { files: uploadedFiles, userId: userId ? userId : "" },
       {
         onSuccess: (response) => {
           setFileUrls(response?.uploadedFileUrls || []);
-          handlePostUpload();
+          handlePostWithoutFilesUpload();
         },
         onError: (error) => {
           toast.error((error.response?.data as string) || error.message);
         },
       }
     );
+  };
+
+  const handlePostSubmit = () => {
+    if (uploadedFiles.length > 0) {
+      handleUploadMedia();
+    } else {
+      handlePostWithoutFilesUpload();
+    }
   };
 
   const handlePostSuccess = () => {
@@ -190,7 +201,6 @@ export const CreatePostModal = () => {
               <MediaUploadInput
                 uploadedFiles={uploadedFiles}
                 setUploadedFiles={setUploadedFiles}
-                setOpenUploadMedia={setOpenUploadMedia}
               />
             )}
 
@@ -218,6 +228,7 @@ export const CreatePostModal = () => {
                     <FaRegFaceGrin className="size-6 text-[#f78c6a]" />
                   </button>
                 </Hint>
+                {/**TODO: Tag people function if possible */}
               </div>
             </div>
 
@@ -236,8 +247,6 @@ export const CreatePostModal = () => {
 
       {openFeelingPickerModal && (
         <FeelingPicker
-          openFeelingPickerModal={openFeelingPickerModal}
-          setOpenFeelingPickerModal={setOpenFeelingPickerModal}
           currentFeeling={currentFeeling}
           setCurrentFeeling={setCurrentFeeling}
         />

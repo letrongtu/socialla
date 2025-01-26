@@ -65,7 +65,6 @@ const CreatePostEditor = ({
 
   return (
     <>
-      {/**TODO: Tag feature */}
       <div className="flex flex-col gap-y-6">
         <Editor
           ref={editorRef}

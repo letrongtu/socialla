@@ -37,7 +37,6 @@ export const Header = () => {
     null
   );
 
-  //TODO: Onclick Search button
   return (
     <div className="flex flex-row justify-between bg-[#ffffff] px-5">
       <div className="flex justify-center items-center py-3">
@@ -51,7 +50,11 @@ export const Header = () => {
         </button>
 
         <div className="flex flex-grow">
-          <div className="p-1.5 rounded-full bg-[#c9ccd1]/30 ml-6 lg:flex lg:gap-x-2 lg:items-center lg:w-52 flex-grow">
+          <div
+            onClick={() => {}}
+            className="p-1.5 rounded-full bg-[#c9ccd1]/30 ml-6 lg:flex lg:gap-x-2 lg:items-center lg:w-52 flex-grow"
+          >
+            {/**TODO: Onclick Search button */}
             <Search className="text-[#606770] size-6" />
             <p className="hidden lg:inline-block text-sm text-muted-foreground">
               Search Socialla

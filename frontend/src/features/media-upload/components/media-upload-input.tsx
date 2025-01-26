@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
+import { useUploadMediaModal } from "@/features/posts/store/use-upload-media-modal";
 
 import { ImagePlusIcon, X } from "lucide-react";
 import { ImageLayout } from "./image-layout";
@@ -7,15 +8,15 @@ import { ImageLayout } from "./image-layout";
 interface MediaUploadInputProps {
   uploadedFiles: File[];
   setUploadedFiles: (files: File[]) => void;
-  setOpenUploadMedia: (openUploadMedia: boolean) => void;
 }
 
 export const MediaUploadInput = ({
   uploadedFiles,
   setUploadedFiles,
-  setOpenUploadMedia,
 }: MediaUploadInputProps) => {
-  const [_, setDragActive] = useState(false);
+  const [, setOpenUploadMedia] = useUploadMediaModal();
+
+  const [, setDragActive] = useState(false);
 
   const imageElementRef = useRef<HTMLInputElement>(null);
 
@@ -46,7 +47,7 @@ export const MediaUploadInput = ({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className="w-full flex flex-col justify-center items-center rounded-lg border"
+      className="w-full flex flex-col justify-center items-center rounded-lg border group/file-upload-input"
     >
       <input
         ref={imageElementRef}
@@ -58,7 +59,7 @@ export const MediaUploadInput = ({
 
       <div
         className={cn(
-          "relative w-full max-w-[calc(100%-1rem)] min-h-60 m-2 rounded-lg flex flex-col items-center justify-center  ",
+          "relative w-full max-w-[calc(100%-1rem)] min-h-60 m-2 rounded-lg flex flex-col items-center justify-center",
           uploadedFiles.length === 0 &&
             "bg-[#c9ccd1]/30 hover:bg-[#c9ccd1]/60 cursor-pointer"
         )}
@@ -90,6 +91,16 @@ export const MediaUploadInput = ({
         >
           <X className="w-6 h-6 text-black" />
         </div>
+
+        {uploadedFiles.length > 0 && (
+          <div
+            onClick={() => imageElementRef.current?.click()}
+            className="hidden absolute top-2 left-2 items-center justify-center gap-x-1 rounded-lg px-3 py-2 bg-[#ffffff] group-hover/file-upload-input:flex cursor-pointer"
+          >
+            <ImagePlusIcon className="w-4 h-4 text-black" />
+            <p className="text-sm font-semibold">Add photos/videos</p>
+          </div>
+        )}
       </div>
     </div>
   );

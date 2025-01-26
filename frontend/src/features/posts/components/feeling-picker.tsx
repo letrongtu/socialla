@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { Separator } from "@/components/ui/separator";
+import { useFeelingPicker } from "../store/use-feeling-picker";
 
 export type FeelingType = {
   feeling: string;
@@ -19,18 +20,16 @@ export type FeelingType = {
 };
 
 interface FeelingPickerProps {
-  openFeelingPickerModal: boolean;
-  setOpenFeelingPickerModal: (openFeelingPickerModal: boolean) => void;
   currentFeeling: FeelingType | null;
   setCurrentFeeling: (currentFeeling: FeelingType) => void;
 }
 
 export const FeelingPicker = ({
-  openFeelingPickerModal,
-  setOpenFeelingPickerModal,
   currentFeeling,
   setCurrentFeeling,
 }: FeelingPickerProps) => {
+  const [openFeelingPickerModal, setOpenFeelingPickerModal] =
+    useFeelingPicker();
   const feelingWithEmojis = feelingsData.map((feeling) => {
     const emoji = Object.entries(emojiData).find(
       ([_, data]) => data.slug === feeling.emojiSlug

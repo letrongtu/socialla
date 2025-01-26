@@ -26,7 +26,7 @@ export const Sidebar = () => {
 
   const avatarFallback = firstName?.charAt(0).toUpperCase();
   return (
-    <div className="hidden lg:flex flex-col ml-2 mt-5">
+    <div className="hidden lg:flex flex-col ml-2 lg:min-w-80">
       <button
         onClick={() => {
           router.push(`/profile/${id}`);
