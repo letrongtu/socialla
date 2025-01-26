@@ -31,8 +31,8 @@ namespace backend.Controllers.Post
             }
 
             bool isPostDtoEmpty = (postDto.Content == null || postDto.Content.Length == 0) &&
-            string.IsNullOrEmpty(postDto.Feeling) &&
-            (postDto.ImageUrls == null || postDto.ImageUrls.Length == 0);
+                                    string.IsNullOrEmpty(postDto.Feeling) &&
+                                    (postDto.FileUrls == null || postDto.FileUrls.Length == 0);
 
             if(isPostDtoEmpty){
                 return BadRequest("Requires at least one of 'Content', 'Images', 'Feeling' fields is required");

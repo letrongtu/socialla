@@ -140,9 +140,13 @@ namespace backend.Controllers.MediaFiles
                 return BadRequest(new{Message="Unsupported file type", InvalidFiles = invalidTypeFiles});
             }
 
-            var uploadResults = new List<object>();
+            var uploadResults = new List<string>();
 
             foreach(var file in files){
+                if(file.Length > 25 * 1024 * 1024){
+                    return BadRequest("The file size exceeds the maximum limit of 25MB");
+                }
+
                 var uploadPath = GetFilePath(userId);
 
                 if(!Directory.Exists(uploadPath)){
@@ -150,14 +154,17 @@ namespace backend.Controllers.MediaFiles
                 }
 
                 var filePath = Path.Combine(uploadPath, file.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create)){
-                    await file.CopyToAsync(stream);
+
+                if(!System.IO.File.Exists(filePath)){
+                    using (var stream = new FileStream(filePath, FileMode.Create)){
+                        await file.CopyToAsync(stream);
+                    }
                 }
 
                 var hostUrl= $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
                 var publicUrl = hostUrl  + "/Uploads/Users/" + userId + "/" + file.FileName;
 
-                uploadResults.Add(new {FileUrl = publicUrl});
+                uploadResults.Add(publicUrl);
             }
 
             return Ok(new {Message = "Files uploaded successfully!", UploadedFileUrls = uploadResults});

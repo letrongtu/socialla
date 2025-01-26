@@ -15,7 +15,7 @@ namespace backend.Mappers.Post
                 Content = postDto.Content,
                 Feeling = postDto.Feeling,
                 PostAudience = postDto.PostAudience,
-                ImageUrls = postDto.ImageUrls,
+                FileUrls = postDto.FileUrls,
                 UserId = postDto.UserId,
             };
         }
@@ -26,7 +26,7 @@ namespace backend.Mappers.Post
                 Content = post.Content,
                 Feeling = post.Feeling,
                 PostAudience = post.PostAudience,
-                ImageUrls = post.ImageUrls,
+                FileUrls = post.FileUrls,
                 CreatedAt = post.CreatedAt,
                 UpdatedAt = post.UpdatedAt,
                 UserId = post.UserId

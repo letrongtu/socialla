@@ -8,10 +8,10 @@ namespace backend.Models
     public class Post
     {
         public int Id { get; set; }
-        public string[] Content { get; set; } = [];
-        public string Feeling { get; set; } = string.Empty;
+        public string[]? Content { get; set; } = [];
+        public string? Feeling { get; set; } = string.Empty;
         public string PostAudience { get; set; } = string.Empty;
-        public string[] ImageUrls { get; set; } = [];
+        public string[]? FileUrls { get; set; } = [];
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; }
         public string UserId { get; set; } = string.Empty;

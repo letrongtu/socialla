@@ -10,8 +10,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
-import { useCreatePostModal } from "../store/use-create-post-modal";
+import { UseCreatePost } from "../api/use-create-post";
 import { UseMediaLocalUpload } from "@/features/media-upload/api/use-media-local-upload";
+import { useCreatePostModal } from "../store/use-create-post-modal";
 import { FeelingType, FeelingPicker } from "./feeling-picker";
 
 import {
@@ -41,19 +42,30 @@ export const CreatePostModal = () => {
   const router = useRouter();
 
   const { data } = useCurrentUser();
-  const { localUploadMedia, isPending } = UseMediaLocalUpload();
-  const [openCreatePostModal, setOpenCreatePostModal] = useCreatePostModal();
+  const { localUploadMedia, isPending: isMediaUploadPending } =
+    UseMediaLocalUpload();
+  const { mutate: createPostMutate, isPending: isCreatePostPending } =
+    UseCreatePost();
 
+  const [openCreatePostModal, setOpenCreatePostModal] = useCreatePostModal();
   const [openPostAudiencePicker, setOpenPostAudiencePicker] = useState(false);
   const [openFeelingPickerModal, setOpenFeelingPickerModal] = useState(false);
   const [openUploadMedia, setOpenUploadMedia] = useState(false);
 
-  const [postContent, setPostContent] = useState<string[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+
+  const [postContent, setPostContent] = useState<string[]>([]);
+  const [fileUrls, setFileUrls] = useState<string[]>([]);
   const [currentFeeling, setCurrentFeeling] = useState<FeelingType | null>(
     null
   );
   const [postAudience, setPostAudience] = useState(DefaultPostAudience);
+
+  const isPostEmpty =
+    (postContent.length === 0 ||
+      (postContent.length === 1 && postContent[0] === "")) &&
+    uploadedFiles.length === 0 &&
+    !currentFeeling;
 
   //current user data
   if (!data) {
@@ -71,13 +83,36 @@ export const CreatePostModal = () => {
     PostAudiences[0];
 
   //request
-  const handleMediaUpload = () => {
+  const handlePostUpload = () => {
+    createPostMutate(
+      {
+        content: postContent,
+        feeling: currentFeeling?.feeling ? currentFeeling.feeling : "",
+        fileUrls: fileUrls,
+        postAudience: postAudience,
+        userId: userId ? userId : "",
+      },
+      {
+        onSuccess(response) {
+          toast.success(response?.message);
+        },
+        onError(error) {
+          console.log(error);
+        },
+        onSettled() {
+          handlePostSuccess();
+        },
+      }
+    );
+  };
+
+  const handlePostSubmit = () => {
     localUploadMedia(
       { files: uploadedFiles, userId: userId ? userId : "" },
       {
         onSuccess: (response) => {
-          handlePostSuccess();
-          toast.success(response?.message);
+          setFileUrls(response?.uploadedFileUrls || []);
+          handlePostUpload();
         },
         onError: (error) => {
           toast.error((error.response?.data as string) || error.message);
@@ -87,10 +122,14 @@ export const CreatePostModal = () => {
   };
 
   const handlePostSuccess = () => {
-    setUploadedFiles([]);
-    setOpenCreatePostModal(false);
     setPostContent([]);
+    setCurrentFeeling(null);
     setPostAudience(DefaultPostAudience);
+    setUploadedFiles([]);
+    setFileUrls([]);
+
+    setOpenUploadMedia(false);
+    setOpenCreatePostModal(false);
   };
 
   return (
@@ -183,8 +222,10 @@ export const CreatePostModal = () => {
             </div>
 
             <Button
-              onClick={handleMediaUpload}
-              disabled={isPending}
+              onClick={handlePostSubmit}
+              disabled={
+                isMediaUploadPending || isCreatePostPending || isPostEmpty
+              }
               className="w-full h-10 flex justify-center items-center bg-[#283959] rounded-lg hover:cursor-pointer hover:bg-[#283959]/80"
             >
               <p className="text-lg font-semibold text-white">Post</p>

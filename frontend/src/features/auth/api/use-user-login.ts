@@ -21,8 +21,6 @@ type Options = {
 };
 
 export const UseUserLogin = () => {
-  const [data, setData] = useState<ResponeType>(null);
-  const [error, setError] = useState<Error | null>(null);
   const [status, setStatus] = useState<
     "success" | "error" | "pending" | "settled" | null
   >(null);
@@ -34,8 +32,6 @@ export const UseUserLogin = () => {
 
   const login = async (values: RequestType, options?: Options) => {
     try {
-      setData(null);
-      setError(null);
       setStatus("pending");
 
       const response = await axios.post<ResponeType>(
@@ -57,8 +53,6 @@ export const UseUserLogin = () => {
 
   return {
     login,
-    data,
-    error,
     isPending,
     isSuccess,
     isError,

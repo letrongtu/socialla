@@ -1,9 +1,11 @@
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -12,6 +14,8 @@ import { Separator } from "@/components/ui/separator";
 
 import { Globe } from "lucide-react";
 import { FaUserFriends, FaLock } from "react-icons/fa";
+import { Button } from "../ui/button";
+import { set } from "date-fns";
 
 export const PostAudiences = [
   {
@@ -42,6 +46,7 @@ export const PostAudiencePicker = ({
   openPostAudiencePicker,
   setOpenPostAudiencePicker,
 }: PostAudiencePickerProps) => {
+  const [newPostAudience, setNewPostAudience] = useState(currentPostAudience);
   return (
     <Dialog
       open={openPostAudiencePicker}
@@ -83,12 +88,12 @@ export const PostAudiencePicker = ({
               audience of this specific post.
             </p>
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-y-2">
             {PostAudiences.map(
               ({ visibility, description, icon: Icon }, index) => (
                 <div
                   onClick={() => {
-                    setPostAudience(visibility);
+                    setNewPostAudience(visibility);
                   }}
                   key={index}
                   className="w-full h-16 flex items-center justify-between hover:bg-[#c9ccd1]/30 rounded-lg p-3"
@@ -111,10 +116,10 @@ export const PostAudiencePicker = ({
                   <div
                     className={cn(
                       "w-4 h-4 rounded-full border-[1px] border-black flex justify-center items-center",
-                      currentPostAudience === visibility && "border-blue-600 "
+                      newPostAudience === visibility && "border-blue-600 "
                     )}
                   >
-                    {currentPostAudience === visibility && (
+                    {newPostAudience === visibility && (
                       <div className="w-2 h-2 rounded-full bg-blue-600"></div>
                     )}
                   </div>
@@ -123,6 +128,32 @@ export const PostAudiencePicker = ({
             )}
           </div>
         </div>
+
+        {newPostAudience !== currentPostAudience && (
+          <DialogFooter className="flex justify-end items-center gap-x-2 mx-4">
+            <Button
+              onClick={() => {
+                setNewPostAudience(currentPostAudience);
+              }}
+              size="md"
+              className="w-24"
+            >
+              <p className="text-base">Cancel</p>
+            </Button>
+
+            <Button
+              onClick={() => {
+                setPostAudience(newPostAudience);
+                setOpenPostAudiencePicker(false);
+              }}
+              size="md"
+              variant="green"
+              className="w-24"
+            >
+              <p className="text-base">Save</p>
+            </Button>
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );

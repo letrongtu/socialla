@@ -42,7 +42,7 @@ export const UseUserSignUp = () => {
       setStatus("pending");
 
       const response = await axios.post<ResponeType>(
-        `${baseURL}/account/sign-up"`,
+        `${baseURL}/account/sign-up`,
         values
       );
 
