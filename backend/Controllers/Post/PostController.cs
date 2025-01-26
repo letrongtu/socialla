@@ -6,6 +6,7 @@ using backend.Dtos.Post;
 using backend.Interfaces;
 using backend.Mappers.Post;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -57,6 +58,22 @@ namespace backend.Controllers.Post
             await _postRepo.CreatePostAsync(post);
 
             return Ok(new {Message="Post created", PostId = post.Id});
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllPaginated(int pageNumber = 1, int pageSize = 20){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            if(pageNumber < 1 || pageSize < 1){
+                return BadRequest("Page number and page size must be greater than 0");
+            }
+
+            var paginatedPosts = await _postRepo.GetAllPaginatedAsync(pageNumber, pageSize);
+
+            //TODO: Push the userId new created post to the top of the list
+            return Ok(new {Posts = paginatedPosts.Records, TotalPosts = paginatedPosts.TotalRecords, HasNextPage = paginatedPosts.HasNextPage});
         }
     }
 }

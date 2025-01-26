@@ -4,6 +4,8 @@ import { useCreatePostModal } from "@/features/posts/store/use-create-post-modal
 import { useFeelingPicker } from "@/features/posts/store/use-feeling-picker";
 import { useUploadMediaModal } from "@/features/posts/store/use-upload-media-modal";
 
+import { PostsDisplaySection } from "@/features/posts/components/posts-display-section";
+
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Separator } from "./ui/separator";
 import { FaPhotoVideo } from "react-icons/fa";
@@ -88,6 +90,8 @@ export const FeedSection = () => {
           </div>
         </div>
       </div>
+
+      <PostsDisplaySection />
     </div>
   );
 };

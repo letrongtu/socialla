@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig = {
+  reactStrictMode: false,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "5096", // Include the port used by your backend
+        pathname: "/Uploads/Users/**", // Allow images from this specific path
+      },
+    ],
+  },
   async rewrites() {
     return [
       {
