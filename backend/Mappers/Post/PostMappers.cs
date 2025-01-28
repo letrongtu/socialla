@@ -23,6 +23,7 @@ namespace backend.Mappers.Post
         {
             return new ReturnPostDto
             {
+                Id = post.Id,
                 Content = post.Content,
                 Feeling = post.Feeling,
                 PostAudience = post.PostAudience,

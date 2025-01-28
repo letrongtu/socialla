@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { convertToRaw, Editor, EditorState, Modifier } from "draft-js";
-import "../../node_modules/draft-js/dist/Draft.css";
+import { Editor, EditorState, Modifier } from "draft-js";
+import "../../../../node_modules/draft-js/dist/Draft.css";
 import { useCreatePostModal } from "@/features/posts/store/use-create-post-modal";
-import { EmojiPopover } from "./emoji-popover";
+
 import { BsEmojiSmile } from "react-icons/bs";
+import { EmojiPopover } from "@/components/emoji-popover";
 
 interface CreatePostEditorProps {
   setPostContent: (content: string[]) => void;

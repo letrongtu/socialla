@@ -1,7 +1,7 @@
 const AuthHeader = () => {
   return (
     <div className="flex flex-col gap-y-3 text-center mb-5">
-      <p className="text-4xl lg:text-6xl md:text-6xl font-bold text-[#283959]">
+      <p className="text-4xl lg:text-6xl md:text-6xl font-bold text-[#1823ab]">
         Socialla
       </p>
 

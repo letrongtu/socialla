@@ -1,40 +1,44 @@
-import { useGetUser } from "@/features/auth/api/use-get-user";
 import { PostType } from "../types";
-import { get } from "http";
-import { useEffect } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+import { PostImageLayout } from "./post-image-layout";
+import { PostHeader } from "./post-header";
+import { EngagementBar } from "@/components/engagement-bar/engagement-bar";
+
+import { FaEllipsis } from "react-icons/fa6";
 
 interface PostCardProps {
   postData: PostType;
 }
 export const PostCard = ({ postData }: PostCardProps) => {
-  const { data: userData, isPending } = useGetUser({ userId: postData.userId });
-
-  if (!userData) {
-    return null;
-  }
-
-  const avatarFallback = userData?.firstName?.charAt(0).toUpperCase();
+  const mediaFiles = postData.fileUrls ? postData.fileUrls : [];
 
   return (
-    <div className="w-full bg-[#ffffff] rounded-lg">
-      <div className="w-full flex">
-        <div className="">
-          <Avatar className="rounded size-10 hover:opacity-75 transition">
-            <AvatarImage
-              alt={userData.firstName}
-              src={userData.profilePictureUrl}
-            />
-            <AvatarFallback className="rounded-full bg-[#283959] text-white font-semibold text-lg">
-              {avatarFallback}
-            </AvatarFallback>
-          </Avatar>
-
-          <div className="text-sm text-gray-500 mt-2">
-            {userData.firstName} {userData.lastName}
+    <div className="bg-[#fff] rounded-lg shadow-md pt-4 pb-2 flex flex-col gap-y-3">
+      <div className="relative flex flex-col justify-center gap-y-3 px-4">
+        {/**TODO: Make this an edit component -> reusable */}
+        <div className="absolute top-0 right-4">
+          <div className="p-1.5 rounded-full hover:bg-[#c9ccd1]/30 cursor-pointer">
+            <FaEllipsis className="size-5 text-muted-foreground" />
           </div>
         </div>
+
+        {/**Make this reusable */}
+        <PostHeader postData={postData} />
+
+        <div className="flex flex-col gap-y-1">
+          {postData.content?.map((line, index) => (
+            <p key={index} className="text-base">
+              {line}
+            </p>
+          ))}
+        </div>
       </div>
+
+      <PostImageLayout mediaFiles={mediaFiles} />
+
+      {/**Make this reusable */}
+
+      <EngagementBar postId={postData.id} />
     </div>
   );
 };

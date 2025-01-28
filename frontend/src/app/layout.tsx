@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-[#d4f0f0]/30 via-[#0f9bf6]/5 to-[#ecd5e3]/20`}
       >
         <JotaiProvider>
           <Modal />

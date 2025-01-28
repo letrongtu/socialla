@@ -6,12 +6,18 @@ import { FaRegPlayCircle } from "react-icons/fa";
 
 interface ImageLayoutProps {
   mediaFiles: File[];
+  rounded?: boolean;
 }
 
-export const ImageLayout = ({ mediaFiles }: ImageLayoutProps) => {
+export const ImageLayout = ({
+  mediaFiles,
+  rounded = true,
+}: ImageLayoutProps) => {
   const numberOfNonDisplayImages = mediaFiles.length - 2;
 
-  const isVideoFile = (file: File) => file.type.startsWith("video/");
+  const isVideoFile = (file: File) => {
+    return file.type.startsWith("video/");
+  };
 
   return (
     <div
@@ -48,7 +54,8 @@ export const ImageLayout = ({ mediaFiles }: ImageLayoutProps) => {
             {isVideoFile(file) ? (
               <div
                 className={cn(
-                  "relative w-full h-[calc(100%)] bg-[#c9ccd1]/50 rounded-lg",
+                  "relative w-full h-[calc(100%)] bg-[#c9ccd1]/50 ",
+                  rounded && "rounded-lg",
                   index === 0 && "min-h-[225px]",
                   index === 2 && mediaFiles.length > 3 && "brightness-50"
                 )}

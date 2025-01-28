@@ -121,7 +121,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
           <form onSubmit={handleSignUp} className="space-y-3">
             <div className="flex gap-x-3">
               <Input
-                className="focus-visible:shadow-md focus-visible:shadow-[#283959]"
+                className="focus-visible:shadow-md focus-visible:shadow-[#1823ab]"
                 disabled={isPending}
                 value={firstName}
                 onChange={(e) => {
@@ -133,7 +133,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
               />
 
               <Input
-                className="focus-visible:shadow-md focus-visible:shadow-[#283959]"
+                className="focus-visible:shadow-md focus-visible:shadow-[#1823ab]"
                 disabled={isPending}
                 value={lastName}
                 onChange={(e) => {
@@ -164,7 +164,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
             </div>
 
             <Input
-              className="focus-visible:shadow-md focus-visible:shadow-[#283959]"
+              className="focus-visible:shadow-md focus-visible:shadow-[#1823ab]"
               disabled={isPending}
               value={email}
               onChange={(e) => {
@@ -177,7 +177,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
 
             <div className="flex relative items-center">
               <Input
-                className="focus-visible:shadow-md focus-visible:shadow-[#283959]"
+                className="focus-visible:shadow-md focus-visible:shadow-[#1823ab]"
                 disabled={isPending}
                 value={password}
                 onChange={(e) => {
@@ -201,7 +201,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
             <Button
               disabled={isPending}
               type="submit"
-              className="w-full h-[50px] bg-[#283959] text-lg"
+              className="w-full h-[50px] bg-[#1823ab] text-lg"
               size="lg"
               variant="socialla"
             >

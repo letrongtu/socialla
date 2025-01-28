@@ -26,6 +26,7 @@ namespace backend.Controllers.Post
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreatePostDto postDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -61,6 +62,7 @@ namespace backend.Controllers.Post
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllPaginated(int pageNumber = 1, int pageSize = 20){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);

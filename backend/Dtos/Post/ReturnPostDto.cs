@@ -7,6 +7,7 @@ namespace backend.Dtos.Post
 {
     public class ReturnPostDto
     {
+        public int Id {get; set;}
         public string[]? Content { get; set; } = [];
         public string? Feeling { get; set; }
         public string PostAudience { get; set; } = string.Empty;

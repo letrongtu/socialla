@@ -26,16 +26,16 @@ export const Sidebar = () => {
 
   const avatarFallback = firstName?.charAt(0).toUpperCase();
   return (
-    <div className="hidden lg:flex flex-col ml-2 lg:min-w-80">
+    <div className="hidden lg:flex flex-col lg:min-w-96 ">
       <button
         onClick={() => {
           router.push(`/profile/${id}`);
         }}
-        className="w-full py-3 px-3 flex items-center rounded-lg gap-x-3 hover:bg-[#c9ccd1]/30"
+        className="w-full py-3 flex items-center rounded-lg gap-x-3 hover:bg-[#c9ccd1]/30"
       >
-        <Avatar className="rounded size-7 hover:opacity-75 transition">
+        <Avatar className="rounded size-11 hover:opacity-75 transition">
           <AvatarImage alt={firstName} src={profilePictureUrl} />
-          <AvatarFallback className="rounded-full bg-[#283959] text-white font-semibold text-base">
+          <AvatarFallback className="rounded-full bg-custom-gradient text-white font-semibold text-xl">
             {avatarFallback}
           </AvatarFallback>
         </Avatar>

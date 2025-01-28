@@ -1,10 +1,9 @@
 import axios, { AxiosError } from "axios";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { PostType } from "../types";
-import { set } from "date-fns";
 
 const BASE_URL = "http://localhost:5096/api";
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 type ResponseType = {
   posts: PostType[];
@@ -25,7 +24,7 @@ export const UseGetPosts = () => {
   const [data, setData] = useState<PostType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchPosts = async (pageNumber: number) => {
+  const fetchPosts = async (pageNumber: number, options?: Options) => {
     try {
       setIsLoading(true);
 
@@ -36,35 +35,35 @@ export const UseGetPosts = () => {
       setData((previousData) => [...previousData, ...response.data.posts]);
       setCanLoadMore(response.data.hasNextPage);
 
-      console.log(response.data);
+      options?.onSuccess?.(response.data);
 
       return response;
     } catch (error) {
-      console.log(1);
+      options?.onError?.(error as AxiosError);
     } finally {
+      options?.onSettled?.();
       setIsLoading(false);
     }
   };
 
+  //fetch the first page when mounted
   useEffect(() => {
     fetchPosts(1);
   }, []);
 
   const loadMore = async (options?: Options) => {
-    if (canLoadMore) {
-      // prevent duplicate requests
-      if (!canLoadMore || isLoading) return;
+    // prevent duplicate requests
+    if (!canLoadMore || isLoading) return;
 
-      const nextPage = currentPageNumber + 1;
-      await fetchPosts(nextPage);
-      setCurrentPageNumber(nextPage);
-    }
+    const nextPage = currentPageNumber + 1;
+    await fetchPosts(nextPage);
+    setCurrentPageNumber(nextPage);
   };
 
   return {
-    loadMore,
-    canLoadMore,
     data,
     isLoading,
+    canLoadMore,
+    loadMore,
   };
 };

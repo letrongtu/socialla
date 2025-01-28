@@ -38,13 +38,13 @@ export const Header = () => {
   );
 
   return (
-    <div className="flex flex-row justify-between bg-[#ffffff] px-5">
-      <div className="flex justify-center items-center py-3">
+    <div className="flex flex-row justify-between bg-[#ffffff] px-5 shadow-md">
+      <div className="lg:min-w-96 flex justify-start items-center py-3 ">
         <button
           onClick={() => {
             router.push("/");
           }}
-          className="text-4xl font-bold text-[#283959]"
+          className="text-4xl font-bold bg-custom-gradient text-transparent bg-clip-text"
         >
           Socialla
         </button>
@@ -52,7 +52,7 @@ export const Header = () => {
         <div className="flex flex-grow">
           <div
             onClick={() => {}}
-            className="p-1.5 rounded-full bg-[#c9ccd1]/30 ml-6 lg:flex lg:gap-x-2 lg:items-center lg:w-52 flex-grow"
+            className="p-1.5 rounded-full bg-[#c9ccd1]/30 ml-6 lg:flex lg:gap-x-2 lg:items-center lg:w-full flex-grow"
           >
             {/**TODO: Onclick Search button */}
             <Search className="text-[#606770] size-6" />
@@ -63,7 +63,7 @@ export const Header = () => {
         </div>
       </div>
 
-      <div className="hidden md:flex items-center justify-center gap-x-5">
+      <div className="w-full max-w-2xl flex-grow hidden md:flex items-center justify-evenly gap-x-5">
         {pages.map((page) => (
           <HeaderPageButton
             key={page.label}
@@ -75,7 +75,7 @@ export const Header = () => {
         ))}
       </div>
 
-      <div className="flex items-center justify-center space-x-3">
+      <div className="lg:min-w-96 flex items-center justify-end space-x-3">
         {utilButtons.map((utilButton) => (
           <HeaderUtilButton
             key={utilButton.label}

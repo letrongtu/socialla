@@ -60,6 +60,10 @@ export default {
       gridTemplateRows: {
         rowImageLayout: "repeat(5, minmax(0, 100px))",
       },
+
+      backgroundImage: {
+        "custom-gradient": "linear-gradient(to top right, #283959, #1823ab)",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

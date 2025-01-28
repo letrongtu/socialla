@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
-import { useUploadMediaModal } from "@/features/posts/store/use-upload-media-modal";
+import { useUploadMediaModal } from "@/features/media-upload/store/use-upload-media-modal";
 
 import { ImagePlusIcon, X } from "lucide-react";
 import { ImageLayout } from "./image-layout";

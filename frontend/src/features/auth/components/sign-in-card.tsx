@@ -87,7 +87,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
 
         <form onSubmit={handleSignIn} className="space-y-3">
           <Input
-            className="focus-visible:shadow-md focus-visible:shadow-[#283959]"
+            className="focus-visible:shadow-md focus-visible:shadow-[#1823ab]"
             disabled={isPending}
             value={email}
             onChange={(e) => {
@@ -100,7 +100,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
 
           <div className="flex relative items-center">
             <Input
-              className="focus-visible:shadow-md focus-visible:shadow-[#283959]"
+              className="focus-visible:shadow-md focus-visible:shadow-[#1823ab]"
               disabled={isPending}
               value={password}
               onChange={(e) => {
@@ -124,7 +124,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
           <Button
             disabled={isPending}
             type="submit"
-            className="w-full h-[50px] bg-[#283959] text-lg"
+            className="w-full h-[50px] bg-[#1823ab] text-lg"
             size="lg"
             variant="socialla"
           >

@@ -41,7 +41,7 @@ export const UserButton = ({}) => {
           <div className="relative hover:cursor-pointer">
             <Avatar className="rounded size-10 hover:opacity-75 transition">
               <AvatarImage alt={firstName} src={profilePictureUrl} />
-              <AvatarFallback className="rounded-full bg-[#283959] text-white font-semibold text-lg">
+              <AvatarFallback className="rounded-full bg-custom-gradient text-white font-semibold text-lg">
                 {avatarFallback}
               </AvatarFallback>
             </Avatar>
@@ -69,7 +69,7 @@ export const UserButton = ({}) => {
             <div className="flex">
               <Avatar className="rounded size-10 hover:opacity-75 transition">
                 <AvatarImage alt={firstName} src={profilePictureUrl} />
-                <AvatarFallback className="rounded-full bg-[#283959] text-white font-semibold text-lg">
+                <AvatarFallback className="rounded-full bg-custom-gradient text-white font-semibold text-lg">
                   {avatarFallback}
                 </AvatarFallback>
               </Avatar>
@@ -82,20 +82,20 @@ export const UserButton = ({}) => {
 
         <DropdownMenuItem
           onClick={() => {}}
-          className="h-12 text-md font-semibold cursor-pointer hover:bg-[#c9ccd1]/30"
+          className="h-12 text-md font-semibold cursor-pointer hover:bg-[#c9ccd1]/30 group/display"
         >
           <div className="flex justify-center items-center w-8 h-8 rounded-full bg-[#c9ccd1] mr-1 ">
-            <Moon className="size-4" />
+            <Moon className="text-[#606770] size-4 group-hover/display:size-5 group-hover/display:text-[#1823ab]" />
           </div>
           Display
         </DropdownMenuItem>
 
         <DropdownMenuItem
           onClick={() => signOut()}
-          className="h-12 text-md font-semibold cursor-pointer hover:bg-[#c9ccd1]/30"
+          className="h-12 text-md font-semibold cursor-pointer hover:bg-[#c9ccd1]/30 group/logout"
         >
           <div className="flex justify-center items-center w-8 h-8 rounded-full bg-[#c9ccd1] mr-1">
-            <LogOut className="size-4" />
+            <LogOut className="text-[#606770] size-4 group-hover/logout:size-5 group-hover/logout:text-[#1823ab]" />
           </div>
           Logout
         </DropdownMenuItem>

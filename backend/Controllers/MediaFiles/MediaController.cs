@@ -143,8 +143,8 @@ namespace backend.Controllers.MediaFiles
             var uploadResults = new List<string>();
 
             foreach(var file in files){
-                if(file.Length > 25 * 1024 * 1024){
-                    return BadRequest("The file size exceeds the maximum limit of 25MB");
+                if(file.Length > 100 * 1024 * 1024){
+                    return BadRequest("The file size exceeds the maximum limit of 100MB");
                 }
 
                 var uploadPath = GetFilePath(userId);

@@ -1,7 +1,7 @@
 const AuthSide = () => {
   return (
     <div className="flex flex-col gap-y-3 text-center md:text-center mb-5 md:mb-10 lg:text-left">
-      <p className="text-4xl lg:text-6xl md:text-6xl font-bold text-[#283959]">
+      <p className="text-4xl lg:text-6xl md:text-6xl font-bold text-[#1823ab]">
         Socialla
       </p>
 

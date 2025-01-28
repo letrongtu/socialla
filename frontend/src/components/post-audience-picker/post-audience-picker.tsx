@@ -15,7 +15,6 @@ import { Separator } from "@/components/ui/separator";
 import { Globe } from "lucide-react";
 import { FaUserFriends, FaLock } from "react-icons/fa";
 import { Button } from "../ui/button";
-import { set } from "date-fns";
 
 export const PostAudiences = [
   {
@@ -24,7 +23,7 @@ export const PostAudiences = [
     icon: FaUserFriends,
   },
   {
-    visibility: "Global",
+    visibility: "Public",
     description: "Anyone on or off Socialla",
     icon: Globe,
   },

@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 
 const CreatePostEditor = dynamic(
-  () => import("@/components/create-post-editor"),
+  () => import("@/features/posts/components/create-post-editor"),
   { ssr: false }
 );
 
@@ -14,7 +14,7 @@ import { UseCreatePost } from "../api/use-create-post";
 import { UseMediaLocalUpload } from "@/features/media-upload/api/use-media-local-upload";
 import { useCreatePostModal } from "../store/use-create-post-modal";
 import { useFeelingPicker } from "../store/use-feeling-picker";
-import { useUploadMediaModal } from "../store/use-upload-media-modal";
+import { useUploadMediaModal } from "../../media-upload/store/use-upload-media-modal";
 import { FeelingType, FeelingPicker } from "./feeling-picker";
 
 import {
@@ -86,12 +86,12 @@ export const CreatePostModal = () => {
     PostAudiences[0];
 
   //request
-  const handlePostWithoutFilesUpload = () => {
+  const handleCreatePost = (fileUrls?: string[]) => {
     createPostMutate(
       {
         content: postContent,
         feeling: currentFeeling?.feeling ? currentFeeling.feeling : "",
-        fileUrls: fileUrls,
+        fileUrls: fileUrls ? fileUrls : [],
         postAudience: postAudience,
         userId: userId ? userId : "",
       },
@@ -109,15 +109,16 @@ export const CreatePostModal = () => {
     );
   };
 
-  const handleUploadMedia = () => {
+  const handleCreatePostWithMedia = () => {
     localUploadMedia(
       { files: uploadedFiles, userId: userId ? userId : "" },
       {
         onSuccess: (response) => {
-          setFileUrls(response?.uploadedFileUrls || []);
-          handlePostWithoutFilesUpload();
+          const fileUrls = response?.uploadedFileUrls || [];
+          handleCreatePost(fileUrls);
         },
         onError: (error) => {
+          console.log("Here");
           toast.error((error.response?.data as string) || error.message);
         },
       }
@@ -126,9 +127,9 @@ export const CreatePostModal = () => {
 
   const handlePostSubmit = () => {
     if (uploadedFiles.length > 0) {
-      handleUploadMedia();
+      handleCreatePostWithMedia();
     } else {
-      handlePostWithoutFilesUpload();
+      handleCreatePost();
     }
   };
 
@@ -160,15 +161,16 @@ export const CreatePostModal = () => {
             </DialogHeader>
 
             <Separator className="h-[0.5px]" />
+
             <div className="flex gap-x-3">
               <button
                 onClick={() => {
                   router.push(`/profile/${userId}`);
                 }}
               >
-                <Avatar className="rounded size-10 hover:opacity-75 transition">
+                <Avatar className="rounded size-11 hover:opacity-75 transition">
                   <AvatarImage alt={firstName} src={profilePictureUrl} />
-                  <AvatarFallback className="rounded-full bg-[#283959] text-white font-semibold text-lg">
+                  <AvatarFallback className="rounded-full bg-[#1823ab] text-white font-semibold text-lg">
                     {avatarFallback}
                   </AvatarFallback>
                 </Avatar>
@@ -237,7 +239,7 @@ export const CreatePostModal = () => {
               disabled={
                 isMediaUploadPending || isCreatePostPending || isPostEmpty
               }
-              className="w-full h-10 flex justify-center items-center bg-[#283959] rounded-lg hover:cursor-pointer hover:bg-[#283959]/80"
+              className="w-full h-10 flex justify-center items-center bg-[#1823ab] rounded-lg hover:cursor-pointer hover:bg-[#1823ab]/80"
             >
               <p className="text-lg font-semibold text-white">Post</p>
             </Button>
