@@ -8,9 +8,10 @@ namespace backend.Interfaces
 {
     public interface IPostReactionRepository
     {
-        Task<List<PostReaction>> GetByPostIdAsync(int postId);
-        Task<PostReaction?> GetByIdAsync(int id);
+        Task<List<PostReaction>> GetByPostIdAsync(string postId);
+        Task<PostReaction?> GetByPostIdAndUserIdAsync(string postId, string userId);
         Task<PostReaction> CreateAsync(PostReaction reaction);
-        Task<PostReaction?> DeleteAsync(int id);
+        Task<PostReaction?> DeleteByPostIdAndUserIdAsync(string postId, string userId);
+        Task<PostReaction?> UpdateByIdAsync(string id, string reaction);
     }
 }

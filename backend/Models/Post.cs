@@ -7,7 +7,7 @@ namespace backend.Models
 {
     public class Post
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString().ToLower();
         public string[]? Content { get; set; } = [];
         public string? Feeling { get; set; } = string.Empty;
         public string PostAudience { get; set; } = string.Empty;

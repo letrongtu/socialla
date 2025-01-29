@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace backend.Dtos.PostReaction
 {
-    public class ReturnPostReationDto
+    public class DeletePostReactionDto
     {
-        public string Reaction { get; set; } = string.Empty;
-        public int Count { get; set; } = 0;
-        public List<string> UserIds { get; set; } = [];
+        public string UserId { get; set; } = string.Empty;
         public string PostId { get; set; } = string.Empty;
     }
 }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "gxghfNlrZhrD+/mvzoiPMewlXpV+qM2Lsu77e6+11Wc=",
+  "Hash": "uyNLQ4OVhuHVfabIdjeuwJlVAVqoqXsLrtZV5vZjfx8=",
   "Source": "backend",
   "BasePath": "_content/backend",
   "Mode": "Default",
@@ -183,6 +183,48 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Uploads\\Users\\0438a85a-32eb-41c6-962c-3a04894449ca\\socialla.png"
+    },
+    {
+      "Identity": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\6bb0d129-35b8-4e74-96a3-0ae49eec9662\\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j - Copy.jpg",
+      "SourceId": "backend",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\socialla\\backend\\wwwroot\\",
+      "BasePath": "_content/backend",
+      "RelativePath": "Uploads/Users/6bb0d129-35b8-4e74-96a3-0ae49eec9662/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j - Copy#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "rg033zkkdt",
+      "Integrity": "G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\Users\\6bb0d129-35b8-4e74-96a3-0ae49eec9662\\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j - Copy.jpg"
+    },
+    {
+      "Identity": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\a6759b1b-f949-41b9-aa79-f4723fdfca6d\\socialla.png",
+      "SourceId": "backend",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\socialla\\backend\\wwwroot\\",
+      "BasePath": "_content/backend",
+      "RelativePath": "Uploads/Users/a6759b1b-f949-41b9-aa79-f4723fdfca6d/socialla#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ouldm5xbii",
+      "Integrity": "4Inq25DVf6Qg+zceBMp6hRd96pNr6yOakXxjtl035ns=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\Users\\a6759b1b-f949-41b9-aa79-f4723fdfca6d\\socialla.png"
     }
   ],
   "Endpoints": [
@@ -829,6 +871,170 @@
         {
           "Name": "Last-Modified",
           "Value": "Mon, 27 Jan 2025 04:05:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-4Inq25DVf6Qg+zceBMp6hRd96pNr6yOakXxjtl035ns="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/Users/6bb0d129-35b8-4e74-96a3-0ae49eec9662/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j - Copy.jpg",
+      "AssetFile": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\6bb0d129-35b8-4e74-96a3-0ae49eec9662\\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j - Copy.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2990111"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 29 Jan 2025 10:03:26 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/Users/6bb0d129-35b8-4e74-96a3-0ae49eec9662/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j - Copy.rg033zkkdt.jpg",
+      "AssetFile": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\6bb0d129-35b8-4e74-96a3-0ae49eec9662\\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j - Copy.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2990111"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 29 Jan 2025 10:03:26 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "rg033zkkdt"
+        },
+        {
+          "Name": "label",
+          "Value": "Uploads/Users/6bb0d129-35b8-4e74-96a3-0ae49eec9662/cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j - Copy.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-G7TuSa6tmNgSPrKmwb9i9U/acq5qBeg3JkhfcRZ7Pd0="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/Users/a6759b1b-f949-41b9-aa79-f4723fdfca6d/socialla.ouldm5xbii.png",
+      "AssetFile": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\a6759b1b-f949-41b9-aa79-f4723fdfca6d\\socialla.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "13369"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4Inq25DVf6Qg+zceBMp6hRd96pNr6yOakXxjtl035ns=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 29 Jan 2025 09:56:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ouldm5xbii"
+        },
+        {
+          "Name": "label",
+          "Value": "Uploads/Users/a6759b1b-f949-41b9-aa79-f4723fdfca6d/socialla.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-4Inq25DVf6Qg+zceBMp6hRd96pNr6yOakXxjtl035ns="
+        }
+      ]
+    },
+    {
+      "Route": "Uploads/Users/a6759b1b-f949-41b9-aa79-f4723fdfca6d/socialla.png",
+      "AssetFile": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\a6759b1b-f949-41b9-aa79-f4723fdfca6d\\socialla.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "13369"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4Inq25DVf6Qg+zceBMp6hRd96pNr6yOakXxjtl035ns=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 29 Jan 2025 09:56:24 GMT"
         },
         {
           "Name": "Cache-Control",

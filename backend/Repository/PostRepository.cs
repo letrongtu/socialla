@@ -28,7 +28,7 @@ namespace backend.Repository
             return post;
         }
 
-        public async Task<Post?> DeleteAsync(int id)
+        public async Task<Post?> DeleteAsync(string id)
         {
             var post = await _dbContext.Posts.FindAsync(id);
 
@@ -60,12 +60,12 @@ namespace backend.Repository
             };
         }
 
-        public async Task<Post?> GetByIdAsync(int id)
+        public async Task<Post?> GetByIdAsync(string id)
         {
             return await _dbContext.Posts.FindAsync(id);
         }
 
-        public async Task<Post?> UpdateAsync(int id, Post post)
+        public async Task<Post?> UpdateAsync(string id, Post post)
         {
             var existingPost = await _dbContext.Posts.FindAsync(id);
 

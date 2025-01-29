@@ -25,32 +25,43 @@ namespace backend.Repository
             return reaction;
         }
 
-        public async Task<PostReaction?> DeleteAsync(int id)
+        public async Task<PostReaction?> DeleteByPostIdAndUserIdAsync(string postId, string userId)
         {
-            var reaction = await _dbContext.PostReactions.FindAsync(id);
+            var existingPostReaction = await _dbContext.PostReactions.FirstOrDefaultAsync((reaction) => reaction.PostId == postId && reaction.UserId == userId);
 
-            if(reaction == null){
+            if(existingPostReaction == null){
                 return null;
             }
 
-            _dbContext.PostReactions.Remove(reaction);
+            _dbContext.PostReactions.Remove(existingPostReaction);
             await _dbContext.SaveChangesAsync();
 
-            return reaction;
+            return existingPostReaction;
         }
 
-        public async Task<List<PostReaction>> GetByPostIdAsync(int postId)
+        public async Task<PostReaction?> GetByPostIdAndUserIdAsync(string postId, string userId)
         {
-            var reactions = await _dbContext.PostReactions.ToListAsync();
-
-            var postReactions = reactions.Where((reaction) => reaction.PostId == postId).ToList();
-
-            return postReactions;
+            return await _dbContext.PostReactions.FirstOrDefaultAsync((reaction) => reaction.PostId == postId && reaction.UserId == userId);
         }
 
-        public async Task<PostReaction?> GetByIdAsync(int id)
+        public async Task<List<PostReaction>> GetByPostIdAsync(string postId)
         {
-            return await _dbContext.PostReactions.FindAsync(id);
+            return await _dbContext.PostReactions.Where((reaction) => reaction.PostId == postId).ToListAsync();;
+        }
+
+
+        public async Task<PostReaction?> UpdateByIdAsync(string id, string reaction)
+        {
+            var existingPostReaction = await _dbContext.PostReactions.FirstOrDefaultAsync(x => x.Id == id);
+
+            if(existingPostReaction == null){
+                return null;
+            }
+
+            existingPostReaction.Reaction = reaction;
+            await _dbContext.SaveChangesAsync();
+
+            return existingPostReaction;
         }
     }
 }

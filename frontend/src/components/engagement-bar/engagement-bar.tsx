@@ -11,6 +11,10 @@ import { FaHeart } from "react-icons/fa";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { reactionsWithEmojiAndIcon } from "./reaction-data/reaction-data";
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
+import { UseCreatePostReaction } from "@/features/post-reactions/api/create-post-reaction";
+import { UseDeletePostReaction } from "@/features/post-reactions/api/delete-post-reaction";
+import { toast } from "sonner";
+import { UseUpdatePostReaction } from "@/features/post-reactions/api/update-post-reaction";
 
 interface EngagementBarProps {
   postId: string;
@@ -25,7 +29,23 @@ export const EngagementBar = ({
   enableComment = true,
   enableShare = true,
 }: EngagementBarProps) => {
+  const { data, isLoading } = useCurrentUser();
+  const { mutate: createPostReactionMutate, isPending } =
+    UseCreatePostReaction();
+  const { mutate: deletePostReactionMutate } = UseDeletePostReaction();
+  const { mutate: updatePostReactionMutate } = UseUpdatePostReaction();
+
   const [currentReaction, setCurrentReaction] = useState<string | null>(null);
+
+  if (!data) {
+    return null;
+  }
+
+  const { id: userId } = data;
+
+  if (!userId) {
+    return null;
+  }
 
   const currentReactionObject =
     reactionsWithEmojiAndIcon.find(
@@ -33,12 +53,62 @@ export const EngagementBar = ({
     ) || reactionsWithEmojiAndIcon[0];
 
   const handleReaction = (reaction: string) => {
-    if (currentReaction && currentReaction === reaction) {
-      setCurrentReaction(null);
+    if (!currentReaction) {
+      setCurrentReaction(reaction);
+      handleCreatePostReaction(reaction);
       return;
     }
 
+    if (currentReaction === reaction) {
+      setCurrentReaction(null);
+      handleDeletePostReaction();
+      return;
+    }
+
+    handleUpdatePostReaction(reaction);
     setCurrentReaction(reaction);
+  };
+
+  const handleCreatePostReaction = (reaction: string) => {
+    createPostReactionMutate(
+      { reaction, userId, postId },
+      {
+        onSuccess: (data) => {
+          //TODO: Could do something here
+        },
+        onError: (error) => {
+          //TODO: Could do something here
+        },
+      }
+    );
+  };
+
+  const handleDeletePostReaction = () => {
+    deletePostReactionMutate(
+      { userId, postId },
+      {
+        onSuccess: (data) => {
+          //TODO: Could do something here
+        },
+        onError: (error) => {
+          //TODO: Could do something here
+        },
+      }
+    );
+  };
+
+  const handleUpdatePostReaction = (reaction: string) => {
+    updatePostReactionMutate(
+      { reaction, userId, postId },
+      {
+        onSuccess: (data) => {
+          console.log(data);
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      }
+    );
   };
 
   return (

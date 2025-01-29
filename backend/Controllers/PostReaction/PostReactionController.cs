@@ -50,22 +50,43 @@ namespace backend.Controllers.Post
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(int postReactionId){
+        public async Task<IActionResult> Delete(DeletePostReactionDto postReactionDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
 
-            var postReaction = await _postReactionRepo.DeleteAsync(postReactionId);
+            var deletedPostReaction = await _postReactionRepo.DeleteByPostIdAndUserIdAsync(postReactionDto.PostId, postReactionDto.UserId);
 
-            if(postReaction == null){
+            if(deletedPostReaction == null){
                 return NotFound("Post Reaction doesn't exist");
             }
 
-            return Ok(postReaction);
+            return Ok(new {Message = "Post Reaction deleted", PostId = deletedPostReaction.Id});
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdatePostReactionDto postReactionDto){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var existingPostReaction = await _postReactionRepo.GetByPostIdAndUserIdAsync(postReactionDto.PostId, postReactionDto.UserId);
+
+            if(existingPostReaction == null){
+                return NotFound("Post Reaction doesn't exist");
+            }
+
+            var newPostReaction = await _postReactionRepo.UpdateByIdAsync(existingPostReaction.Id, postReactionDto.Reaction);
+
+            if(newPostReaction == null){
+                return NotFound("Cannot update post reaction");
+            }
+
+            return Ok(new {Message = "Post Reaction updated", PostId = newPostReaction.Id});
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByPostId(int postId){
+        public async Task<IActionResult> GetByPostId(string postId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }

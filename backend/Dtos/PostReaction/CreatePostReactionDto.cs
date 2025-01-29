@@ -9,6 +9,6 @@ namespace backend.Dtos.PostReaction
     {
         public string Reaction { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
-        public int PostId { get; set; }
+        public string PostId { get; set; } = string.Empty;
     }
 }

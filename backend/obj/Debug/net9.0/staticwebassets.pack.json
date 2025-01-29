@@ -33,6 +33,14 @@
       "PackagePath": "staticwebassets\\Uploads\\Users\\0438a85a-32eb-41c6-962c-3a04894449ca\\socialla.png"
     },
     {
+      "Id": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\6bb0d129-35b8-4e74-96a3-0ae49eec9662\\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j - Copy.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\Users\\6bb0d129-35b8-4e74-96a3-0ae49eec9662\\cherry-blossom-mountains-river-nature-scenery-4k-wallpaper-uhdpaper.com-673@0@j - Copy.jpg"
+    },
+    {
+      "Id": "D:\\socialla\\backend\\wwwroot\\Uploads\\Users\\a6759b1b-f949-41b9-aa79-f4723fdfca6d\\socialla.png",
+      "PackagePath": "staticwebassets\\Uploads\\Users\\a6759b1b-f949-41b9-aa79-f4723fdfca6d\\socialla.png"
+    },
+    {
       "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.backend.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },

@@ -21,7 +21,7 @@ namespace backend.Mappers.PostReaction
             return new ReturnPostReationDto {
                 Reaction = postReaction.Reaction,
                 Count = 1,
-                UserId = new List<string> { postReaction.UserId },
+                UserIds = new List<string> { postReaction.UserId },
                 PostId = postReaction.PostId,
             };
         }
