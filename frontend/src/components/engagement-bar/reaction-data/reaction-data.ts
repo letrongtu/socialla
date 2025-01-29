@@ -29,5 +29,3 @@ export const reactionsWithEmojiAndIcon = reactionsData.map(
     };
   }
 );
-
-//TODO: Put the reaction to the db

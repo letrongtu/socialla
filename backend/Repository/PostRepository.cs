@@ -42,7 +42,7 @@ namespace backend.Repository
             return post;
         }
 
-        public async Task<PagedResult<ReturnPostDto>> GetAllPaginatedAsync(int pageNumber, int pageSize)
+        public async Task<PagedResult<Post>> GetAllPaginatedAsync(int pageNumber, int pageSize)
         {
             var totalRecords = await _dbContext.Posts.CountAsync();
 
@@ -52,10 +52,8 @@ namespace backend.Repository
                     .Take(pageSize)
                     .ToListAsync();
 
-            var postsDto = paginatedPosts.Select(post => post.ToReturnPostDto()).ToList();
-
-            return new PagedResult<ReturnPostDto>{
-                Records = postsDto,
+            return new PagedResult<Post>{
+                Records = paginatedPosts,
                 TotalRecords = totalRecords,
                 PageNumber = pageNumber,
                 PageSize = pageSize

@@ -68,7 +68,7 @@ export const PostHeader = ({ postData }: PostHeaderProps) => {
 
         <div onClick={() => {}} className="flex items-center gap-x-2">
           <Hint label={postCreatedDayDateTime} side="bottom">
-            <p className="text-xs font-bold text-muted-foreground hover:underline cursor-pointer">
+            <p className="text-xs font-semibold text-muted-foreground hover:underline cursor-pointer">
               {postCreatedDisplayString}
             </p>
           </Hint>

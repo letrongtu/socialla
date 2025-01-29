@@ -18,6 +18,7 @@ namespace api.Data
 
         public DbSet<MediaFile> MediaFiles { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<PostReaction> PostReactions { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 

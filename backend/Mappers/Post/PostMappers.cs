@@ -19,19 +19,5 @@ namespace backend.Mappers.Post
                 UserId = postDto.UserId,
             };
         }
-        public static ReturnPostDto ToReturnPostDto(this backend.Models.Post post)
-        {
-            return new ReturnPostDto
-            {
-                Id = post.Id,
-                Content = post.Content,
-                Feeling = post.Feeling,
-                PostAudience = post.PostAudience,
-                FileUrls = post.FileUrls,
-                CreatedAt = post.CreatedAt,
-                UpdatedAt = post.UpdatedAt,
-                UserId = post.UserId
-            };
-        }
     }
 }

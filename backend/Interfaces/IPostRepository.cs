@@ -10,7 +10,7 @@ namespace backend.Interfaces
 {
     public interface IPostRepository
     {
-        Task<PagedResult<ReturnPostDto>> GetAllPaginatedAsync(int pageNumber, int pageSize);
+        Task<PagedResult<Post>> GetAllPaginatedAsync(int pageNumber, int pageSize);
         Task<Post?> GetByIdAsync(int id);
         Task<Post> CreatePostAsync(Post post);
         Task<Post?> DeleteAsync(int id);
