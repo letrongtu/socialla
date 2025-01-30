@@ -1,4 +1,5 @@
 using api.Data;
+using backend.Hubs;
 using backend.Interfaces;
 using backend.Models;
 using backend.Repository;
@@ -103,6 +104,8 @@ builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostReactionRepository, PostReactionRepository>();
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -121,5 +124,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<PostReactionHub>("/postReactionHub");
 
 app.Run();

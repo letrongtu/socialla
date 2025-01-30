@@ -15,6 +15,7 @@ import { UseCreatePostReaction } from "@/features/post-reactions/api/create-post
 import { UseDeletePostReaction } from "@/features/post-reactions/api/delete-post-reaction";
 import { toast } from "sonner";
 import { UseUpdatePostReaction } from "@/features/post-reactions/api/update-post-reaction";
+import { useGetPostReactions } from "@/features/post-reactions/api/use-get-post-reactions";
 
 interface EngagementBarProps {
   postId: string;
@@ -29,7 +30,11 @@ export const EngagementBar = ({
   enableComment = true,
   enableShare = true,
 }: EngagementBarProps) => {
-  const { data, isLoading } = useCurrentUser();
+  const { data: currentUserData, isLoading: isLoadingCurrentUserData } =
+    useCurrentUser();
+  const { data: postReactionData, isLoading: isLoadingPostReactionData } =
+    useGetPostReactions(postId);
+
   const { mutate: createPostReactionMutate, isPending } =
     UseCreatePostReaction();
   const { mutate: deletePostReactionMutate } = UseDeletePostReaction();
@@ -37,15 +42,21 @@ export const EngagementBar = ({
 
   const [currentReaction, setCurrentReaction] = useState<string | null>(null);
 
-  if (!data) {
+  if (!currentUserData) {
     return null;
   }
 
-  const { id: userId } = data;
+  const { id: userId } = currentUserData;
 
   if (!userId) {
     return null;
   }
+
+  const totalReaction = postReactionData.reduce(
+    (total, reaction) => (total += reaction.count),
+    0
+  );
+  console.log(totalReaction);
 
   const currentReactionObject =
     reactionsWithEmojiAndIcon.find(
@@ -136,7 +147,7 @@ export const EngagementBar = ({
             </div>
             <Hint label="13k people reacted">
               <p className="text-base text-muted-foreground hover:underline cursor-pointer">
-                13k
+                {}
               </p>
             </Hint>
           </div>

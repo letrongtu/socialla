@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Dtos.PostReaction;
+using backend.Hubs;
 using backend.Interfaces;
 using backend.Mappers.PostReaction;
 using backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers.Post
@@ -27,24 +29,27 @@ namespace backend.Controllers.Post
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreatePostReactionDto reactionDto){
+        public async Task<IActionResult> Create(CreatePostReactionDto postReactionDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(user => user.Id == reactionDto.UserId);
+            var user = await _userManager.Users.FirstOrDefaultAsync(user => user.Id == postReactionDto.UserId);
             if(user == null){
                 return StatusCode(400, "User who creates the reaction, is not found");
             }
 
-            var post = await _postRepo.GetByIdAsync(reactionDto.PostId);
+            var post = await _postRepo.GetByIdAsync(postReactionDto.PostId);
             if(post == null){
                 return StatusCode(400, "Post not found");
             }
 
-            var postReaction = reactionDto.ToPostReactionFromCreate();
+            var postReaction = postReactionDto.ToPostReactionFromCreate();
 
             await _postReactionRepo.CreateAsync(postReaction);
+
+            var hubContext = HttpContext.RequestServices.GetRequiredService<IHubContext<PostReactionHub>>();
+            await hubContext.Clients.All.SendAsync("ReceivePostReactionUpdate", postReactionDto.PostId);
 
             return Ok(new {Message = "Reaction created", ReactionId = postReaction.Id});
         }
@@ -60,6 +65,9 @@ namespace backend.Controllers.Post
             if(deletedPostReaction == null){
                 return NotFound("Post Reaction doesn't exist");
             }
+
+            var hubContext = HttpContext.RequestServices.GetRequiredService<IHubContext<PostReactionHub>>();
+            await hubContext.Clients.All.SendAsync("ReceivePostReactionUpdate", postReactionDto.PostId);
 
             return Ok(new {Message = "Post Reaction deleted", PostId = deletedPostReaction.Id});
         }
@@ -82,11 +90,15 @@ namespace backend.Controllers.Post
                 return NotFound("Cannot update post reaction");
             }
 
+            var hubContext = HttpContext.RequestServices.GetRequiredService<IHubContext<PostReactionHub>>();
+            await hubContext.Clients.All.SendAsync("ReceivePostReactionUpdate", postReactionDto.PostId);
+
             return Ok(new {Message = "Post Reaction updated", PostId = newPostReaction.Id});
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByPostId(string postId){
+        [Route("{postId:string}")]
+        public async Task<IActionResult> GetByPostId([FromRoute] string postId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
