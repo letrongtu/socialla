@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { PostReactionType } from "../types";
 import * as signalR from "@microsoft/signalr";
 
-const BASE_URL = "http://localhost:5096/api";
+const BASE_URL = "http://localhost:5096";
+const BASE_API_URL = "http://localhost:5096/api";
 
 type ResponseType = {
   postReactions: PostReactionType[];
@@ -24,10 +25,9 @@ export const useGetPostReactions = (postId: string) => {
       setIsLoading(true);
 
       const response = await axios.get<ResponseType>(
-        `${BASE_URL}/post-reaction/${postId}`
+        `${BASE_API_URL}/post-reaction/${postId}`
       );
 
-      console.log(response);
       setData(response.data.postReactions);
 
       options?.onSuccess?.(response.data);
@@ -42,15 +42,25 @@ export const useGetPostReactions = (postId: string) => {
   };
 
   useEffect(() => {
-    console.log("Here");
+    if (!postId) {
+      return;
+    }
+
     fetchPostReactions(postId);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/postReactionHub`)
+      .withUrl("http://localhost:5096/postReactionHub")
       .withAutomaticReconnect()
       .build();
 
-    connection.on("ReceivePostReaction", (updatedPostId: string) => {
+    connection
+      .start()
+      .then(() => {
+        console.log("SignalR connected");
+      })
+      .catch((err) => console.log("SignalR connection error: ", err));
+
+    connection.on("ReceivePostReactionUpdate", (updatedPostId: string) => {
       if (updatedPostId === postId) {
         console.log("Here");
         fetchPostReactions(postId);
@@ -58,7 +68,10 @@ export const useGetPostReactions = (postId: string) => {
     });
 
     return () => {
-      connection.stop();
+      connection
+        .stop()
+        .then(() => console.log("SignalR disconnected"))
+        .catch((err) => console.error("Error stopping SignalR:", err));
     };
   }, [postId]);
 

@@ -97,7 +97,7 @@ namespace backend.Controllers.Post
         }
 
         [HttpGet]
-        [Route("{postId:string}")]
+        [Route("{postId}")]
         public async Task<IActionResult> GetByPostId([FromRoute] string postId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -128,7 +128,7 @@ namespace backend.Controllers.Post
                 postReactionByReactionValue.UserIds.Add(postReaction.UserId);
             }
 
-            return Ok(postReactionsByReactionValues);
+            return Ok(new {PostReactions = postReactionsByReactionValues});
         }
 
     }
