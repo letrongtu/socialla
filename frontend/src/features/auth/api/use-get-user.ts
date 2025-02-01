@@ -14,11 +14,7 @@ type ResponseType = {
   createdAt: Date | undefined;
 } | null;
 
-interface UseGetUserProps {
-  userId: string;
-}
-
-export const useGetUser = ({ userId }: UseGetUserProps) => {
+export const useGetUser = (userId: string) => {
   const [data, setData] = useState<ResponseType>(null);
 
   const [isLoading, setIsLoading] = useState(true);

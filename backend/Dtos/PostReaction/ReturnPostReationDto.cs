@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Dtos.User;
 
 namespace backend.Dtos.PostReaction
 {
@@ -9,7 +10,6 @@ namespace backend.Dtos.PostReaction
     {
         public string Reaction { get; set; } = string.Empty;
         public int Count { get; set; } = 0;
-        public List<string> UserIds { get; set; } = [];
-        public string PostId { get; set; } = string.Empty;
+        public List<ReturnUserForPostReactionDto> Users { get; set; } = [];
     }
 }

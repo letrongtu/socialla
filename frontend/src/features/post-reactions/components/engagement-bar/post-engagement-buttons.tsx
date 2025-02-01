@@ -105,7 +105,7 @@ export const PostEngagementButtons = ({
   return (
     <div className="flex items-center justify-evenly px-2">
       {enableReaction && (
-        <ReactionPickerTooltip handleReaction={handleReaction}>
+        <ReactionPickerTooltip handleReaction={handleReaction} side="bottom">
           <div
             onClick={() => {
               handleReaction(currentReactionObject.reaction);

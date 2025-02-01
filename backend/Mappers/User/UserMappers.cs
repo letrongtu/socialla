@@ -23,5 +23,12 @@ namespace backend.Mappers.User
             };
 
         }
+
+        public static ReturnUserForPostReactionDto ToReturnUserForPostReactionDto (this AppUser appUser){
+            return new ReturnUserForPostReactionDto{
+                Id = appUser.Id,
+                FullName = appUser.FirstName + " " + appUser.LastName,
+            };
+        }
     }
 }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Dtos.PostReaction;
+using backend.Dtos.User;
+using backend.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace backend.Mappers.PostReaction
 {
@@ -14,15 +17,6 @@ namespace backend.Mappers.PostReaction
                 CreatedAt = DateTime.Now,
                 UserId = postReactionDto.UserId,
                 PostId = postReactionDto.PostId,
-            };
-        }
-
-        public static ReturnPostReationDto ToReturnPostReactionDto(this backend.Models.PostReaction postReaction){
-            return new ReturnPostReationDto {
-                Reaction = postReaction.Reaction,
-                Count = 1,
-                UserIds = new List<string> { postReaction.UserId },
-                PostId = postReaction.PostId,
             };
         }
     }

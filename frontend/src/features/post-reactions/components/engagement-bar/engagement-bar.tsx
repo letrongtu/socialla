@@ -22,7 +22,7 @@ export const EngagementBar = ({
   const { data: currentUserData, isLoading: isLoadingCurrentUserData } =
     useCurrentUser();
 
-  const { data: postReactionData, isLoading: isLoadingPostReactionData } =
+  const { data: postReactions, isLoading: isLoadingPostReactionData } =
     useGetPostReactions(postId);
 
   if (!currentUserData) {
@@ -36,12 +36,18 @@ export const EngagementBar = ({
   }
 
   const userReaction =
-    postReactionData.find((reaction) => reaction.userIds.includes(userId))
-      ?.reaction || null;
+    postReactions.find((reaction) =>
+      reaction.users.some((user) => user.id === userId)
+    )?.reaction || null;
 
   return (
     <div className="flex flex-col justify-center gap-y-2">
-      <PostEngagementDetails postReactionData={postReactionData} />
+      <PostEngagementDetails
+        postReactions={postReactions}
+        enableReaction={enableReaction}
+        enableComment={enableComment}
+        enableShare={enableShare}
+      />
 
       <Separator />
 
@@ -49,6 +55,9 @@ export const EngagementBar = ({
         postId={postId}
         userId={userId}
         userReaction={userReaction}
+        enableReaction={enableReaction}
+        enableComment={enableComment}
+        enableShare={enableShare}
       />
     </div>
   );

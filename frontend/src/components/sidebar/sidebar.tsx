@@ -31,7 +31,7 @@ export const Sidebar = () => {
         onClick={() => {
           router.push(`/profile/${id}`);
         }}
-        className="w-full py-3 flex items-center rounded-lg gap-x-3 hover:bg-[#c9ccd1]/30"
+        className="w-full pl-3 py-3 flex items-center rounded-lg gap-x-3 hover:bg-[#c9ccd1]/30"
       >
         <Avatar className="rounded size-11 hover:opacity-75 transition">
           <AvatarImage alt={firstName} src={profilePictureUrl} />

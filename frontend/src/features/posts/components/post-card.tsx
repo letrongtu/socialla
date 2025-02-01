@@ -2,7 +2,7 @@ import { PostType } from "../types";
 
 import { PostImageLayout } from "./post-image-layout";
 import { PostHeader } from "./post-header";
-import { EngagementBar } from "@/components/engagement-bar/engagement-bar";
+import { EngagementBar } from "@/features/post-reactions/components/engagement-bar/engagement-bar";
 
 import { FaEllipsis } from "react-icons/fa6";
 

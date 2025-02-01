@@ -17,7 +17,7 @@ export const PostHeader = ({ postData }: PostHeaderProps) => {
   // const { data: currentUser, isLoading: currentUserLoading } = useCurrentUser();
 
   const { data: createdPostUser, isLoading: createdPostUserLoading } =
-    useGetUser({ userId: postData.userId });
+    useGetUser(postData.userId);
 
   const postAudience = PostAudiences.find(
     (audience) => audience.visibility === postData.postAudience

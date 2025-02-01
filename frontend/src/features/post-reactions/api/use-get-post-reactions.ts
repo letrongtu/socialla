@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { PostReactionType } from "../types";
+import { PostReactionType, PostReactionUserType } from "../types";
 import * as signalR from "@microsoft/signalr";
 
 const BASE_URL = "http://localhost:5096";
@@ -49,20 +49,23 @@ export const useGetPostReactions = (postId: string) => {
     fetchPostReactions(postId);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5096/postReactionHub")
+      .withUrl(`${BASE_URL}/postReactionHub`)
       .withAutomaticReconnect()
       .build();
 
     connection
       .start()
       .then(() => {
-        console.log("SignalR connected");
+        //TODO: Find a way to handle this
+        // console.log("SignalR connected");
       })
-      .catch((err) => console.log("SignalR connection error: ", err));
+      .catch((error) => {
+        //TODO: Find a way to handle this
+        // console.log("SignalR connection error: ", error);
+      });
 
     connection.on("ReceivePostReactionUpdate", (updatedPostId: string) => {
       if (updatedPostId === postId) {
-        console.log("Here");
         fetchPostReactions(postId);
       }
     });
@@ -70,8 +73,14 @@ export const useGetPostReactions = (postId: string) => {
     return () => {
       connection
         .stop()
-        .then(() => console.log("SignalR disconnected"))
-        .catch((err) => console.error("Error stopping SignalR:", err));
+        .then(() => {
+          ////TODO: Find a way to handle this
+          console.log("SignalR disconnected");
+        })
+        .catch((error) => {
+          //TODO: Find a way to handle this
+          console.log("Error stopping SignalR:", error);
+        });
     };
   }, [postId]);
 
