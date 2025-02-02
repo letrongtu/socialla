@@ -28,7 +28,7 @@ export const useGetPostReactions = (postId: string) => {
         `${BASE_API_URL}/post-reaction/${postId}`
       );
 
-      setData(response.data.postReactions);
+      setData(response.data.postReactions ? response.data.postReactions : []);
 
       options?.onSuccess?.(response.data);
 

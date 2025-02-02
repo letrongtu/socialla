@@ -153,7 +153,7 @@ export const CreatePostModal = () => {
         >
           <DialogOverlay />
 
-          <DialogContent className="w-full flex flex-col">
+          <DialogContent className="max-w-xl flex flex-col">
             <DialogHeader className="flex items-center">
               <DialogTitle className="text-xl font-semibold">
                 Create Post

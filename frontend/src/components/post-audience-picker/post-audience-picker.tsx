@@ -54,7 +54,7 @@ export const PostAudiencePicker = ({
       <DialogContent
         showCloseButton={false}
         showOverlayBackground={false}
-        className="w-full"
+        className="max-w-xl"
       >
         <DialogHeader className="relative flex flex-row items-center justify-center">
           <DialogClose asChild>

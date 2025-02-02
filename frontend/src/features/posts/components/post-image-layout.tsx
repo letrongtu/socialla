@@ -8,6 +8,10 @@ interface ImageLayoutProps {
 }
 
 export const PostImageLayout = ({ mediaFiles }: ImageLayoutProps) => {
+  if (mediaFiles.length === 0) {
+    return null;
+  }
+
   const numberOfNonDisplayImages = mediaFiles.length - 2;
 
   const isVideoFile = (file: string) => {

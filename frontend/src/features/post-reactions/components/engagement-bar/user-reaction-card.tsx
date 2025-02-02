@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { FaHeart } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
 import { FaUserPlus } from "react-icons/fa6";
+import { useCurrentUser } from "@/features/auth/api/use-current-user";
 
 interface UserReactionCardProps {
   reaction: string;
@@ -21,14 +22,18 @@ export const UserReactionCard = ({
   userId,
 }: UserReactionCardProps) => {
   const router = useRouter();
-  //Should have a global (for the details) loading state for this reaction data
-  const { data, isLoading } = useGetUser(userId);
 
-  if (!data) {
+  const { data: currentUser, isLoading: isLoadingCurrentUser } =
+    useCurrentUser();
+  //Should have a global (for the details) loading state for this reaction data
+  const { data: reactedUser, isLoading: isLoadingReactedUser } =
+    useGetUser(userId);
+
+  if (!reactedUser || !currentUser) {
     return null;
   }
 
-  const avatarFallback = data.firstName?.charAt(0).toUpperCase();
+  const avatarFallback = reactedUser.firstName?.charAt(0).toUpperCase();
 
   const reactionWithEmojiAndIcon = reactionsWithEmojiAndIcon.find(
     (reactionWithEmojiAndIcon) => reactionWithEmojiAndIcon.reaction === reaction
@@ -36,15 +41,18 @@ export const UserReactionCard = ({
 
   return (
     <div className="flex flex-row items-center justify-between px-2">
-      <div className="flex items-center gap-x-3">
-        <button
-          onClick={() => {
-            router.push(`/profile/${userId}`);
-          }}
-          className="relative"
-        >
+      <div
+        onClick={() => {
+          router.push(`/profile/${userId}`);
+        }}
+        className="flex items-center gap-x-3"
+      >
+        <button className="relative">
           <Avatar className="rounded size-11 hover:opacity-75 transition">
-            <AvatarImage alt={data?.firstName} src={data?.profilePictureUrl} />
+            <AvatarImage
+              alt={reactedUser?.firstName}
+              src={reactedUser?.profilePictureUrl}
+            />
             <AvatarFallback className="rounded-full bg-[#1823ab] text-white font-semibold text-lg">
               {avatarFallback}
             </AvatarFallback>
@@ -72,15 +80,17 @@ export const UserReactionCard = ({
           </div>
         </button>
 
-        <p className="text-base font-semibold">
-          {data.firstName} {data.lastName}
+        <p className="text-base font-semibold hover:underline cursor-pointer">
+          {reactedUser.firstName} {reactedUser.lastName}
         </p>
       </div>
 
-      <Button className="text-black bg-[#c9ccd1]/50 hover:bg-[#c9ccd1] ">
-        <FaUserPlus />
-        Add friend
-      </Button>
+      {userId !== currentUser.id && (
+        <Button className="text-black bg-[#c9ccd1]/50 hover:bg-[#c9ccd1] ">
+          <FaUserPlus />
+          Add friend
+        </Button>
+      )}
     </div>
   );
 };

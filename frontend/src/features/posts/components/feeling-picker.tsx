@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 
 import emojiData from "unicode-emoji-json";
 import { feelingsData } from "./feeling-data/feeling-data";
+import { useFeelingPicker } from "../store/use-feeling-picker";
 
 import {
   Dialog,
@@ -10,9 +11,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { IoIosArrowRoundBack } from "react-icons/io";
 import { Separator } from "@/components/ui/separator";
-import { useFeelingPicker } from "../store/use-feeling-picker";
+
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 export type FeelingType = {
   feeling: string;
@@ -21,7 +22,7 @@ export type FeelingType = {
 
 interface FeelingPickerProps {
   currentFeeling: FeelingType | null;
-  setCurrentFeeling: (currentFeeling: FeelingType) => void;
+  setCurrentFeeling: (currentFeeling: FeelingType | null) => void;
 }
 
 export const FeelingPicker = ({
@@ -30,6 +31,7 @@ export const FeelingPicker = ({
 }: FeelingPickerProps) => {
   const [openFeelingPickerModal, setOpenFeelingPickerModal] =
     useFeelingPicker();
+
   const feelingWithEmojis = feelingsData.map((feeling) => {
     const emoji = Object.entries(emojiData).find(
       ([_, data]) => data.slug === feeling.emojiSlug
@@ -61,6 +63,14 @@ export const FeelingPicker = ({
     return filteredFeelings;
   })();
 
+  const handleClickFeeling = (feeling: FeelingType) => {
+    if (feeling.feeling === currentFeeling?.feeling) {
+      setCurrentFeeling(null);
+      return;
+    }
+    setCurrentFeeling(feeling);
+  };
+
   return (
     <Dialog
       open={openFeelingPickerModal}
@@ -69,7 +79,7 @@ export const FeelingPicker = ({
       <DialogContent
         showCloseButton={false}
         showOverlayBackground={false}
-        className="w-full"
+        className="max-w-xl"
       >
         <DialogHeader className="relative flex flex-row items-center justify-center">
           <DialogClose asChild>
@@ -94,7 +104,7 @@ export const FeelingPicker = ({
           {sortedFeelingWithEmojis.map((feeling, index) => (
             <div
               onClick={() => {
-                setCurrentFeeling(feeling);
+                handleClickFeeling(feeling);
                 setOpenFeelingPickerModal(false);
               }}
               key={feeling.feeling}

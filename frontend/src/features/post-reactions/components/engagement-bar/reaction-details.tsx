@@ -12,23 +12,46 @@ import { FaHeart } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
 import { useState } from "react";
 import { EngagementDetailsModal } from "./engagement-details-modal";
+import { useCurrentUser } from "@/features/auth/api/use-current-user";
 
 interface ReactionDetailsProps {
   postReactions: PostReactionType[];
 }
 
 export const ReactionDetails = ({ postReactions }: ReactionDetailsProps) => {
+  const { data: currentUserData, isLoading } = useCurrentUser();
+
   const [reaction, setReaction] = useState<string | null>(null);
+
+  if (!currentUserData) {
+    return null;
+  }
 
   const allPostReactionsObject = postReactions.find(
     (reaction) => reaction.reaction === "All"
   );
   const totalPostReactions = allPostReactionsObject?.count || 0;
 
+  // Push the current user to the first of the list if the user reacted to the post
+  postReactions.map((postReaction) => {
+    const currentUserReaction = postReaction.users.find(
+      (user) => user.id === currentUserData.id
+    );
+
+    if (currentUserReaction) {
+      postReaction.users = postReaction.users.filter(
+        (user) => user.id !== currentUserData.id
+      );
+
+      postReaction.users.unshift(currentUserReaction);
+    }
+  });
+
   const firstTenUsersReactedFullNames = allPostReactionsObject?.users
     .map((user) => user.fullName)
     .slice(0, 10);
 
+  //TODO: Push the user to the first of the string if they reacted
   const mostTwoReactions = postReactions
     .filter((reaction) => reaction.reaction !== "All")
     .sort((a, b) => b.count - a.count)
@@ -41,7 +64,9 @@ export const ReactionDetails = ({ postReactions }: ReactionDetailsProps) => {
             new Date(b.reactionCreatedAt).getTime()
         )
         .slice(0, 10)
-        .map((user) => user.fullName);
+        .map((user) =>
+          user.id === currentUserData.id ? "You" : user.fullName
+        );
 
       if (postReaction.count > 10) {
         userFullNames.push(
