@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { CreatePostModal } from "@/features/posts/components/create-post-modal";
+import { PostCommentModal } from "@/features/post-comments/components/post-comment-modal";
 
 export default function Modal() {
   const [mounted, setMounted] = useState(false);
@@ -15,6 +16,7 @@ export default function Modal() {
   return (
     <>
       <CreatePostModal />
+      <PostCommentModal />
     </>
   );
 }

@@ -1,17 +1,14 @@
 import { cn } from "@/lib/utils";
 
-import { reactionsWithEmojiAndIcon } from "./reaction-data/reaction-data";
-import { EngagementHint } from "./engagement-hint";
+import { reactionsWithEmojiAndIcon } from "@/features/post-reactions/components/reaction-data/reaction-data";
+import { EngagementHint } from "@/features/posts/components/engagement-bar/engagement-hint";
 
-import {
-  PostReactionType,
-  PostReactionUserType,
-} from "@/features/post-reactions/types";
+import { PostReactionType } from "@/features/post-reactions/types";
 
 import { FaHeart } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
 import { useState } from "react";
-import { EngagementDetailsModal } from "./engagement-details-modal";
+import { ReactionDetailsModal } from "./reaction-details-modal";
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
 
 interface ReactionDetailsProps {
@@ -81,7 +78,7 @@ export const ReactionDetails = ({ postReactions }: ReactionDetailsProps) => {
 
   return (
     <>
-      <EngagementDetailsModal
+      <ReactionDetailsModal
         postReactions={postReactions}
         currentReaction={reaction}
         setReaction={setReaction}
@@ -117,7 +114,7 @@ export const ReactionDetails = ({ postReactions }: ReactionDetailsProps) => {
                   {reactionWithEmojiAndIcon?.emoji && (
                     <p
                       className={cn(
-                        "-mt-[0.1rem] -ml-1 text-[1.28rem] leading-none",
+                        "-mt-[0.09rem] -ml-1 text-[1.28rem] leading-none",
                         index === 0 && "-mr-1"
                       )}
                     >

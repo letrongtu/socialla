@@ -2,7 +2,7 @@ import { PostType } from "../types";
 
 import { PostImageLayout } from "./post-image-layout";
 import { PostHeader } from "./post-header";
-import { EngagementBar } from "@/features/post-reactions/components/engagement-bar/engagement-bar";
+import { EngagementBar } from "./engagement-bar/engagement-bar";
 
 import { FaEllipsis } from "react-icons/fa6";
 
@@ -22,7 +22,6 @@ export const PostCard = ({ postData }: PostCardProps) => {
           </div>
         </div>
 
-        {/**Make this reusable */}
         <PostHeader postData={postData} />
 
         <div className="flex flex-col gap-y-1">
@@ -36,9 +35,7 @@ export const PostCard = ({ postData }: PostCardProps) => {
 
       <PostImageLayout mediaFiles={mediaFiles} />
 
-      {/**Make this reusable */}
-
-      <EngagementBar postId={postData.id} />
+      <EngagementBar postData={postData} />
     </div>
   );
 };

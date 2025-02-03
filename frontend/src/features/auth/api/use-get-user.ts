@@ -29,7 +29,7 @@ export const useGetUser = (userId: string) => {
 
         setData(response.data);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       } finally {
         setIsLoading(false);
       }

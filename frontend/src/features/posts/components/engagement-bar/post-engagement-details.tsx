@@ -1,12 +1,9 @@
 import { cn } from "@/lib/utils";
 
-import {
-  PostReactionType,
-  PostReactionUserType,
-} from "@/features/post-reactions/types";
+import { PostReactionType } from "@/features/post-reactions/types";
 
-import { ReactionDetails } from "./reaction-details";
-import { EngagementHint } from "./engagement-hint";
+import { ReactionDetails } from "@/features/post-reactions/components/reaction-details";
+import { EngagementHint } from "@/features/posts/components/engagement-bar/engagement-hint";
 
 interface PostEngagementDetailsProps {
   postReactions: PostReactionType[];

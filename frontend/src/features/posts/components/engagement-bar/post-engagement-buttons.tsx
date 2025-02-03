@@ -1,17 +1,20 @@
 import { cn } from "@/lib/utils";
 import { createElement, useEffect, useState } from "react";
 
+import { usePostCommentModal } from "@/features/post-comments/store/use-post-comment-modal";
+import { PostType } from "../../types";
+
 import { UseCreatePostReaction } from "@/features/post-reactions/api/create-post-reaction";
 import { UseDeletePostReaction } from "@/features/post-reactions/api/delete-post-reaction";
 import { UseUpdatePostReaction } from "@/features/post-reactions/api/update-post-reaction";
-import { reactionsWithEmojiAndIcon } from "./reaction-data/reaction-data";
-import { ReactionPickerTooltip } from "./reaction-picker-tooltip";
+import { reactionsWithEmojiAndIcon } from "../../../post-reactions/components/reaction-data/reaction-data";
+import { ReactionPickerTooltip } from "@/features/post-reactions/components/reaction-picker-tooltip";
 
 import { PiShareFat } from "react-icons/pi";
 import { MessageCircle } from "lucide-react";
 
 interface PostEngagementButtonsProps {
-  postId: string;
+  postData: PostType;
   userId: string;
   userReaction?: string | null;
   enableReaction?: boolean;
@@ -20,19 +23,23 @@ interface PostEngagementButtonsProps {
 }
 
 export const PostEngagementButtons = ({
-  postId,
+  postData,
   userId,
   userReaction = null,
   enableReaction = true,
   enableComment = true,
   enableShare = true,
 }: PostEngagementButtonsProps) => {
+  const [, setOpenPostCommentModal] = usePostCommentModal();
+
   const { mutate: createPostReactionMutate, isPending } =
     UseCreatePostReaction();
   const { mutate: deletePostReactionMutate } = UseDeletePostReaction();
   const { mutate: updatePostReactionMutate } = UseUpdatePostReaction();
 
   const [currentReaction, setCurrentReaction] = useState<string | null>(null);
+
+  const postId = postData.id;
 
   useEffect(() => {
     setCurrentReaction(userReaction);
@@ -105,7 +112,11 @@ export const PostEngagementButtons = ({
   return (
     <div className="flex items-center justify-evenly px-2">
       {enableReaction && (
-        <ReactionPickerTooltip handleReaction={handleReaction} side="bottom">
+        <ReactionPickerTooltip
+          handleReaction={handleReaction}
+          side="top"
+          align="start"
+        >
           <div
             onClick={() => {
               handleReaction(currentReactionObject.reaction);
@@ -156,7 +167,13 @@ export const PostEngagementButtons = ({
       )}
 
       {enableComment && (
-        <div className="w-full flex justify-center items-center space-x-2 hover:bg-[#c9ccd1]/30 rounded-md cursor-pointer">
+        <div
+          onClick={() => {
+            setOpenPostCommentModal({ open: true, postData: postData });
+            console.log();
+          }}
+          className="w-full flex justify-center items-center space-x-2 hover:bg-[#c9ccd1]/30 rounded-md cursor-pointer"
+        >
           <div className="py-1 rounded-full cursor-pointer">
             <MessageCircle className="text-muted-foreground size-6" />
           </div>

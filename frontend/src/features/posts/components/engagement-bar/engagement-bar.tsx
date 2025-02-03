@@ -1,5 +1,6 @@
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
 import { useGetPostReactions } from "@/features/post-reactions/api/use-get-post-reactions";
+import { PostType } from "../../types";
 
 import { PostEngagementButtons } from "./post-engagement-buttons";
 import { PostEngagementDetails } from "./post-engagement-details";
@@ -7,14 +8,14 @@ import { PostEngagementDetails } from "./post-engagement-details";
 import { Separator } from "@/components/ui/separator";
 
 interface EngagementBarProps {
-  postId: string;
+  postData: PostType;
   enableReaction?: boolean;
   enableComment?: boolean;
   enableShare?: boolean;
 }
 
 export const EngagementBar = ({
-  postId,
+  postData,
   enableReaction = true,
   enableComment = true,
   enableShare = true,
@@ -23,7 +24,7 @@ export const EngagementBar = ({
     useCurrentUser();
 
   const { data: postReactions, isLoading: isLoadingPostReactionData } =
-    useGetPostReactions(postId);
+    useGetPostReactions(postData.id);
 
   if (!currentUserData) {
     return null; //TODO: Loader maybe
@@ -52,7 +53,7 @@ export const EngagementBar = ({
       <Separator />
 
       <PostEngagementButtons
-        postId={postId}
+        postData={postData}
         userId={userId}
         userReaction={userReaction}
         enableReaction={enableReaction}

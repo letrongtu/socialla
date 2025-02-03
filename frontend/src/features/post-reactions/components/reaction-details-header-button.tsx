@@ -4,19 +4,19 @@ import { reactionsWithEmojiAndIcon } from "./reaction-data/reaction-data";
 
 import { FaHeart } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
-import { PostReactionType } from "../../types";
+import { PostReactionType } from "../types";
 
-interface EngagementDetailsHeaderButtonProps {
+interface ReactionDetailsHeaderButtonProps {
   postReactions: PostReactionType[];
   currentReaction: string | null;
   setReaction: (reaction: string | null) => void;
 }
 
-export const EngagementDetailsHeaderButton = ({
+export const ReactionDetailsHeaderButton = ({
   postReactions,
   currentReaction,
   setReaction,
-}: EngagementDetailsHeaderButtonProps) => {
+}: ReactionDetailsHeaderButtonProps) => {
   return (
     <>
       <div

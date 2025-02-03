@@ -6,7 +6,7 @@ const CreatePostEditor = dynamic(
 );
 
 import { toast } from "sonner";
-import { use, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useCurrentUser } from "@/features/auth/api/use-current-user";

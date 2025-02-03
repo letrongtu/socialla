@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 import { useGetUser } from "@/features/auth/api/use-get-user";
-import { reactionsWithEmojiAndIcon } from "./reaction-data/reaction-data";
+import { reactionsWithEmojiAndIcon } from "@/features/post-reactions/components/reaction-data/reaction-data";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";

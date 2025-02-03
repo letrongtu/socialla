@@ -1,5 +1,5 @@
 import { UserReactionCard } from "./user-reaction-card";
-import { PostReactionType } from "../../types";
+import { PostReactionType } from "../types";
 
 interface UserReactionListProps {
   postReactions: PostReactionType[];
