@@ -1,13 +1,9 @@
-import dynamic from "next/dynamic";
-
-const CommentEditor = dynamic(
-  () => import("@/features/post-comments/components/comment-editor"),
-  { ssr: false }
-);
+import { useEffect } from "react";
 
 import { usePostCommentModal } from "../store/use-post-comment-modal";
 import { useGetUser } from "@/features/auth/api/use-get-user";
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
+import CommentEditor from "./comment-editor";
 
 import {
   Dialog,
@@ -21,6 +17,7 @@ import { PostCard } from "@/features/posts/components/post-card";
 import { Separator } from "@/components/ui/separator";
 
 import { IoClose } from "react-icons/io5";
+import { CommentList } from "./comment-list";
 
 export const PostCommentModal = () => {
   const [{ open, postData }, setOpenPostCommentModal] = usePostCommentModal();
@@ -36,7 +33,14 @@ export const PostCommentModal = () => {
       : "edge-case-that-never-happen"
   );
 
-  if (!data) {
+  if (
+    !data ||
+    !data.id ||
+    !postData ||
+    !postData.id ||
+    !currentUser ||
+    !currentUser.id
+  ) {
     return null;
   }
 
@@ -51,7 +55,7 @@ export const PostCommentModal = () => {
 
       <DialogContent
         showCloseButton={false}
-        className="max-w-[43rem] max-h-[calc(100%-5rem)] flex flex-col gap-0 px-0 pb-0 pt-4 m-0"
+        className="max-w-[42rem] max-h-[calc(100%-5rem)] flex flex-col gap-0 px-0 pb-0 pt-4 m-0 left-[50.1%]"
       >
         <DialogHeader className="relative flex items-center pb-4 justify-center">
           <DialogTitle className="flex flex-row text-xl font-semibold">
@@ -66,11 +70,16 @@ export const PostCommentModal = () => {
 
         <Separator />
 
-        <div className="overflow-y-auto custom-scrollbar">
-          {postData && postData.fileUrls && <PostCard postData={postData} />}
+        <div className="w-full overflow-y-auto custom-scrollbar">
+          {postData && postData.fileUrls && (
+            <PostCard postData={postData} shadow={false} />
+          )}
+          <Separator />
+
+          <CommentList postId={postData.id} />
         </div>
 
-        <CommentEditor />
+        <CommentEditor postId={postData.id} userId={currentUser.id} />
       </DialogContent>
     </Dialog>
   );

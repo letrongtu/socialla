@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5096")
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5096", "http://192.168.1.200:3000")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -104,6 +104,7 @@ builder.Services.AddScoped<IUserValidator<AppUser>, CustomUserValidator<AppUser>
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostReactionRepository, PostReactionRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentReposity>();
 
 builder.Services.AddSignalR();
 
@@ -127,5 +128,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHub<PostReactionHub>("/postReactionHub");
+app.MapHub<PostCommentHub>("/postCommentHub");
 
 app.Run();

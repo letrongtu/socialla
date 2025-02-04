@@ -18,31 +18,33 @@ export const urlsToFiles = async (urls: string[]): Promise<File[]> => {
   return files;
 };
 
-export const getPostCreatedDisplayString = (postCreatedAt: Date) => {
+export const getCreatedDisplayString = (CreatedAt: Date) => {
   const now = new Date();
 
-  const postDayOfWeek = format(postCreatedAt, "EEEE,");
-  const postCreatedDate = format(postCreatedAt, "MMMM dd, yyyy");
-  const postCreatedTime = format(postCreatedAt, "h:mm aa");
+  const postDayOfWeek = format(CreatedAt, "EEEE,");
+  const postCreatedDate = format(CreatedAt, "MMMM dd, yyyy");
+  const postCreatedTime = format(CreatedAt, "h:mm aa");
 
-  let postCreatedDisplayString: string;
+  let createdDisplayString: string;
 
-  const seconds = differenceInSeconds(now, postCreatedAt);
-  const minutes = differenceInMinutes(now, postCreatedAt);
-  const hours = differenceInHours(now, postCreatedAt);
+  const seconds = differenceInSeconds(now, CreatedAt);
+  const minutes = differenceInMinutes(now, CreatedAt);
+  const hours = differenceInHours(now, CreatedAt);
 
-  if (seconds < 60) {
-    postCreatedDisplayString = `${seconds}s`;
+  if (seconds === 0) {
+    createdDisplayString = `Just Now`;
+  } else if (seconds < 60) {
+    createdDisplayString = `${seconds}s`;
   } else if (minutes < 60) {
-    postCreatedDisplayString = `${minutes}m`;
+    createdDisplayString = `${minutes}m`;
   } else if (hours < 24) {
-    postCreatedDisplayString = `${hours}h`;
+    createdDisplayString = `${hours}h`;
   } else {
-    postCreatedDisplayString = postCreatedDate + " at " + postCreatedTime;
+    createdDisplayString = postCreatedDate + " at " + postCreatedTime;
   }
 
-  const postCreatedDayDateTime =
+  const createdDayDateTime =
     postDayOfWeek + " " + postCreatedDate + " at " + postCreatedTime;
 
-  return { postCreatedDisplayString, postCreatedDayDateTime };
+  return { createdDisplayString, createdDayDateTime };
 };

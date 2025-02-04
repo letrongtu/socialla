@@ -37,7 +37,7 @@ namespace backend.Controllers.Post
                                     (postDto.FileUrls == null || postDto.FileUrls.Length == 0);
 
             if(isPostDtoEmpty){
-                return BadRequest("Requires at least one of 'Content', 'Images', 'Feeling' fields is required");
+                return BadRequest("Requires at least one of 'Content', 'Images', 'Feeling' fields");
             }
 
             if(string.IsNullOrEmpty(postDto.PostAudience)){

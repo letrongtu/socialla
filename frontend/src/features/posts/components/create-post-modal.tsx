@@ -65,8 +65,7 @@ export const CreatePostModal = () => {
   const [postAudience, setPostAudience] = useState(DefaultPostAudience);
 
   const isPostEmpty =
-    (postContent.length === 0 ||
-      (postContent.length === 1 && postContent[0] === "")) &&
+    (postContent.length === 0 || postContent.every((line) => line === "")) &&
     uploadedFiles.length === 0 &&
     !currentFeeling;
 

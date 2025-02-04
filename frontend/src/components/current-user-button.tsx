@@ -15,9 +15,9 @@ export const CurrentUserButton = () => {
 
   return (
     <button>
-      <Avatar className="rounded size-11 hover:opacity-75 transition">
+      <Avatar className="rounded size-10 hover:opacity-75 transition">
         <AvatarImage alt={firstName} src={profilePictureUrl} />
-        <AvatarFallback className="rounded-full bg-custom-gradient text-white font-semibold text-xl">
+        <AvatarFallback className="rounded-full bg-custom-gradient text-white font-semibold text-lg">
           {avatarFallback}
         </AvatarFallback>
       </Avatar>

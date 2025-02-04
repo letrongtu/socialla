@@ -2,7 +2,7 @@ import { useCurrentUser } from "@/features/auth/api/use-current-user";
 import { useGetUser } from "@/features/auth/api/use-get-user";
 import { PostType } from "../types";
 import { PostAudiences } from "@/components/post-audience-picker/post-audience-picker";
-import { getPostCreatedDisplayString } from "../helper/helper";
+import { getCreatedDisplayString } from "../helper/helper";
 
 import emojiData from "unicode-emoji-json";
 import { feelingsData } from "./feeling-data/feeling-data";
@@ -38,8 +38,10 @@ export const PostHeader = ({ postData }: PostHeaderProps) => {
   const avatarFallback = createdPostUser?.firstName?.charAt(0).toUpperCase();
 
   const postCreatedAt = new Date(postData.createdAt);
-  const { postCreatedDisplayString, postCreatedDayDateTime } =
-    getPostCreatedDisplayString(postCreatedAt);
+  const {
+    createdDisplayString: postCreatedDisplayString,
+    createdDayDateTime: postCreatedDayDateTime,
+  } = getCreatedDisplayString(postCreatedAt);
 
   return (
     <div className="flex items-center gap-x-2">
