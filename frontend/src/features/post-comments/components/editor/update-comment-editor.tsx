@@ -7,13 +7,12 @@ import {
   getDefaultKeyBinding,
   Modifier,
 } from "draft-js";
-import "../../../../node_modules/draft-js/dist/Draft.css";
+import "../../../../../node_modules/draft-js/dist/Draft.css";
 
-import { UseUpdateComment } from "../api/use-update-comment";
+import { UseUpdateComment } from "../../api/use-update-comment";
 
 import { EmojiPopover } from "@/components/emoji-popover";
 import { Button } from "@/components/ui/button";
-import { CurrentUserButton } from "@/components/current-user-button";
 
 import { BsEmojiSmile } from "react-icons/bs";
 import { IoSend } from "react-icons/io5";
@@ -173,11 +172,11 @@ const UpdateCommentEditor = ({
         </div>
 
         <div className="w-full h-10 flex items-center justify-between pb-3 px-2">
-          <div className="size-8 flex items-center justify-center rounded-full hover:bg-[#c9ccd1]/50 cursor-pointer">
-            <EmojiPopover onEmojiSelect={handleEmojiSelect}>
+          <EmojiPopover onEmojiSelect={handleEmojiSelect}>
+            <div className="size-8 flex items-center justify-center rounded-full hover:bg-[#c9ccd1]/50 cursor-pointer">
               <BsEmojiSmile className="size-[1.1rem] text-muted-foreground" />
-            </EmojiPopover>
-          </div>
+            </div>
+          </EmojiPopover>
 
           <Button
             disabled={isCommentEmpty || isPending}

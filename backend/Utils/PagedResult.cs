@@ -9,6 +9,7 @@ namespace backend.Utils
     {
         public List<T> Records { get; set; } = new List<T>();
         public int TotalRecords { get; set; }
+        public int? TotalPostCommentRecords { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalPages => (int)Math.Ceiling(decimal.Divide(TotalRecords, PageSize));

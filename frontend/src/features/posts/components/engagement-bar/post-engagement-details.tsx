@@ -4,9 +4,12 @@ import { PostReactionType } from "@/features/post-reactions/types";
 
 import { ReactionDetails } from "@/features/post-reactions/components/reaction-details";
 import { EngagementHint } from "@/features/posts/components/engagement-bar/engagement-hint";
+import { UseGetCommentsByParentCommentId } from "@/features/post-comments/api/use-get-comments-by-parent-comment-id";
+import { UseGetParentCommentsByPostId } from "@/features/post-comments/api/use-get-parent-comments-by-post-id";
 
 interface PostEngagementDetailsProps {
   postReactions: PostReactionType[];
+  postId: string;
   enableReaction?: boolean;
   enableComment?: boolean;
   enableShare?: boolean;
@@ -14,10 +17,15 @@ interface PostEngagementDetailsProps {
 
 export const PostEngagementDetails = ({
   postReactions,
+  postId,
   enableReaction = true,
   enableComment = true,
   enableShare = true,
 }: PostEngagementDetailsProps) => {
+  const { totalPostComments: totalPostComments } =
+    UseGetParentCommentsByPostId(postId);
+
+  console.log(totalPostComments);
   return (
     <div
       className={cn(
@@ -31,7 +39,8 @@ export const PostEngagementDetails = ({
         {enableComment && (
           <EngagementHint label="8 comments">
             <p className="text-base text-muted-foreground hover:underline cursor-pointer">
-              8 comments
+              {totalPostComments}{" "}
+              {totalPostComments > 1 ? "comments" : "comment"}
             </p>
           </EngagementHint>
         )}

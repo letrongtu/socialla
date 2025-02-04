@@ -11,10 +11,11 @@ namespace backend.Interfaces
 {
     public interface ICommentRepository
     {
-        Task<PagedResult<Comment>> GetAllByPostIdPaginatedAsync(string postId, string sortBy, int pageNumber, int pageSize);
+        Task<PagedResult<Comment>> GetParentCommentsByPostIdPaginatedAsync(string postId, string sortBy, int pageNumber, int pageSize);
         Task<PagedResult<Comment>> GetReplyCommentsByParentCommentIdPagedAsync(string parentCommentId, string sortBy, int pageNumber, int pageSize);
         Task<Comment?> GetByIdAsync(string commentId);
         Task<Comment> CreateAsync(Comment comment);
         Task<Comment?> UpdateAsync(UpdateCommentDto commentDto);
+        Task<Comment?> DeleteAsync(string id);
     }
 }

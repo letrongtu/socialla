@@ -70,6 +70,7 @@ namespace backend.Controllers.Comment
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Update(UpdateCommentDto commentDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -84,10 +85,27 @@ namespace backend.Controllers.Comment
              return Ok(new {Message = "Comment updated", commentId = commentDto.Id});
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Delete([FromRoute] string id){
+            if(!ModelState.IsValid){
+            return BadRequest(ModelState);
+            }
+
+            var deletedComment = await _commentRepo.DeleteAsync(id);
+
+            if(deletedComment == null){
+            return NotFound("Comment not found");
+            }
+
+            return Ok(new {Message = "Comment deleted", commentId = id});
+        }
+
         [HttpGet]
         [Route("get-by-post-id")]
-
-        public async Task<IActionResult> GetAllByPostIdPaginated(string postId, string sortBy = "top", int pageNumber = 1, int pageSize = 20){
+        [Authorize]
+        public async Task<IActionResult> GetByPostIdPaginated(string postId, string sortBy = "top", int pageNumber = 1, int pageSize = 20){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
@@ -102,10 +120,9 @@ namespace backend.Controllers.Comment
                 return BadRequest("Page number and page size must be greater than 0");
             }
 
-            var paginatedComments = await _commentRepo.GetAllByPostIdPaginatedAsync(postId, sortBy, pageNumber, pageSize);
+            var paginatedComments = await _commentRepo.GetParentCommentsByPostIdPaginatedAsync(postId, sortBy, pageNumber, pageSize);
 
-            //TODO: Push the userId new created post to the top of the list
-            return Ok(new {Comments = paginatedComments.Records, TotalComments= paginatedComments.TotalRecords, HasNextPage = paginatedComments.HasNextPage});
+            return Ok(new {Comments = paginatedComments.Records, TotalParentComments= paginatedComments.TotalRecords, TotalPostComments = paginatedComments.TotalPostCommentRecords, HasNextPage = paginatedComments.HasNextPage});
         }
 
         [HttpGet]
@@ -128,8 +145,7 @@ namespace backend.Controllers.Comment
 
             var paginatedReplyComments = await _commentRepo.GetReplyCommentsByParentCommentIdPagedAsync(parentCommentId, sortBy, pageNumber, pageSize);
 
-            //TODO: Push the userId new created post to the top of the list
-            return Ok(new {Comments = paginatedReplyComments.Records, TotalComments= paginatedReplyComments.TotalRecords, HasNextPage = paginatedReplyComments.HasNextPage});
+            return Ok(new {Comments = paginatedReplyComments.Records, TotalReplyComments= paginatedReplyComments.TotalRecords, TotalPostComments = paginatedReplyComments.TotalPostCommentRecords, HasNextPage = paginatedReplyComments.HasNextPage});
         }
     }
 }

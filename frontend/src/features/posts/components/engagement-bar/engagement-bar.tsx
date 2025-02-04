@@ -45,6 +45,7 @@ export const EngagementBar = ({
     <div className="flex flex-col justify-center gap-y-2">
       <PostEngagementDetails
         postReactions={postReactions}
+        postId={postData.id}
         enableReaction={enableReaction}
         enableComment={enableComment}
         enableShare={enableShare}

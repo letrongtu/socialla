@@ -12,9 +12,11 @@ namespace backend.Hubs
         public async Task SendCreateComment(Comment comment){
             await Clients.All.SendAsync("ReceivePostCommentCreate", comment);
         }
-
         public async Task SendUpdateComment(Comment updatedComment){
             await Clients.All.SendAsync("ReceivePostCommentUpdate", updatedComment);
+        }
+        public async Task SendDeleteComment(Comment deletedComment){
+            await Clients.All.SendAsync("ReceivePostCommentDelete", deletedComment);
         }
     }
 }

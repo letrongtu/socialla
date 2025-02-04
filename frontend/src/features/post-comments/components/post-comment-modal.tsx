@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { usePostCommentModal } from "../store/use-post-comment-modal";
 import { useGetUser } from "@/features/auth/api/use-get-user";
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
-import CommentEditor from "./comment-editor";
+import CommentEditor from "./editor/comment-editor";
 
 import {
   Dialog,

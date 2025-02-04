@@ -4,7 +4,13 @@ import { SidebarButton } from "./sidebar-buton";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 import { MdGroups } from "react-icons/md";
-import { Gift, MessagesSquare, TvMinimalPlay, UserRound } from "lucide-react";
+import {
+  Gift,
+  Loader2,
+  MessagesSquare,
+  TvMinimalPlay,
+  UserRound,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const buttonList = [
@@ -16,7 +22,16 @@ const buttonList = [
 ];
 export const Sidebar = () => {
   const router = useRouter();
-  const { data } = useCurrentUser();
+  const { data, isLoading } = useCurrentUser();
+
+  //TODO: Manage this
+  if (isLoading) {
+    return (
+      <div className="lg:min-w-96 flex items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
+  }
 
   if (!data) {
     return null;
@@ -25,6 +40,7 @@ export const Sidebar = () => {
   const { id, firstName, lastName, profilePictureUrl } = data;
 
   const avatarFallback = firstName?.charAt(0).toUpperCase();
+
   return (
     <div className="hidden lg:flex flex-col lg:min-w-96 ">
       <button

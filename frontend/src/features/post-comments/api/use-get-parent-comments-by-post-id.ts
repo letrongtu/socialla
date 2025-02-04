@@ -9,7 +9,8 @@ const PAGE_SIZE = 5;
 
 type ResponseType = {
   comments: CommentType[];
-  totalComments: number;
+  totalParentComments: number;
+  totalPostComments: number;
   hasNextPage: boolean;
 };
 
@@ -19,12 +20,13 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const UseGetCommentsByPostId = (
+export const UseGetParentCommentsByPostId = (
   postId: string,
   sortBy: string = "top"
 ) => {
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [canLoadMore, setCanLoadMore] = useState(true);
+  const [totalPostComments, setTotalPostComments] = useState(0);
 
   const [data, setData] = useState<CommentType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -51,6 +53,7 @@ export const UseGetCommentsByPostId = (
       );
 
       setData((previousData) => [...previousData, ...response.data.comments]);
+      setTotalPostComments(response.data.totalPostComments);
       setCanLoadMore(response.data.hasNextPage);
 
       options?.onSuccess?.(response.data);
@@ -67,6 +70,7 @@ export const UseGetCommentsByPostId = (
   useEffect(() => {
     setData([]); // Reset comments
     setCurrentPageNumber(1); // Reset page number
+    setTotalPostComments(0);
     setCanLoadMore(true); // Reset load more flag
     fetchComments(postId, 1, sortBy); // Fetch first page with new sortBy
   }, [postId, sortBy]);
@@ -91,16 +95,23 @@ export const UseGetCommentsByPostId = (
 
     connection.on("ReceivePostCommentCreate", (createdComment: CommentType) => {
       if (
-        createdComment.postId === postId &&
-        createdComment.parentCommentId === null
+        createdComment.postId !== postId ||
+        createdComment.parentCommentId !== null
       ) {
-        setData((prev) => [
-          ...prev.filter(
-            (existingComment) => existingComment.id !== createdComment.id
-          ),
-          createdComment,
-        ]);
+        return;
       }
+
+      setTotalPostComments((prevTotal) => prevTotal + 1);
+
+      setData((prev) => {
+        const filteredComments = prev.filter(
+          (existingComment) => existingComment.id !== createdComment.id
+        );
+
+        return sortBy === "newest"
+          ? [createdComment, ...filteredComments] // Newest at the top
+          : [...filteredComments, createdComment]; // Oldest at the top
+      });
     });
 
     connection.on("ReceivePostCommentUpdate", (updatedComment: CommentType) => {
@@ -118,6 +129,21 @@ export const UseGetCommentsByPostId = (
       }
     });
 
+    connection.on("ReceivePostCommentDelete", (deletedComment: CommentType) => {
+      if (
+        deletedComment.postId === postId &&
+        deletedComment.parentCommentId === null
+      ) {
+        setTotalPostComments((prevTotal) => prevTotal - 1);
+
+        setData((prev) =>
+          prev.filter(
+            (existingComment) => existingComment.id !== deletedComment.id
+          )
+        );
+      }
+    });
+
     return () => {
       connection
         .stop()
@@ -130,19 +156,20 @@ export const UseGetCommentsByPostId = (
           // console.log("Error stopping SignalR:", error);
         });
     };
-  }, [postId]);
+  }, [postId, sortBy]);
 
   const loadMore = async (options?: Options) => {
     // prevent duplicate requests
     if (!canLoadMore || isLoading) return;
 
     const nextPage = currentPageNumber + 1;
-    await fetchComments(postId, nextPage, sortBy);
+    await fetchComments(postId, nextPage, sortBy, options);
     setCurrentPageNumber(nextPage);
   };
 
   return {
     data,
+    totalPostComments,
     isLoading,
     canLoadMore,
     loadMore,

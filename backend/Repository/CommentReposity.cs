@@ -23,9 +23,11 @@ namespace backend.Repository
               _postCommentHubContext = postCommentHubContext;
         }
 
-        public async Task<PagedResult<Comment>> GetAllByPostIdPaginatedAsync(string postId, string sortBy, int pageNumber, int pageSize)
+        public async Task<PagedResult<Comment>> GetParentCommentsByPostIdPaginatedAsync(string postId, string sortBy, int pageNumber, int pageSize)
         {
-            var totalRecords = await _dbContext.Comments.CountAsync();
+            var totalPostCommentRecords = await _dbContext.Comments.CountAsync();
+
+            var totalParentCommentRecords = await _dbContext.Comments.Where((comment) => comment.ParentCommentId == null).CountAsync();
 
             var paginatedComments = await _dbContext.Comments
                     .Where((comment) => comment.PostId == postId && comment.ParentCommentId == null)
@@ -54,7 +56,8 @@ namespace backend.Repository
 
             return new PagedResult<Comment>{
                 Records = paginatedComments,
-                TotalRecords = totalRecords,
+                TotalRecords = totalParentCommentRecords,
+                TotalPostCommentRecords  = totalPostCommentRecords,
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };
@@ -62,6 +65,7 @@ namespace backend.Repository
 
         public async Task<PagedResult<Comment>> GetReplyCommentsByParentCommentIdPagedAsync(string parentCommentId, string sortBy, int pageNumber, int pageSize)
         {
+            var totalPostCommentRecords = await _dbContext.Comments.CountAsync();
             var totalRecords = await _dbContext.Comments.Where((comment) => comment.ParentCommentId == parentCommentId).CountAsync();
 
             var paginatedComments = await _dbContext.Comments
@@ -93,6 +97,7 @@ namespace backend.Repository
             return new PagedResult<Comment>{
                 Records = paginatedComments,
                 TotalRecords = totalRecords,
+                TotalPostCommentRecords = totalPostCommentRecords,
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };
@@ -127,6 +132,32 @@ namespace backend.Repository
             await _dbContext.SaveChangesAsync();
 
             await _postCommentHubContext.Clients.All.SendAsync("ReceivePostCommentUpdate", existingComment);
+
+            return existingComment;
+        }
+
+        public async Task<Comment?> DeleteAsync(string id)
+        {
+            var existingComment = await _dbContext.Comments.FindAsync(id);
+
+            if(existingComment == null){
+                return null;
+            }
+
+            var replyComments = await _dbContext.Comments.Where((comment) => comment.ParentCommentId == id).ToListAsync();
+
+            if (replyComments.Count != 0){
+                foreach(var replyComment in replyComments ){
+                    _dbContext.Comments.Remove(replyComment);
+                    await _postCommentHubContext.Clients.All.SendAsync("ReceivePostCommentDelete", replyComment);
+                }
+            }
+
+            _dbContext.Comments.Remove(existingComment);
+
+            await _dbContext.SaveChangesAsync();
+
+            await _postCommentHubContext.Clients.All.SendAsync("ReceivePostCommentDelete", existingComment);
 
             return existingComment;
         }

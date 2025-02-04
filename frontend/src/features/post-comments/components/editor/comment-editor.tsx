@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { Editor, EditorState, getDefaultKeyBinding, Modifier } from "draft-js";
-import "../../../../node_modules/draft-js/dist/Draft.css";
+import "../../../../../node_modules/draft-js/dist/Draft.css";
 
-import { UseCreateComment } from "../api/use-create-comment";
+import { UseCreateComment } from "../../api/use-create-comment";
 import { CurrentUserButton } from "@/components/current-user-button";
 
 import { EmojiPopover } from "@/components/emoji-popover";
@@ -169,11 +169,11 @@ const CommentEditor = ({
           </div>
 
           <div className="w-full h-10 flex items-center justify-between pb-3 px-2">
-            <div className="size-8 flex items-center justify-center rounded-full hover:bg-[#c9ccd1]/50 cursor-pointer">
-              <EmojiPopover onEmojiSelect={handleEmojiSelect}>
+            <EmojiPopover onEmojiSelect={handleEmojiSelect}>
+              <div className="size-8 flex items-center justify-center rounded-full hover:bg-[#c9ccd1]/50 cursor-pointer">
                 <BsEmojiSmile className="size-[1.1rem] text-muted-foreground" />
-              </EmojiPopover>
-            </div>
+              </div>
+            </EmojiPopover>
 
             <Button
               disabled={isCommentEmpty || isPending}

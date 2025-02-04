@@ -10,7 +10,7 @@ const PAGE_SIZE = 5;
 
 type ResponseType = {
   comments: CommentType[];
-  totalComments: number;
+  totalReplyComments: number;
   hasNextPage: boolean;
 };
 
@@ -26,7 +26,7 @@ export const UseGetCommentsByParentCommentId = (
 ) => {
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [canLoadMore, setCanLoadMore] = useState(true);
-  const [totalCommentsCount, setTotalCommentsCount] = useState(0);
+  const [totalReplyComments, setTotalReplyComments] = useState(0);
   const [remainingCommentsCount, setRemainingCommentsCount] = useState(0);
 
   const [data, setData] = useState<CommentType[]>([]);
@@ -50,10 +50,10 @@ export const UseGetCommentsByParentCommentId = (
 
       setData((previousData) => [...previousData, ...response.data.comments]);
 
-      setTotalCommentsCount(response.data.totalComments);
+      setTotalReplyComments(response.data.totalReplyComments);
       setRemainingCommentsCount(
-        response.data.totalComments >= PAGE_SIZE * pageNumber
-          ? response.data.totalComments - pageNumber * PAGE_SIZE
+        response.data.totalReplyComments >= PAGE_SIZE * pageNumber
+          ? response.data.totalReplyComments - pageNumber * PAGE_SIZE
           : 0
       );
 
@@ -73,7 +73,7 @@ export const UseGetCommentsByParentCommentId = (
   useEffect(() => {
     setData([]); // Reset comments
     setCurrentPageNumber(1); // Reset page number
-    setTotalCommentsCount(0);
+    setTotalReplyComments(0);
     setRemainingCommentsCount(0);
     setCanLoadMore(true); // Reset load more flag
     fetchComments(parentCommentId, 1, sortBy); // Fetch first page with new sortBy
@@ -98,14 +98,19 @@ export const UseGetCommentsByParentCommentId = (
       });
 
     connection.on("ReceivePostCommentCreate", (createdComment: CommentType) => {
-      if (createdComment.parentCommentId === parentCommentId) {
-        setData((prev) => [
-          ...prev.filter(
-            (existingComment) => existingComment.id !== createdComment.id
-          ),
-          createdComment,
-        ]);
-      }
+      if (createdComment.parentCommentId !== parentCommentId) return;
+
+      setTotalReplyComments((prevTotal) => prevTotal + 1);
+
+      setData((prev) => {
+        const filteredComments = prev.filter(
+          (existingComment) => existingComment.id !== createdComment.id
+        );
+
+        return sortBy === "newest"
+          ? [createdComment, ...filteredComments] // Newest at the top
+          : [...filteredComments, createdComment]; // Oldest at the top
+      });
     });
 
     connection.on("ReceivePostCommentUpdate", (updatedComment: CommentType) => {
@@ -115,6 +120,18 @@ export const UseGetCommentsByParentCommentId = (
             existingComment.id === updatedComment.id
               ? updatedComment
               : existingComment
+          )
+        );
+      }
+    });
+
+    connection.on("ReceivePostCommentDelete", (deletedComment: CommentType) => {
+      if (deletedComment.parentCommentId === parentCommentId) {
+        setTotalReplyComments((prevTotal) => prevTotal - 1);
+
+        setData((prev) =>
+          prev.filter(
+            (existingComment) => existingComment.id !== deletedComment.id
           )
         );
       }
@@ -132,14 +149,14 @@ export const UseGetCommentsByParentCommentId = (
           // console.log("Error stopping SignalR:", error);
         });
     };
-  }, [parentCommentId]);
+  }, [parentCommentId, sortBy]);
 
   const loadMore = async (options?: Options) => {
     // prevent duplicate requests
     if (!canLoadMore || isLoading) return;
 
     const nextPage = currentPageNumber + 1;
-    await fetchComments(parentCommentId, nextPage, sortBy);
+    await fetchComments(parentCommentId, nextPage, sortBy, options);
     setCurrentPageNumber(nextPage);
   };
 
@@ -148,7 +165,7 @@ export const UseGetCommentsByParentCommentId = (
     isLoading,
     canLoadMore,
     loadMore,
-    totalCommentsCount,
+    totalReplyComments,
     remainingCommentsCount,
   };
 };
