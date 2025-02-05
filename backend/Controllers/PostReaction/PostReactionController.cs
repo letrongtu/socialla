@@ -136,9 +136,9 @@ namespace backend.Controllers.Post
                 .Where(x => users.Select(user => user.Id).Contains(x.UserId)) // Ensure user exists
                 .ToDictionary(
                     x => x.UserId,
-                    x => new ReturnUserForPostReactionDto{
+                    x => new ReturnUserForReactionDto{
                         Id = x.UserId,
-                        FullName = users.First(user => user.Id == x.UserId).ToReturnUserForPostReactionDto().FullName,
+                        FullName = users.First(user => user.Id == x.UserId).ToReturnUserForReactionDto().FullName,
                         ReactionCreatedAt = x.CreatedAt
                     });
 

@@ -25,7 +25,6 @@ export const PostEngagementDetails = ({
   const { totalPostComments: totalPostComments } =
     UseGetParentCommentsByPostId(postId);
 
-  console.log(totalPostComments);
   return (
     <div
       className={cn(
@@ -36,7 +35,7 @@ export const PostEngagementDetails = ({
       {enableReaction && <ReactionDetails postReactions={postReactions} />}
 
       <div className="flex items-center gap-x-3">
-        {enableComment && (
+        {enableComment && totalPostComments > 0 && (
           <EngagementHint label="8 comments">
             <p className="text-base text-muted-foreground hover:underline cursor-pointer">
               {totalPostComments}{" "}

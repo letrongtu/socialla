@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace backend.Dtos.User
 {
-    public class ReturnUserForPostReactionDto
+    public class ReturnUserForReactionDto
     {
         public string Id { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;

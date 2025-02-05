@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.Dtos.User;
 
-namespace backend.Dtos.PostReaction
+namespace backend.Dtos.CommentReaction
 {
-    public class ReturnPostReationDto
+    public class ReturnCommentReactionDto
     {
         public string Reaction { get; set; } = string.Empty;
         public int Count { get; set; } = 0;

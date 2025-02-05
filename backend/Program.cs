@@ -105,6 +105,7 @@ builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IPostReactionRepository, PostReactionRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentReposity>();
+builder.Services.AddScoped<ICommentReactionRepository, CommentReactionRepository>();
 
 builder.Services.AddSignalR();
 
@@ -129,5 +130,6 @@ app.MapControllers();
 
 app.MapHub<PostReactionHub>("/postReactionHub");
 app.MapHub<PostCommentHub>("/postCommentHub");
+app.MapHub<CommentReactionHub>("/commentReactionHub");
 
 app.Run();

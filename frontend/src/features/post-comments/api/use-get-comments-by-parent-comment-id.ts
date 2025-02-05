@@ -100,8 +100,6 @@ export const UseGetCommentsByParentCommentId = (
     connection.on("ReceivePostCommentCreate", (createdComment: CommentType) => {
       if (createdComment.parentCommentId !== parentCommentId) return;
 
-      setTotalReplyComments((prevTotal) => prevTotal + 1);
-
       setData((prev) => {
         const filteredComments = prev.filter(
           (existingComment) => existingComment.id !== createdComment.id
@@ -111,6 +109,8 @@ export const UseGetCommentsByParentCommentId = (
           ? [createdComment, ...filteredComments] // Newest at the top
           : [...filteredComments, createdComment]; // Oldest at the top
       });
+
+      setTotalReplyComments((prevTotal) => prevTotal + 1);
     });
 
     connection.on("ReceivePostCommentUpdate", (updatedComment: CommentType) => {
@@ -127,14 +127,14 @@ export const UseGetCommentsByParentCommentId = (
 
     connection.on("ReceivePostCommentDelete", (deletedComment: CommentType) => {
       if (deletedComment.parentCommentId === parentCommentId) {
-        setTotalReplyComments((prevTotal) => prevTotal - 1);
-
         setData((prev) =>
           prev.filter(
             (existingComment) => existingComment.id !== deletedComment.id
           )
         );
       }
+
+      setTotalReplyComments((prevTotal) => prevTotal - 1);
     });
 
     return () => {

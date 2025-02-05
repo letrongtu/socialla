@@ -95,23 +95,21 @@ export const UseGetParentCommentsByPostId = (
 
     connection.on("ReceivePostCommentCreate", (createdComment: CommentType) => {
       if (
-        createdComment.postId !== postId ||
-        createdComment.parentCommentId !== null
+        createdComment.postId === postId &&
+        createdComment.parentCommentId === null
       ) {
-        return;
+        setData((prev) => {
+          const filteredComments = prev.filter(
+            (existingComment) => existingComment.id !== createdComment.id
+          );
+
+          return sortBy === "newest"
+            ? [createdComment, ...filteredComments] // Newest at the top
+            : [...filteredComments, createdComment]; // Oldest at the top
+        });
       }
 
       setTotalPostComments((prevTotal) => prevTotal + 1);
-
-      setData((prev) => {
-        const filteredComments = prev.filter(
-          (existingComment) => existingComment.id !== createdComment.id
-        );
-
-        return sortBy === "newest"
-          ? [createdComment, ...filteredComments] // Newest at the top
-          : [...filteredComments, createdComment]; // Oldest at the top
-      });
     });
 
     connection.on("ReceivePostCommentUpdate", (updatedComment: CommentType) => {
@@ -134,14 +132,14 @@ export const UseGetParentCommentsByPostId = (
         deletedComment.postId === postId &&
         deletedComment.parentCommentId === null
       ) {
-        setTotalPostComments((prevTotal) => prevTotal - 1);
-
         setData((prev) =>
           prev.filter(
             (existingComment) => existingComment.id !== deletedComment.id
           )
         );
       }
+
+      setTotalPostComments((prevTotal) => prevTotal - 1);
     });
 
     return () => {

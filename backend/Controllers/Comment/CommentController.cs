@@ -145,7 +145,7 @@ namespace backend.Controllers.Comment
 
             var paginatedReplyComments = await _commentRepo.GetReplyCommentsByParentCommentIdPagedAsync(parentCommentId, sortBy, pageNumber, pageSize);
 
-            return Ok(new {Comments = paginatedReplyComments.Records, TotalReplyComments= paginatedReplyComments.TotalRecords, TotalPostComments = paginatedReplyComments.TotalPostCommentRecords, HasNextPage = paginatedReplyComments.HasNextPage});
+            return Ok(new {Comments = paginatedReplyComments.Records, TotalReplyComments= paginatedReplyComments.TotalRecords, HasNextPage = paginatedReplyComments.HasNextPage});
         }
     }
 }

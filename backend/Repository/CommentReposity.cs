@@ -20,12 +20,12 @@ namespace backend.Repository
         public CommentReposity(ApplicationDBContext dBContext, IHubContext<PostCommentHub> postCommentHubContext)
         {
             _dbContext = dBContext;
-              _postCommentHubContext = postCommentHubContext;
+            _postCommentHubContext = postCommentHubContext;
         }
 
         public async Task<PagedResult<Comment>> GetParentCommentsByPostIdPaginatedAsync(string postId, string sortBy, int pageNumber, int pageSize)
         {
-            var totalPostCommentRecords = await _dbContext.Comments.CountAsync();
+            var totalPostCommentRecords = await _dbContext.Comments.Where((comment) => comment.PostId == postId).CountAsync();
 
             var totalParentCommentRecords = await _dbContext.Comments.Where((comment) => comment.ParentCommentId == null).CountAsync();
 
@@ -65,7 +65,6 @@ namespace backend.Repository
 
         public async Task<PagedResult<Comment>> GetReplyCommentsByParentCommentIdPagedAsync(string parentCommentId, string sortBy, int pageNumber, int pageSize)
         {
-            var totalPostCommentRecords = await _dbContext.Comments.CountAsync();
             var totalRecords = await _dbContext.Comments.Where((comment) => comment.ParentCommentId == parentCommentId).CountAsync();
 
             var paginatedComments = await _dbContext.Comments
@@ -97,7 +96,6 @@ namespace backend.Repository
             return new PagedResult<Comment>{
                 Records = paginatedComments,
                 TotalRecords = totalRecords,
-                TotalPostCommentRecords = totalPostCommentRecords,
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };
