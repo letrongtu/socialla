@@ -8,8 +8,8 @@ namespace backend.Hubs
 {
     public class PostReactionHub : Hub
     {
-        public async Task SendPostReaction(string postId){
-            await Clients.All.SendAsync("ReceivePostReactionUpdate", postId);
+        public async Task SendPostReactionChange(string postId){
+            await Clients.All.SendAsync("ReceivePostReactionChange", postId);
         }
     }
 }

@@ -52,9 +52,6 @@ namespace backend.Controllers.Post
 
             await _postReactionRepo.CreateAsync(postReaction);
 
-            var hubContext = HttpContext.RequestServices.GetRequiredService<IHubContext<PostReactionHub>>();
-            await hubContext.Clients.All.SendAsync("ReceivePostReactionUpdate", postReactionDto.PostId);
-
             return Ok(new {Message = "Reaction created", ReactionId = postReaction.Id});
         }
 
@@ -70,9 +67,6 @@ namespace backend.Controllers.Post
             if(deletedPostReaction == null){
                 return NotFound("Post Reaction doesn't exist");
             }
-
-            var hubContext = HttpContext.RequestServices.GetRequiredService<IHubContext<PostReactionHub>>();
-            await hubContext.Clients.All.SendAsync("ReceivePostReactionUpdate", postReactionDto.PostId);
 
             return Ok(new {Message = "Post Reaction deleted", PostId = deletedPostReaction.Id});
         }
@@ -95,9 +89,6 @@ namespace backend.Controllers.Post
             if(newPostReaction == null){
                 return NotFound("Cannot update post reaction");
             }
-
-            var hubContext = HttpContext.RequestServices.GetRequiredService<IHubContext<PostReactionHub>>();
-            await hubContext.Clients.All.SendAsync("ReceivePostReactionUpdate", postReactionDto.PostId);
 
             return Ok(new {Message = "Post Reaction updated", PostId = newPostReaction.Id});
         }
@@ -133,7 +124,7 @@ namespace backend.Controllers.Post
                         .ToListAsync();
 
             var sortedUserDictionary = userIdsWithReactionCreationTime
-                .Where(x => users.Select(user => user.Id).Contains(x.UserId)) // Ensure user exists
+                .Where(x => users.Select(user => user.Id).Contains(x.UserId))
                 .ToDictionary(
                     x => x.UserId,
                     x => new ReturnUserForReactionDto{

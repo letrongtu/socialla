@@ -34,7 +34,7 @@ export const getCreatedDisplayString = (CreatedAt: Date) => {
   if (seconds === 0) {
     createdDisplayString = `Now`;
   } else if (seconds < 60) {
-    createdDisplayString = `${seconds}s`;
+    createdDisplayString = `1m`;
   } else if (minutes < 60) {
     createdDisplayString = `${minutes}m`;
   } else if (hours < 24) {

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using backend.Dtos.Post;
+using backend.Hubs;
 using backend.Interfaces;
 using backend.Mappers.Post;
 using backend.Models;
 using backend.Utils;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository
@@ -15,15 +17,21 @@ namespace backend.Repository
     public class PostRepository : IPostRepository
     {
         private readonly ApplicationDBContext _dbContext;
-        public PostRepository(ApplicationDBContext dbContext)
+        private readonly ICommentRepository _commentRepo;
+        private readonly IHubContext<PostHub> _postHubContext;
+        public PostRepository(ApplicationDBContext dbContext, ICommentRepository commentRepo, IHubContext<PostHub> postHubContext)
         {
             _dbContext = dbContext;
+            _commentRepo = commentRepo;
+            _postHubContext = postHubContext;
         }
 
         public async Task<Post> CreatePostAsync(Post post)
         {
             await _dbContext.Posts.AddAsync(post);
             await _dbContext.SaveChangesAsync();
+
+            await _postHubContext.Clients.All.SendAsync("ReceivePostCreate", post);
 
             return post;
         }
@@ -36,8 +44,19 @@ namespace backend.Repository
                 return null;
             }
 
+            var postReactions = await _dbContext.PostReactions.Where((postReaction) => postReaction.PostId == post.Id).ToListAsync();
+            _dbContext.PostReactions.RemoveRange(postReactions);
+
+            var postComments = await _dbContext.Comments.Where((comment) => comment.PostId == post.Id).ToListAsync();
+
+            foreach(var comment in postComments){
+                await _commentRepo.DeleteAsync(comment.Id);
+            }
+
             _dbContext.Posts.Remove(post);
             await _dbContext.SaveChangesAsync();
+
+            await _postHubContext.Clients.All.SendAsync("ReceivePostDelete", post);
 
             return post;
         }
@@ -80,6 +99,8 @@ namespace backend.Repository
             existingPost.UpdatedAt = DateTime.Now;
 
             await _dbContext.SaveChangesAsync();
+
+            await _postHubContext.Clients.All.SendAsync("ReceivePostUpdate", existingPost);
 
             return existingPost;
         }

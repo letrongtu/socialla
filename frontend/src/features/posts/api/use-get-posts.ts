@@ -1,8 +1,10 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import * as signalR from "@microsoft/signalr";
 import { PostType } from "../types";
 
-const BASE_URL = "http://localhost:5096/api";
+const BASE_URL = "http://localhost:5096";
+const BASE_URL_API = "http://localhost:5096/api";
 const PAGE_SIZE = 5;
 
 type ResponseType = {
@@ -28,7 +30,7 @@ export const UseGetPosts = () => {
     try {
       setIsLoading(true);
 
-      const response = await axios.get<ResponseType>(`${BASE_URL}/post`, {
+      const response = await axios.get<ResponseType>(`${BASE_URL_API}/post`, {
         params: { pageNumber, pageSize: PAGE_SIZE },
       });
 
@@ -49,6 +51,40 @@ export const UseGetPosts = () => {
   //fetch the first page when mounted
   useEffect(() => {
     fetchPosts(1);
+
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl(`${BASE_URL}/postHub`)
+      .withAutomaticReconnect()
+      .build();
+
+    connection
+      .start()
+      .then(() => {
+        //TODO: Find a way to handle this
+        // console.log("SignalR connected");
+      })
+      .catch((error) => {
+        //TODO: Find a way to handle this
+        // console.log("SignalR connection error: ", error);
+      });
+
+    connection.on("ReceivePostCreate", (post: PostType) => {
+      console.log("Here");
+      setData((prev) => [post, ...prev]);
+    });
+
+    return () => {
+      connection
+        .stop()
+        .then(() => {
+          ////TODO: Find a way to handle this
+          console.log("SignalR disconnected");
+        })
+        .catch((error) => {
+          //TODO: Find a way to handle this
+          console.log("Error stopping SignalR:", error);
+        });
+    };
   }, []);
 
   const loadMore = async (options?: Options) => {

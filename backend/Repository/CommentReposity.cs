@@ -146,10 +146,16 @@ namespace backend.Repository
 
             if (replyComments.Count != 0){
                 foreach(var replyComment in replyComments ){
+                    var replyCommentReactions = await _dbContext.CommentReactions.Where((reaction) => reaction.CommentId == replyComment.Id).ToListAsync();
+                    _dbContext.CommentReactions.RemoveRange(replyCommentReactions);
+
                     _dbContext.Comments.Remove(replyComment);
                     await _postCommentHubContext.Clients.All.SendAsync("ReceivePostCommentDelete", replyComment);
                 }
             }
+
+            var commentReactions = await _dbContext.CommentReactions.Where((reaction) => reaction.CommentId == existingComment.Id).ToListAsync();
+            _dbContext.CommentReactions.RemoveRange(commentReactions);
 
             _dbContext.Comments.Remove(existingComment);
 

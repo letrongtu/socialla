@@ -65,7 +65,7 @@ export const useGetPostReactions = (postId: string) => {
         // console.log("SignalR connection error: ", error);
       });
 
-    connection.on("ReceivePostReactionUpdate", (updatedPostId: string) => {
+    connection.on("ReceivePostReactionChange", (updatedPostId: string) => {
       if (updatedPostId === postId) {
         fetchPostReactions(postId);
       }

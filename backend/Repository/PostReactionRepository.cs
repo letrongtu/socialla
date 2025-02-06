@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using backend.Hubs;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository
@@ -12,15 +14,19 @@ namespace backend.Repository
     public class PostReactionRepository : IPostReactionRepository
     {
         private readonly ApplicationDBContext _dbContext;
-        public PostReactionRepository(ApplicationDBContext dBContext)
+        private readonly IHubContext<PostReactionHub> _postReactionHubContext;
+        public PostReactionRepository(ApplicationDBContext dBContext, IHubContext<PostReactionHub> postReactionHubContext)
         {
             _dbContext = dBContext;
+            _postReactionHubContext = postReactionHubContext;
         }
 
         public async Task<PostReaction> CreateAsync(PostReaction reaction)
         {
             await _dbContext.PostReactions.AddAsync(reaction);
             await _dbContext.SaveChangesAsync();
+
+            await _postReactionHubContext.Clients.All.SendAsync("ReceivePostReactionChange", reaction.PostId);
 
             return reaction;
         }
@@ -35,6 +41,8 @@ namespace backend.Repository
 
             _dbContext.PostReactions.Remove(existingPostReaction);
             await _dbContext.SaveChangesAsync();
+
+            await _postReactionHubContext.Clients.All.SendAsync("ReceivePostReactionChange", existingPostReaction.PostId);
 
             return existingPostReaction;
         }
@@ -60,6 +68,8 @@ namespace backend.Repository
 
             existingPostReaction.Reaction = reaction;
             await _dbContext.SaveChangesAsync();
+
+            await _postReactionHubContext.Clients.All.SendAsync("ReceivePostReactionChange", existingPostReaction.PostId);
 
             return existingPostReaction;
         }
