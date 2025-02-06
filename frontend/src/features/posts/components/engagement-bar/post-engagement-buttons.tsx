@@ -7,8 +7,8 @@ import { PostType } from "../../types";
 import { UseCreatePostReaction } from "@/features/post-reactions/api/create-post-reaction";
 import { UseDeletePostReaction } from "@/features/post-reactions/api/delete-post-reaction";
 import { UseUpdatePostReaction } from "@/features/post-reactions/api/update-post-reaction";
-import { reactionsWithEmojiAndIcon } from "../../../post-reactions/components/reaction-data/reaction-data";
-import { ReactionPickerTooltip } from "@/features/post-reactions/components/reaction-picker-tooltip";
+import { reactionsWithEmojiAndIcon } from "../../../../utils/reaction-data/reaction-data";
+import { ReactionPickerTooltip } from "@/components/reaction-details-modal/reaction-picker-tooltip";
 
 import { PiShareFat } from "react-icons/pi";
 import { MessageCircle } from "lucide-react";

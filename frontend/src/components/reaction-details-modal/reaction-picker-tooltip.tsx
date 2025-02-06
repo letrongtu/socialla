@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { createElement } from "react";
-import { reactionsWithEmojiAndIcon } from "./reaction-data/reaction-data";
+import { reactionsWithEmojiAndIcon } from "../../utils/reaction-data/reaction-data";
 
 import {
   Tooltip,

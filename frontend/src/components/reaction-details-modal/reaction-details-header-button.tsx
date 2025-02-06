@@ -1,19 +1,19 @@
 import { cn } from "@/lib/utils";
+import { ReactionType } from "@/utils/types";
 
-import { reactionsWithEmojiAndIcon } from "./reaction-data/reaction-data";
+import { reactionsWithEmojiAndIcon } from "@/utils/reaction-data/reaction-data";
 
 import { FaHeart } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
-import { PostReactionType } from "../types";
 
 interface ReactionDetailsHeaderButtonProps {
-  postReactions: PostReactionType[];
+  reactions: ReactionType[];
   currentReaction: string | null;
   setReaction: (reaction: string | null) => void;
 }
 
 export const ReactionDetailsHeaderButton = ({
-  postReactions,
+  reactions,
   currentReaction,
   setReaction,
 }: ReactionDetailsHeaderButtonProps) => {
@@ -38,7 +38,7 @@ export const ReactionDetailsHeaderButton = ({
         </p>
       </div>
 
-      {postReactions.map((reaction, index) => {
+      {reactions.map((reaction, index) => {
         const reactionWithEmojiAndIcon = reactionsWithEmojiAndIcon.find(
           (reactionWithEmojiAndIcon) =>
             reactionWithEmojiAndIcon.reaction === reaction.reaction

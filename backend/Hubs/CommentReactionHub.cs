@@ -9,14 +9,8 @@ namespace backend.Hubs
 {
     public class CommentReactionHub : Hub
     {
-        public async Task SendCommentReactionCreate(CommentReaction reaction){
-            await Clients.All.SendAsync("ReceiveCommentReactionCreate", reaction);
-        }
-        public async Task SendCommentReactionDelete(CommentReaction reaction){
-            await Clients.All.SendAsync("ReceiveCommentReactionDelete", reaction);
-        }
-        public async Task SendCommentReactionUpdate(CommentReaction reaction){
-            await Clients.All.SendAsync("ReceiveCommentReactionUpdate", reaction);
+        public async Task SendCommentReactionChange(string commentId){
+            await Clients.All.SendAsync("ReceiveCommentReactionChange", commentId);
         }
     }
 }

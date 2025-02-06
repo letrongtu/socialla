@@ -1,6 +1,7 @@
 import { getCreatedDisplayString } from "@/features/posts/helper/helper";
 import { CommentType } from "../types";
 
+import { useGetCommentReactions } from "@/features/comment-reactions/api/use-get-comment-reactions";
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
 import { UseDeleteComment } from "../api/use-delete-comment";
 
@@ -11,14 +12,16 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Hint } from "@/components/ui/hint";
-import { ReactionPickerTooltip } from "@/features/post-reactions/components/reaction-picker-tooltip";
+import { CommentReactionButton } from "./comment-reaction-button";
 
 import { BiSolidCommentEdit } from "react-icons/bi";
 import { Separator } from "@/components/ui/separator";
 import { Pen, Trash } from "lucide-react";
+import { CommentReactionDetails } from "@/features/comment-reactions/components/comment-reaction-details";
 
 interface CommentEngagementBarProps {
   comment: CommentType;
+  isEditComment: boolean;
   setIsReply: (reply: boolean) => void;
   setIsEditComment: (isEditComment: boolean) => void;
   setIsLastChildEditingFromParent?: (isLastChildEditing: boolean) => void;
@@ -26,29 +29,34 @@ interface CommentEngagementBarProps {
 }
 export const CommentEngagementBar = ({
   comment,
+  isEditComment,
   setIsReply,
   setIsEditComment,
   setIsLastChildEditingFromParent,
   isLastChild,
 }: CommentEngagementBarProps) => {
-  const { data, isLoading } = useCurrentUser();
+  const { data: currentUser, isLoading } = useCurrentUser();
+  const { data: commentReactions, isLoading: isLoadingCommentReactions } =
+    useGetCommentReactions(comment.id);
 
   const { mutate: deleteComment, isPending: isDeletePending } =
     UseDeleteComment();
 
-  if (!data) {
+  if (!currentUser || !currentUser.id) {
     return null;
   }
 
-  const isCurrentUserComment = data.id === comment.userId;
+  const isCurrentUserComment = currentUser.id === comment.userId;
 
   const { createdDisplayString, createdDayDateTime } = getCreatedDisplayString(
     comment.createdAt
   );
 
-  const handleReaction = (reaction: string) => {
-    console.log("here");
-  };
+  if (isLoading) {
+    return (
+      <div className="my-2 px-2 py-1 w-36 rounded-xl flex items-center gap-x-3 bg-[#c9ccd1]/30"></div>
+    );
+  }
 
   const handleDeleteComment = () => {
     deleteComment(
@@ -64,12 +72,6 @@ export const CommentEngagementBar = ({
     );
   };
 
-  if (isLoading) {
-    return (
-      <div className="my-2 px-2 py-1 w-36 rounded-xl flex items-center gap-x-3 bg-[#c9ccd1]/30"></div>
-    );
-  }
-
   return (
     <div className="px-2 py-1 rounded-xl flex items-center gap-x-3">
       <Hint label={createdDayDateTime}>
@@ -78,11 +80,11 @@ export const CommentEngagementBar = ({
         </p>
       </Hint>
 
-      <ReactionPickerTooltip handleReaction={handleReaction}>
-        <p className="text-xs font-semibold text-muted-foreground hover:underline cursor-pointer">
-          Like
-        </p>
-      </ReactionPickerTooltip>
+      <CommentReactionButton
+        commentReactions={commentReactions}
+        comment={comment}
+        currentUserId={currentUser.id}
+      />
 
       <Hint label="Reply">
         <p
@@ -93,11 +95,11 @@ export const CommentEngagementBar = ({
         </p>
       </Hint>
 
-      {isCurrentUserComment && (
+      {isCurrentUserComment && !isEditComment && (
         <TooltipProvider>
           <Tooltip delayDuration={50}>
             <TooltipTrigger>
-              <div className="flex items-end justify-end mt-[0.2rem] -ml-1 p-1 rounded-full hover:bg-[#c9ccd1]/30 cursor-pointer group">
+              <div className="group-hover/comment:flex hidden items-end justify-end mt-[0.2rem] -ml-1 rounded-full hover:bg-[#c9ccd1]/30 cursor-pointer group">
                 <BiSolidCommentEdit className="size-[0.7rem] group-hover:text-[#1823ab] text-muted-foreground flex items-end" />
               </div>
             </TooltipTrigger>
@@ -136,6 +138,8 @@ export const CommentEngagementBar = ({
           </Tooltip>
         </TooltipProvider>
       )}
+
+      <CommentReactionDetails commentReactions={commentReactions} />
     </div>
   );
 };

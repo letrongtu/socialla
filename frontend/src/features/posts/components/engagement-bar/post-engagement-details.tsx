@@ -2,9 +2,8 @@ import { cn } from "@/lib/utils";
 
 import { PostReactionType } from "@/features/post-reactions/types";
 
-import { ReactionDetails } from "@/features/post-reactions/components/reaction-details";
+import { PostReactionDetails } from "@/features/post-reactions/components/post-reaction-details";
 import { EngagementHint } from "@/features/posts/components/engagement-bar/engagement-hint";
-import { UseGetCommentsByParentCommentId } from "@/features/post-comments/api/use-get-comments-by-parent-comment-id";
 import { UseGetParentCommentsByPostId } from "@/features/post-comments/api/use-get-parent-comments-by-post-id";
 
 interface PostEngagementDetailsProps {
@@ -32,7 +31,7 @@ export const PostEngagementDetails = ({
         enableReaction && "justify-between"
       )}
     >
-      {enableReaction && <ReactionDetails postReactions={postReactions} />}
+      {enableReaction && <PostReactionDetails postReactions={postReactions} />}
 
       <div className="flex items-center gap-x-3">
         {enableComment && totalPostComments > 0 && (

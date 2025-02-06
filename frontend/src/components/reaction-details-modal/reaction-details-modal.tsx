@@ -1,4 +1,4 @@
-import { PostReactionType } from "../types";
+import { ReactionType } from "@/utils/types";
 
 import {
   Dialog,
@@ -13,17 +13,17 @@ import { ReactionDetailsHeaderButton } from "./reaction-details-header-button";
 import { UserReactionList } from "./user-reaction-list";
 
 interface ReactionDetailsModalProps {
-  postReactions: PostReactionType[];
+  reactions: ReactionType[];
   currentReaction: string | null;
   setReaction: (reaction: string | null) => void;
 }
 
 export const ReactionDetailsModal = ({
-  postReactions,
+  reactions,
   currentReaction,
   setReaction,
 }: ReactionDetailsModalProps) => {
-  const postReactionsWithOutAll = postReactions.filter(
+  const reactionsWithOutAll = reactions.filter(
     (reaction) => reaction.reaction !== "All"
   );
   return (
@@ -37,14 +37,14 @@ export const ReactionDetailsModal = ({
         <DialogHeader>
           <DialogTitle className="flex flex-row text-xl font-semibold">
             <ReactionDetailsHeaderButton
-              postReactions={postReactionsWithOutAll.slice(0, 3)}
+              reactions={reactionsWithOutAll.slice(0, 3)}
               currentReaction={currentReaction}
               setReaction={setReaction}
             />
 
-            {postReactions.length >= 3 && (
+            {reactions.length >= 3 && (
               <ReactionDetailsModalDropdownMenu
-                postReactions={postReactionsWithOutAll.slice(3)}
+                reactions={reactionsWithOutAll.slice(3)}
                 currentReaction={currentReaction}
                 setReaction={setReaction}
               />
@@ -53,7 +53,7 @@ export const ReactionDetailsModal = ({
         </DialogHeader>
 
         <UserReactionList
-          postReactions={postReactions}
+          reactions={reactions}
           currentReaction={currentReaction}
         />
       </DialogContent>

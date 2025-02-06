@@ -32,7 +32,7 @@ export const getCreatedDisplayString = (CreatedAt: Date) => {
   const hours = differenceInHours(now, CreatedAt);
 
   if (seconds === 0) {
-    createdDisplayString = `Just Now`;
+    createdDisplayString = `Now`;
   } else if (seconds < 60) {
     createdDisplayString = `${seconds}s`;
   } else if (minutes < 60) {

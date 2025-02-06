@@ -1,21 +1,24 @@
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-import { reactionsWithEmojiAndIcon } from "@/features/post-reactions/components/reaction-data/reaction-data";
-import { EngagementHint } from "@/features/posts/components/engagement-bar/engagement-hint";
+import { useCurrentUser } from "@/features/auth/api/use-current-user";
 
-import { PostReactionType } from "@/features/post-reactions/types";
+import { reactionsWithEmojiAndIcon } from "@/utils/reaction-data/reaction-data";
+import { EngagementHint } from "@/features/posts/components/engagement-bar/engagement-hint";
+import { ReactionDetailsModal } from "@/components/reaction-details-modal/reaction-details-modal";
+
+import { ReactionType } from "@/utils/types";
 
 import { FaHeart } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
-import { useState } from "react";
-import { ReactionDetailsModal } from "./reaction-details-modal";
-import { useCurrentUser } from "@/features/auth/api/use-current-user";
 
-interface ReactionDetailsProps {
-  postReactions: PostReactionType[];
+interface PostReactionDetailsProps {
+  postReactions: ReactionType[];
 }
 
-export const ReactionDetails = ({ postReactions }: ReactionDetailsProps) => {
+export const PostReactionDetails = ({
+  postReactions,
+}: PostReactionDetailsProps) => {
   const { data: currentUserData, isLoading } = useCurrentUser();
 
   const [reaction, setReaction] = useState<string | null>(null);
@@ -79,7 +82,7 @@ export const ReactionDetails = ({ postReactions }: ReactionDetailsProps) => {
   return (
     <>
       <ReactionDetailsModal
-        postReactions={postReactions}
+        reactions={postReactions}
         currentReaction={reaction}
         setReaction={setReaction}
       />

@@ -8,7 +8,7 @@ const BASE_URL = "http://localhost:5096";
 const BASE_API_URL = "http://localhost:5096/api";
 
 type ResponseType = {
-  postReactions: ReactionType[];
+  commentReactions: ReactionType[];
 };
 
 type Options = {
@@ -17,19 +17,24 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const useGetPostReactions = (postId: string) => {
+export const useGetCommentReactions = (commentId: string) => {
   const [data, setData] = useState<ReactionType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchPostReactions = async (postId: string, options?: Options) => {
+  const fetchCommentReactions = async (
+    commentId: string,
+    options?: Options
+  ) => {
     try {
       setIsLoading(true);
 
       const response = await axios.get<ResponseType>(
-        `${BASE_API_URL}/post-reaction/${postId}`
+        `${BASE_API_URL}/comment-reaction/${commentId}`
       );
 
-      setData(response.data.postReactions ? response.data.postReactions : []);
+      setData(
+        response.data.commentReactions ? response.data.commentReactions : []
+      );
 
       options?.onSuccess?.(response.data);
 
@@ -43,14 +48,14 @@ export const useGetPostReactions = (postId: string) => {
   };
 
   useEffect(() => {
-    if (!postId) {
+    if (!commentId) {
       return;
     }
 
-    fetchPostReactions(postId);
+    fetchCommentReactions(commentId);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/postReactionHub`)
+      .withUrl(`${BASE_URL}/commentReactionHub`)
       .withAutomaticReconnect()
       .build();
 
@@ -65,11 +70,16 @@ export const useGetPostReactions = (postId: string) => {
         // console.log("SignalR connection error: ", error);
       });
 
-    connection.on("ReceivePostReactionUpdate", (updatedPostId: string) => {
-      if (updatedPostId === postId) {
-        fetchPostReactions(postId);
+    connection.on(
+      "ReceiveCommentReactionChange",
+      (updatedCommentId: string) => {
+        console.log(updatedCommentId);
+        console.log(commentId);
+        if (updatedCommentId === commentId) {
+          fetchCommentReactions(commentId);
+        }
       }
-    });
+    );
 
     return () => {
       connection
@@ -83,7 +93,7 @@ export const useGetPostReactions = (postId: string) => {
           console.log("Error stopping SignalR:", error);
         });
     };
-  }, [postId]);
+  }, [commentId]);
 
   return {
     data,

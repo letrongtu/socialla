@@ -43,7 +43,7 @@ namespace backend.Controllers.CommentReaction
                 return StatusCode(400, "User who creates the reaction, is not found");
             }
 
-            var comment = await _commentRepo.GetByIdAsync(commentReactionDto.PostId);
+            var comment = await _commentRepo.GetByIdAsync(commentReactionDto.CommentId);
             if(comment == null){
                 return StatusCode(400, "Comment not found");
             }
@@ -87,7 +87,7 @@ namespace backend.Controllers.CommentReaction
                 return NotFound("Comment Reaction doesn't exist");
             }
 
-            var newCommentReaction = await _commentReactionRepo.UpdateByIdAsync(existingCommentReaction.Id, existingCommentReaction.Reaction);
+            var newCommentReaction = await _commentReactionRepo.UpdateByIdAsync(existingCommentReaction.Id, commentReactionDto.Reaction);
 
             if(newCommentReaction == null){
                 return NotFound("Cannot update comment reaction");

@@ -29,6 +29,7 @@ export const CommentCard = ({
   isLastChild = false,
 }: CommentCardProps) => {
   const { data, isLoading } = useGetUser(comment.userId);
+
   const {
     data: replyComments,
     isLoading: isLoadingReplyComments,
@@ -50,7 +51,7 @@ export const CommentCard = ({
   const avatarFallback = data.firstName?.charAt(0).toUpperCase();
 
   return (
-    <div className="relative w-full flex flex-row justify-between gap-x-2">
+    <div className="relative w-full flex flex-row justify-between gap-x-2 group/comment">
       <div className="cursor-pointer">
         <Avatar className="rounded size-10 hover:opacity-75 transition">
           <AvatarImage alt={data.firstName} src={data.profilePictureUrl} />
@@ -71,7 +72,7 @@ export const CommentCard = ({
             isLastChild={isLastChild}
           />
         ) : (
-          <div className="w-fit max-w-full min-w-20 px-3 py-1 rounded-xl bg-[#c9ccd1]/30">
+          <div className="w-fit max-w-full min-w-28 px-3 py-1 rounded-xl bg-[#c9ccd1]/30">
             <p className="text-sm font-semibold hover:underline cursor-pointer">
               {data.firstName} {data.lastName}
             </p>
@@ -88,6 +89,7 @@ export const CommentCard = ({
 
         <CommentEngagementBar
           comment={comment}
+          isEditComment={isEditComment}
           setIsReply={setParentIsReply ? setParentIsReply : setIsReply}
           setIsEditComment={setIsEditComment}
           setIsLastChildEditingFromParent={setIsLastChildEditingFromParent}

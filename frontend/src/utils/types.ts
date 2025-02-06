@@ -1,10 +1,10 @@
-export type PostReactionType = {
+export type ReactionType = {
   reaction: string;
   count: number;
-  users: PostReactionUserType[];
+  users: ReactionUserType[];
 };
 
-export type PostReactionUserType = {
+export type ReactionUserType = {
   id: string;
   fullName: string;
   reactionCreatedAt: string;

@@ -26,7 +26,7 @@ namespace backend.Repository
             await _dbContext.CommentReactions.AddAsync(reaction);
             await _dbContext.SaveChangesAsync();
 
-            await _commentReactionHubContext.Clients.All.SendAsync("ReceiveCommentReactionCreate", reaction);
+            await _commentReactionHubContext.Clients.All.SendAsync("ReceiveCommentReactionChange", reaction.CommentId);
 
             return reaction;
         }
@@ -46,14 +46,14 @@ namespace backend.Repository
             _dbContext.CommentReactions.Remove(existingCommentReaction);
             await _dbContext.SaveChangesAsync();
 
-            await _commentReactionHubContext.Clients.All.SendAsync("ReceiveCommentReactionDelete", existingCommentReaction);
+            await _commentReactionHubContext.Clients.All.SendAsync("ReceiveCommentReactionChange", existingCommentReaction.CommentId);
 
             return existingCommentReaction;
         }
 
         public async Task<CommentReaction?> UpdateByIdAsync(string id, string reaction)
         {
-             var existingCommentReaction = await _dbContext.CommentReactions.FirstOrDefaultAsync(x => x.Id == id);
+            var existingCommentReaction = await _dbContext.CommentReactions.FirstOrDefaultAsync(x => x.Id == id);
 
             if(existingCommentReaction == null){
                 return null;
@@ -62,7 +62,7 @@ namespace backend.Repository
             existingCommentReaction.Reaction = reaction;
             await _dbContext.SaveChangesAsync();
 
-            await _commentReactionHubContext.Clients.All.SendAsync("ReceiveCommentReactionUpdate", existingCommentReaction);
+            await _commentReactionHubContext.Clients.All.SendAsync("ReceiveCommentReactionChange", existingCommentReaction.CommentId);
 
             return existingCommentReaction;
         }

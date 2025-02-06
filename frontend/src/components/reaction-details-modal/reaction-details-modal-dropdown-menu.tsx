@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
-import { reactionsWithEmojiAndIcon } from "./reaction-data/reaction-data";
+import { reactionsWithEmojiAndIcon } from "@/utils/reaction-data/reaction-data";
 
-import { PostReactionType } from "../types";
+import { ReactionType } from "@/utils/types";
 
 import {
   DropdownMenu,
@@ -16,17 +16,17 @@ import { FaHeart } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
 
 interface ReactionDetailsModalDropdownMenuProps {
-  postReactions: PostReactionType[];
+  reactions: ReactionType[];
   currentReaction: string | null;
   setReaction: (reaction: string | null) => void;
 }
 
 export const ReactionDetailsModalDropdownMenu = ({
-  postReactions,
+  reactions,
   currentReaction,
   setReaction,
 }: ReactionDetailsModalDropdownMenuProps) => {
-  const isActive = postReactions.some(
+  const isActive = reactions.some(
     (reaction) => reaction.reaction === currentReaction
   );
   return (
@@ -52,7 +52,7 @@ export const ReactionDetailsModalDropdownMenu = ({
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {postReactions.map((reaction, index) => {
+        {reactions.map((reaction, index) => {
           const reactionWithEmojiAndIcon = reactionsWithEmojiAndIcon.find(
             (reactionWithEmojiAndIcon) =>
               reactionWithEmojiAndIcon.reaction === reaction.reaction
