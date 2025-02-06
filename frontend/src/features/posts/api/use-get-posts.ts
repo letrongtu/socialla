@@ -69,8 +69,13 @@ export const UseGetPosts = () => {
       });
 
     connection.on("ReceivePostCreate", (post: PostType) => {
-      console.log("Here");
       setData((prev) => [post, ...prev]);
+    });
+
+    connection.on("ReceivePostDelete", (post: PostType) => {
+      setData((prev) =>
+        prev.filter((existingComment) => existingComment.id !== post.id)
+      );
     });
 
     return () => {

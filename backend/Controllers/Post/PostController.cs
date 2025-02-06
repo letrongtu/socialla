@@ -61,6 +61,23 @@ namespace backend.Controllers.Post
             return Ok(new {Message="Post created", PostId = post.Id});
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Delete([FromRoute] string id){
+            if(!ModelState.IsValid){
+            return BadRequest(ModelState);
+            }
+
+            var deletedPost = await _postRepo.DeleteAsync(id);
+
+            if(deletedPost == null){
+            return NotFound("Post not found");
+            }
+
+            return Ok(new {Message = "Post deleted", postId = id});
+        }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetAllPaginated(int pageNumber = 1, int pageSize = 20){
