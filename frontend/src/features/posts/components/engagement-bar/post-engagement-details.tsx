@@ -1,13 +1,12 @@
 import { cn } from "@/lib/utils";
-
-import { PostReactionType } from "@/features/post-reactions/types";
+import { ReactionType } from "@/utils/types";
 
 import { PostReactionDetails } from "@/features/post-reactions/components/post-reaction-details";
 import { EngagementHint } from "@/features/posts/components/engagement-bar/engagement-hint";
 import { UseGetParentCommentsByPostId } from "@/features/post-comments/api/use-get-parent-comments-by-post-id";
 
 interface PostEngagementDetailsProps {
-  postReactions: PostReactionType[];
+  postReactions: ReactionType[];
   postId: string;
   enableReaction?: boolean;
   enableComment?: boolean;
@@ -35,7 +34,13 @@ export const PostEngagementDetails = ({
 
       <div className="flex items-center gap-x-3">
         {enableComment && totalPostComments > 0 && (
-          <EngagementHint label="8 comments">
+          <EngagementHint
+            label={
+              totalPostComments > 1
+                ? `${totalPostComments} comments`
+                : `${totalPostComments} comment`
+            }
+          >
             <p className="text-base text-muted-foreground hover:underline cursor-pointer">
               {totalPostComments}{" "}
               {totalPostComments > 1 ? "comments" : "comment"}

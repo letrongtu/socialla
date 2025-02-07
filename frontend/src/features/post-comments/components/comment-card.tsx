@@ -5,6 +5,7 @@ import { CommentType } from "../types";
 import CommentEditor from "./editor/comment-editor";
 import UpdateCommentEditor from "./editor/update-comment-editor";
 import { useGetUser } from "@/features/auth/api/use-get-user";
+import { useCurrentUser } from "@/features/auth/api/use-current-user";
 import { UseGetCommentsByParentCommentId } from "../api/use-get-comments-by-parent-comment-id";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,6 +13,7 @@ import { CommentEngagementBar } from "./comment-engagement-bar";
 
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
 import { MdOutlineSubdirectoryArrowRight } from "react-icons/md";
+import { UserHoverCard } from "@/components/user-hover-card";
 
 interface CommentCardProps {
   comment: CommentType;
@@ -28,7 +30,10 @@ export const CommentCard = ({
   setIsLastChildEditingFromParent,
   isLastChild = false,
 }: CommentCardProps) => {
-  const { data, isLoading } = useGetUser(comment.userId);
+  const { data: currentUserData, isLoading: isLoadingCurrentUserData } =
+    useCurrentUser();
+  const { data: createdCommentUser, isLoading: isLoadingCreatedCommentUser } =
+    useGetUser(comment.userId);
 
   const {
     data: replyComments,
@@ -44,21 +49,29 @@ export const CommentCard = ({
   const [isEditComment, setIsEditComment] = useState(false);
   const [isLastChildEditing, setIsLastChildEditing] = useState(false);
 
-  if (!data) {
+  if (!createdCommentUser) {
     return null;
   }
 
-  const avatarFallback = data.firstName?.charAt(0).toUpperCase();
+  const avatarFallback = createdCommentUser.firstName?.charAt(0).toUpperCase();
 
   return (
     <div className="relative w-full flex flex-row justify-between gap-x-2 group/comment">
       <div className="cursor-pointer">
-        <Avatar className="rounded size-10 hover:opacity-75 transition">
-          <AvatarImage alt={data.firstName} src={data.profilePictureUrl} />
-          <AvatarFallback className="rounded-full bg-custom-gradient text-white font-semibold text-lg">
-            {avatarFallback}
-          </AvatarFallback>
-        </Avatar>
+        <UserHoverCard
+          user={createdCommentUser}
+          isCurrentUser={currentUserData?.id === createdCommentUser.id}
+        >
+          <Avatar className="rounded size-10 hover:opacity-75 transition">
+            <AvatarImage
+              alt={createdCommentUser.firstName}
+              src={createdCommentUser.profilePictureUrl}
+            />
+            <AvatarFallback className="rounded-full bg-custom-gradient text-white font-semibold text-lg">
+              {avatarFallback}
+            </AvatarFallback>
+          </Avatar>
+        </UserHoverCard>
       </div>
 
       <div className="max-w-[calc(100%-3rem)] flex flex-col flex-grow">
@@ -73,9 +86,14 @@ export const CommentCard = ({
           />
         ) : (
           <div className="w-fit max-w-full min-w-28 px-3 py-1 rounded-xl bg-[#c9ccd1]/30">
-            <p className="text-sm font-semibold hover:underline cursor-pointer">
-              {data.firstName} {data.lastName}
-            </p>
+            <UserHoverCard
+              user={createdCommentUser}
+              isCurrentUser={currentUserData?.id === createdCommentUser.id}
+            >
+              <p className="text-sm font-semibold hover:underline cursor-pointer">
+                {createdCommentUser.firstName} {createdCommentUser.lastName}
+              </p>
+            </UserHoverCard>
 
             <div className="break-words">
               {comment.content?.map((line, idx) => (

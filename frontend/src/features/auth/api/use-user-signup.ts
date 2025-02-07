@@ -6,7 +6,7 @@ const baseURL = "http://localhost:5096/api";
 type RequestType = {
   firstName: string;
   lastName: string;
-  date: Date | undefined;
+  dateOfBirth: Date | undefined;
   email: string;
   password: string;
 };

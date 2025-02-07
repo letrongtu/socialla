@@ -1,4 +1,3 @@
-import { useCurrentUser } from "@/features/auth/api/use-current-user";
 import { useGetUser } from "@/features/auth/api/use-get-user";
 import { PostType } from "../types";
 import { PostAudiences } from "@/components/post-audience-picker/post-audience-picker";
@@ -7,15 +6,17 @@ import { getCreatedDisplayString } from "../helper/helper";
 import emojiData from "unicode-emoji-json";
 import { feelingsData } from "./feeling-data/feeling-data";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserHoverCard } from "@/components/user-hover-card";
 import { Hint } from "@/components/ui/hint";
+import { UserButton } from "@/components/user-button";
+import { useCurrentUser } from "@/features/auth/api/use-current-user";
 
 interface PostHeaderProps {
   postData: PostType;
 }
 export const PostHeader = ({ postData }: PostHeaderProps) => {
-  // const { data: currentUser, isLoading: currentUserLoading } = useCurrentUser();
-
+  const { data: currentUserData, isLoading: isLoadingCurrentUserData } =
+    useCurrentUser();
   const { data: createdPostUser, isLoading: createdPostUserLoading } =
     useGetUser(postData.userId);
 
@@ -35,8 +36,6 @@ export const PostHeader = ({ postData }: PostHeaderProps) => {
     return null;
   }
 
-  const avatarFallback = createdPostUser?.firstName?.charAt(0).toUpperCase();
-
   const postCreatedAt = new Date(postData.createdAt);
   const {
     createdDisplayString: postCreatedDisplayString,
@@ -45,21 +44,23 @@ export const PostHeader = ({ postData }: PostHeaderProps) => {
 
   return (
     <div className="flex items-center gap-x-2">
-      <Avatar className="rounded size-11 hover:opacity-75 transition cursor-pointer">
-        <AvatarImage
-          alt={createdPostUser.firstName}
-          src={createdPostUser.profilePictureUrl}
-        />
-        <AvatarFallback className="rounded-full bg-custom-gradient text-white font-semibold text-xl">
-          {avatarFallback}
-        </AvatarFallback>
-      </Avatar>
+      <UserHoverCard
+        user={createdPostUser}
+        isCurrentUser={currentUserData?.id === createdPostUser.id}
+      >
+        <UserButton user={createdPostUser} />
+      </UserHoverCard>
 
       <div className="h-full flex flex-col">
         <div onClick={() => {}} className="flex gap-x-1">
-          <p className="text-base text-black font-semibold hover:underline cursor-pointer">
-            {createdPostUser.firstName} {createdPostUser.lastName}
-          </p>
+          <UserHoverCard
+            user={createdPostUser}
+            isCurrentUser={currentUserData?.id === createdPostUser.id}
+          >
+            <p className="text-base text-black font-semibold hover:underline cursor-pointer">
+              {createdPostUser.firstName} {createdPostUser.lastName}
+            </p>
+          </UserHoverCard>
 
           {postData.feeling && (
             <p className="text-base font-semibold">

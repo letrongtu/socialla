@@ -55,7 +55,7 @@ export const CreatePostCard = () => {
       <Separator />
 
       <div className="w-full flex justify-evenly">
-        <div className="h-10 w-full flex items-center justify-center ">
+        {/* <div className="h-10 w-full flex items-center justify-center ">
           <button
             onClick={() => {}}
             className="w-full rounded-md bg-[#ffffff] hover:bg-[#c9ccd1]/30 flex items-center justify-center space-x-3 py-2"
@@ -66,7 +66,7 @@ export const CreatePostCard = () => {
               Live
             </p>
           </button>
-        </div>
+        </div> */}
 
         <div className="h-10 w-full flex items-center justify-center ">
           <button

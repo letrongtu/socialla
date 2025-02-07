@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
 import { PostType } from "../types";
 
+import { useCurrentUser } from "@/features/auth/api/use-current-user";
+
 import { PostImageLayout } from "./post-image-layout";
 import { PostHeader } from "./post-header";
 import { EngagementBar } from "./engagement-bar/engagement-bar";
@@ -12,6 +14,8 @@ interface PostCardProps {
   shadow?: boolean;
 }
 export const PostCard = ({ postData, shadow = true }: PostCardProps) => {
+  const { data: currentUser, isLoading: isLoadingCurrentUser } =
+    useCurrentUser();
   const mediaFiles = postData.fileUrls ? postData.fileUrls : [];
   return (
     <div
@@ -22,9 +26,11 @@ export const PostCard = ({ postData, shadow = true }: PostCardProps) => {
     >
       <div className="relative flex flex-col justify-center gap-y-3 px-4">
         {/**TODO: Make this an edit component -> reusable */}
-        <div className="absolute top-0 right-5">
-          <PostEditButton postId={postData.id} />
-        </div>
+        {currentUser?.id === postData.userId && (
+          <div className="absolute top-0 right-5">
+            <PostEditButton postId={postData.id} />
+          </div>
+        )}
 
         <PostHeader postData={postData} />
 

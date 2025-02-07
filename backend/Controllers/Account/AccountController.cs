@@ -48,11 +48,15 @@ namespace backend.Controllers
                 var formattedCreatedAt = createdAt.ToString("yyyyMMddHHmmss");
                 var uniqueUserName = signUpDto.Email.Split('@')[0] + formattedCreatedAt;
 
+                var hostUrl= $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
+                var profilePictureUrl = hostUrl  + "/DefaultIcon/default-icon.png";
+
                 var appUser = new AppUser{
                     FirstName = signUpDto.FirstName,
                     LastName = signUpDto.LastName,
                     UserName = uniqueUserName,
                     DateOfBirth = signUpDto.DateOfBirth,
+                    ProfilePictureUrl = profilePictureUrl,
                     Email = signUpDto.Email,
                     CreatedAt = createdAt,
                 };
@@ -102,8 +106,6 @@ namespace backend.Controllers
                     Errors = message.Value?.Errors?.Select(e => e.ErrorMessage) ?? Enumerable.Empty<string>()
                 })
             .ToList();
-
-            Console.WriteLine(errors);
 
             return new {
                 Message = "Validation failed",

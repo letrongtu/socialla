@@ -26,21 +26,21 @@ interface SignUpCardProps {
 }
 
 const SignUpCard = ({ setState }: SignUpCardProps) => {
+  const { signUp, isPending } = UseUserSignUp();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [date, setDate] = useState<Date>();
+  const [dateOfBirth, setDateOfBirth] = useState<Date>();
   const [errorMessages, setErrorMessages] = useState<string[] | null>(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const { signUp, isPending } = UseUserSignUp();
-
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signUp(
-      { firstName, lastName, date, email, password },
+      { firstName, lastName, dateOfBirth, email, password },
       {
         onSuccess: (response) => {
           toast.success(response?.message);
@@ -70,7 +70,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
   const clearForm = () => {
     setFirstName("");
     setLastName("");
-    setDate(undefined);
+    setDateOfBirth(undefined);
     setEmail("");
     setPassword("");
   };
@@ -160,7 +160,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
                 <p className="font-normal">(optional)</p>
               </div>
 
-              <DatePicker date={date} setDate={setDate} />
+              <DatePicker date={dateOfBirth} setDate={setDateOfBirth} />
             </div>
 
             <Input
