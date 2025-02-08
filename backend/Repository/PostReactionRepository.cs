@@ -54,7 +54,7 @@ namespace backend.Repository
 
         public async Task<List<PostReaction>> GetByPostIdAsync(string postId)
         {
-            return await _dbContext.PostReactions.Where((reaction) => reaction.PostId == postId).ToListAsync();;
+            return await _dbContext.PostReactions.Where((reaction) => reaction.PostId == postId).ToListAsync();
         }
 
 

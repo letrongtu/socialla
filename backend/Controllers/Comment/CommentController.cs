@@ -82,7 +82,7 @@ namespace backend.Controllers.Comment
                 return NotFound("Comment not found");
             }
 
-             return Ok(new {Message = "Comment updated", commentId = commentDto.Id});
+            return Ok(new {Message = "Comment updated", commentId = commentDto.Id});
         }
 
         [HttpDelete]

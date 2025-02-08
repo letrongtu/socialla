@@ -21,6 +21,7 @@ namespace api.Data
         public DbSet<PostReaction> PostReactions { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<CommentReaction> CommentReactions { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -39,6 +40,9 @@ namespace api.Data
                 },
             ];
             builder.Entity<IdentityRole>().HasData(roles);
+
+            //Friends Table
+            builder.Entity<Friendship>().HasKey(f => new {f.FirstUserId, f.SecondUserId});
         }
     }
 }

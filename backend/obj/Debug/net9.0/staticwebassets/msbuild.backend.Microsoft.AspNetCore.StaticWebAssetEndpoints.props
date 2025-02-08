@@ -1,5 +1,17 @@
 ﻿<Project>
   <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/backend/DefaultIcon/default-icon.lj2q9210p5.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\DefaultIcon\default-icon.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"lj2q9210p5"},{"Name":"integrity","Value":"sha256-YZA6trFrqaJBhg8vL/56jbtcVmNeLK4pyvOJgCUlBbI="},{"Name":"label","Value":"_content/backend/DefaultIcon/default-icon.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"65561"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022YZA6trFrqaJBhg8vL/56jbtcVmNeLK4pyvOJgCUlBbI=\u0022"},{"Name":"Last-Modified","Value":"Thu, 06 Feb 2025 13:50:59 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/backend/DefaultIcon/default-icon.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\DefaultIcon\default-icon.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-YZA6trFrqaJBhg8vL/56jbtcVmNeLK4pyvOJgCUlBbI="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"65561"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022YZA6trFrqaJBhg8vL/56jbtcVmNeLK4pyvOJgCUlBbI=\u0022"},{"Name":"Last-Modified","Value":"Thu, 06 Feb 2025 13:50:59 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/backend/Uploads/Users/0438a85a-32eb-41c6-962c-3a04894449ca/6548176-hd_1920_1080_24fps - Copy.mp4">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Uploads\Users\0438a85a-32eb-41c6-962c-3a04894449ca\6548176-hd_1920_1080_24fps - Copy.mp4'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
