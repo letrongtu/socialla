@@ -49,7 +49,7 @@ export const CommentCard = ({
   const [isEditComment, setIsEditComment] = useState(false);
   const [isLastChildEditing, setIsLastChildEditing] = useState(false);
 
-  if (!createdCommentUser) {
+  if (!createdCommentUser || !currentUserData) {
     return null;
   }
 
@@ -58,10 +58,7 @@ export const CommentCard = ({
   return (
     <div className="relative w-full flex flex-row justify-between gap-x-2 group/comment">
       <div className="cursor-pointer">
-        <UserHoverCard
-          user={createdCommentUser}
-          isCurrentUser={currentUserData?.id === createdCommentUser.id}
-        >
+        <UserHoverCard user={createdCommentUser} currentUser={currentUserData}>
           <Avatar className="rounded size-10 hover:opacity-75 transition">
             <AvatarImage
               alt={createdCommentUser.firstName}
@@ -88,7 +85,7 @@ export const CommentCard = ({
           <div className="w-fit max-w-full min-w-28 px-3 py-1 rounded-xl bg-[#c9ccd1]/30">
             <UserHoverCard
               user={createdCommentUser}
-              isCurrentUser={currentUserData?.id === createdCommentUser.id}
+              currentUser={currentUserData}
             >
               <p className="text-sm font-semibold hover:underline cursor-pointer">
                 {createdCommentUser.firstName} {createdCommentUser.lastName}

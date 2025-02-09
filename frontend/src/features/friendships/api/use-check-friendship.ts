@@ -1,15 +1,14 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { ReactionType } from "@/utils/types";
-
 import * as signalR from "@microsoft/signalr";
 
 const BASE_URL = "http://localhost:5096";
 const BASE_API_URL = "http://localhost:5096/api";
 
 type ResponseType = {
-  userFriendIds: string[];
-};
+  hasFriendship: boolean;
+  isAccepted: boolean;
+} | null;
 
 type Options = {
   onSuccess?: (data: ResponseType) => void;
@@ -17,37 +16,45 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const useGetFriends = (userId: string) => {
-  const [data, setData] = useState<string[]>([]);
+export const useCheckFriendShip = (
+  firstUserId: string,
+  secondUserId: string
+) => {
+  const [data, setData] = useState<ResponseType>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchFriends = async (userId: string, options?: Options) => {
+  const checkIsFriendShip = async (
+    firstUserId: string,
+    secondUserId: string
+  ) => {
     try {
       setIsLoading(true);
 
       const response = await axios.get<ResponseType>(
-        `${BASE_API_URL}/friendship/${userId}`
+        `${BASE_API_URL}/friendship`,
+        {
+          params: {
+            firstUserId,
+            secondUserId,
+          },
+        }
       );
 
-      setData(response.data.userFriendIds);
-
-      options?.onSuccess?.(response.data);
+      setData(response.data);
 
       return response;
     } catch (error) {
-      options?.onError?.(error as AxiosError);
+      console.log(error);
     } finally {
-      options?.onSettled?.();
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!userId) {
+    if (!firstUserId || !secondUserId) {
       return;
     }
-
-    fetchFriends(userId);
+    checkIsFriendShip(firstUserId, secondUserId);
 
     const connection = new signalR.HubConnectionBuilder()
       .withUrl(`${BASE_URL}/friendshipHub`)
@@ -58,36 +65,46 @@ export const useGetFriends = (userId: string) => {
       .start()
       .then(() => {
         //TODO: Find a way to handle this
-        // console.log("SignalR connected");
+        console.log("SignalR connected");
       })
       .catch((error) => {
         //TODO: Find a way to handle this
-        // console.log("SignalR connection error: ", error);
+        console.log("SignalR connection error: ", error);
       });
+
+    connection.on(
+      "ReceiveFriendshipCreate",
+      (firstCreatedUserId: string, secondCreatedUserId: string) => {
+        if (
+          firstUserId === firstCreatedUserId &&
+          secondUserId === secondCreatedUserId
+        ) {
+          checkIsFriendShip(firstUserId, secondUserId);
+        }
+      }
+    );
 
     connection.on(
       "ReceiveFriendshipDelete",
       (firstDeletedUserId: string, secondDeletedUserId: string) => {
-        const deletedFriendId =
-          firstDeletedUserId === userId
-            ? firstDeletedUserId
-            : secondDeletedUserId;
-
-        setData((prev) =>
-          prev?.filter((friendId) => friendId !== deletedFriendId)
-        );
+        if (
+          firstUserId === firstDeletedUserId &&
+          secondUserId === secondDeletedUserId
+        ) {
+          checkIsFriendShip(firstUserId, secondUserId);
+        }
       }
     );
 
     connection.on(
       "ReceiveFriendshipUpdate",
       (firstUpdatedUserId: string, secondUpdatedUserId: string) => {
-        const addedFriendId =
-          firstUpdatedUserId === userId
-            ? firstUpdatedUserId
-            : secondUpdatedUserId;
-
-        setData((prev) => [addedFriendId, ...prev]);
+        if (
+          firstUserId === firstUpdatedUserId &&
+          secondUserId === secondUpdatedUserId
+        ) {
+          checkIsFriendShip(firstUserId, secondUserId);
+        }
       }
     );
 
@@ -103,7 +120,7 @@ export const useGetFriends = (userId: string) => {
           console.log("Error stopping SignalR:", error);
         });
     };
-  }, [userId]);
+  }, [firstUserId, secondUserId]);
 
   return {
     data,

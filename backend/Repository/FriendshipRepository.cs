@@ -29,6 +29,9 @@ namespace backend.Repository
             await _dbContext.Friendships.AddAsync(friendship);
             await _dbContext.SaveChangesAsync();
 
+            await _friendshipHubContext.Clients.All.SendAsync("ReceiveFriendshipCreate", friendship.FirstUserId, friendship.SecondUserId);
+
+
             var notifcation = new Notification{
                 ReceiveUserId = friendship.SecondUserId,
                 EntityType = NotificationEntityType.User,

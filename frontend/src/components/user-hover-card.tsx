@@ -4,12 +4,13 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { UserButton } from "./user-button";
+import { AddFriendButton } from "@/features/friendships/components/add-friend-button";
+import { Button } from "./ui/button";
 
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { MdDynamicFeed } from "react-icons/md";
 import { BiSolidMessageSquareDetail } from "react-icons/bi";
-import { AddFriendButton } from "@/features/friends/components/add-friend-button";
 
 interface UserHoverCardProps {
   user: {
@@ -22,18 +23,30 @@ interface UserHoverCardProps {
     profilePictureUrl: string | undefined;
     createdAt: Date | undefined;
   };
-  isCurrentUser?: boolean;
+  currentUser: {
+    id: string | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    dateOfBirth: Date | undefined;
+    email: string | undefined;
+    phoneNumber: string | undefined;
+    profilePictureUrl: string | undefined;
+    createdAt: Date | undefined;
+  };
+
   children: React.ReactNode;
 }
 
 export const UserHoverCard = ({
   user,
-  isCurrentUser = false,
+  currentUser,
   children,
 }: UserHoverCardProps) => {
-  if (!user || !user.id) {
+  if (!user.id || !currentUser.id) {
     return null;
   }
+
+  const isCurrentUser = user.id === currentUser.id;
 
   return (
     <HoverCard openDelay={100} closeDelay={50}>
@@ -81,15 +94,18 @@ export const UserHoverCard = ({
 
           {!isCurrentUser && (
             <div className="w-full flex items-center justify-center gap-x-2">
-              <div
+              <Button
                 onClick={() => {}}
-                className="w-full py-2 px-4 flex items-center justify-center gap-x-2 rounded-md bg-[#c9ccd1]/30 hover:bg-[#c9ccd1]/70 cursor-pointer"
+                className="w-full py-2 px-4 flex items-center justify-center gap-x-2 rounded-md text-black bg-[#c9ccd1]/30 hover:bg-[#c9ccd1]/70 cursor-pointer"
               >
                 <BiSolidMessageSquareDetail className="size-5" />
                 <p className="text-sm font-semibold">Message</p>
-              </div>
+              </Button>
 
-              <AddFriendButton />
+              <AddFriendButton
+                currentUserId={currentUser.id}
+                otherUserId={user.id}
+              />
             </div>
           )}
         </div>

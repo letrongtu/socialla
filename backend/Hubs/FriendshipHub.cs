@@ -8,11 +8,14 @@ namespace backend.Hubs
 {
     public class FriendshipHub : Hub
     {
-        public async Task SendUpdateFriendship(string firstUserId, string secondUserId){
-            await Clients.All.SendAsync("ReceiveFriendshipUpdate", firstUserId, secondUserId);
+        public async Task SendCreateFriendship(string firstCreatedUserId, string secondCreatedUserId){
+            await Clients.All.SendAsync("ReceiveFriendshipCreate", firstCreatedUserId, secondCreatedUserId);
         }
-        public async Task SendDeleteFriendship(string firstUserId, string secondUserId){
-            await Clients.All.SendAsync("ReceiveFriendshipDelete", firstUserId, secondUserId);
+        public async Task SendUpdateFriendship(string firstUpdatedUserId, string secondUpdatedUserId){
+            await Clients.All.SendAsync("ReceiveFriendshipUpdate", firstUpdatedUserId, secondUpdatedUserId);
+        }
+        public async Task SendDeleteFriendship(string firstDeletedUserId, string secondDeletedUserId){
+            await Clients.All.SendAsync("ReceiveFriendshipDelete", firstDeletedUserId, secondDeletedUserId);
         }
     }
 }

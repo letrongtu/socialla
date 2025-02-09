@@ -32,7 +32,7 @@ export const PostHeader = ({ postData }: PostHeaderProps) => {
     ([emoji, data]) => data.slug === currentFeeling?.emojiSlug
   )?.[0];
 
-  if (!createdPostUser) {
+  if (!createdPostUser || !currentUserData) {
     return null;
   }
 
@@ -44,19 +44,13 @@ export const PostHeader = ({ postData }: PostHeaderProps) => {
 
   return (
     <div className="flex items-center gap-x-2">
-      <UserHoverCard
-        user={createdPostUser}
-        isCurrentUser={currentUserData?.id === createdPostUser.id}
-      >
+      <UserHoverCard user={createdPostUser} currentUser={currentUserData}>
         <UserButton user={createdPostUser} />
       </UserHoverCard>
 
       <div className="h-full flex flex-col">
         <div onClick={() => {}} className="flex gap-x-1">
-          <UserHoverCard
-            user={createdPostUser}
-            isCurrentUser={currentUserData?.id === createdPostUser.id}
-          >
+          <UserHoverCard user={createdPostUser} currentUser={currentUserData}>
             <p className="text-base text-black font-semibold hover:underline cursor-pointer">
               {createdPostUser.firstName} {createdPostUser.lastName}
             </p>

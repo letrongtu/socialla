@@ -129,7 +129,7 @@ namespace backend.Controllers.Friendship
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> CheckFriendship(CheckFriendshipDto friendshipDto){
+        public async Task<IActionResult> CheckFriendship([FromQuery] CheckFriendshipDto friendshipDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
@@ -146,8 +146,7 @@ namespace backend.Controllers.Friendship
 
             var friendship = await _friendshipRepo.CheckFriendshipAsync(friendshipDto.FirstUserId, friendshipDto.SecondUserId);
 
-            return Ok(new {isFriend = friendship != null});
+            return Ok(new {hasFriendship = friendship != null, isAccepted = friendship?.Status == FriendshipStatus.Accepted });
         }
-
     }
 }
