@@ -13,15 +13,27 @@ namespace backend.Repository
     public class FriendshipRepository : IFriendshipRepository
     {
         private readonly ApplicationDBContext _dbContext;
-        public FriendshipRepository(ApplicationDBContext dbContext)
+        private readonly INotificationRepository _notificationRepo;
+        public FriendshipRepository(ApplicationDBContext dbContext, INotificationRepository notificationRepo)
         {
             _dbContext = dbContext;
+            _notificationRepo = notificationRepo;
         }
 
         public async Task<Friendship> CreateAsync(Friendship friendship)
         {
             await _dbContext.Friendships.AddAsync(friendship);
             await _dbContext.SaveChangesAsync();
+
+            var notifcation = new Notification{
+                ReceiveUserId = friendship.SecondUserId,
+                EntityType = NotificationEntityType.User,
+                EntityId = friendship.FirstUserId,
+                Type = NotificationType.Friend_Request,
+                Content = "sent you a friend request",
+            };
+
+            await _notificationRepo.CreateAsync(notifcation);
 
             return friendship;
         }
@@ -51,6 +63,17 @@ namespace backend.Repository
             existingFriendship.Status = FriendshipStatus.Accepted;
             existingFriendship.AcceptedAt = DateTime.Now;
             await _dbContext.SaveChangesAsync();
+
+            //IMPORTANT: The user who accepts the friend request must be the firstUser
+            var notifcation = new Notification{
+                ReceiveUserId = existingFriendship.SecondUserId,
+                EntityType = NotificationEntityType.User,
+                EntityId = existingFriendship.FirstUserId,
+                Type = NotificationType.Friend_Accept,
+                Content = "accepted your friend request",
+            };
+
+            await _notificationRepo.CreateAsync(notifcation);
 
             return existingFriendship;
         }

@@ -107,6 +107,7 @@ builder.Services.AddScoped<IPostReactionRepository, PostReactionRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentReposity>();
 builder.Services.AddScoped<ICommentReactionRepository, CommentReactionRepository>();
 builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
 builder.Services.AddSignalR();
 
@@ -133,5 +134,6 @@ app.MapHub<PostHub>("/postHub");
 app.MapHub<PostReactionHub>("/postReactionHub");
 app.MapHub<PostCommentHub>("/postCommentHub");
 app.MapHub<CommentReactionHub>("/commentReactionHub");
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();
