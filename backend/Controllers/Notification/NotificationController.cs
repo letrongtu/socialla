@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers.Notification
 {
+    //TODO: Authorize
     [Route("api/notification")]
     [ApiController]
     public class NotificationController : ControllerBase
@@ -24,6 +26,7 @@ namespace backend.Controllers.Notification
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(string id){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -40,6 +43,7 @@ namespace backend.Controllers.Notification
 
         [HttpPut]
         [Route("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateRead(string id){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -56,6 +60,7 @@ namespace backend.Controllers.Notification
 
         [HttpGet]
         [Route("userId")]
+        [Authorize]
         public async Task<IActionResult> GetPaginatedByUserId(string userId, int pageNumber, int pageSize){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);

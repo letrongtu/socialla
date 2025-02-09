@@ -134,6 +134,7 @@ app.MapHub<PostHub>("/postHub");
 app.MapHub<PostReactionHub>("/postReactionHub");
 app.MapHub<PostCommentHub>("/postCommentHub");
 app.MapHub<CommentReactionHub>("/commentReactionHub");
+app.MapHub<NotificationHub>("/friendshipHub");
 app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();

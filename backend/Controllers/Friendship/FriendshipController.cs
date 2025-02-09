@@ -6,6 +6,7 @@ using backend.Dtos.Friendship;
 using backend.Interfaces;
 using backend.Mappers.Friendship;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,7 @@ namespace backend.Controllers.Friendship
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreateFriendshipDto friendshipDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -54,6 +56,7 @@ namespace backend.Controllers.Friendship
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> Delete(DeleteFriendshipDto friendshipDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -79,6 +82,7 @@ namespace backend.Controllers.Friendship
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> AcceptRequest(UpdateAcceptFriendshipDto friendshipDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -105,6 +109,7 @@ namespace backend.Controllers.Friendship
 
         [HttpGet]
         [Route("{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetAllByUserId([FromRoute] string userId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -123,6 +128,7 @@ namespace backend.Controllers.Friendship
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> CheckFriendship(CheckFriendshipDto friendshipDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);

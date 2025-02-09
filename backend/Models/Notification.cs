@@ -23,13 +23,13 @@ namespace backend.Models
     }
     public class Notification
     {
-        public string Id = Guid.NewGuid().ToString().ToLower();
-        public string ReceiveUserId = string.Empty;
-        public NotificationEntityType EntityType = NotificationEntityType.Null;
-        public string EntityId = string.Empty; // The one who triggers the notification
-        public NotificationType Type = NotificationType.Null;
-        public string Content = string.Empty;
-        public Boolean IsRead = false;
-        public DateTime CreatedAt = DateTime.Now;
+        public string Id { get; set; } = Guid.NewGuid().ToString().ToLower();
+        public string ReceiveUserId { get; set; } = string.Empty;
+        public NotificationEntityType EntityType { get; set; } = NotificationEntityType.Null;
+        public string EntityId { get; set; } = string.Empty; // The one who triggers the notification
+        public NotificationType Type { get; set; } = NotificationType.Null;
+        public string Content { get; set; } = string.Empty;
+        public Boolean IsRead { get; set; } = false;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

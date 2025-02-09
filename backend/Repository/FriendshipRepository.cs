@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using backend.Dtos.Friendship;
+using backend.Hubs;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository
@@ -14,10 +16,12 @@ namespace backend.Repository
     {
         private readonly ApplicationDBContext _dbContext;
         private readonly INotificationRepository _notificationRepo;
-        public FriendshipRepository(ApplicationDBContext dbContext, INotificationRepository notificationRepo)
+        private readonly IHubContext<FriendshipHub> _friendshipHubContext;
+        public FriendshipRepository(ApplicationDBContext dbContext, INotificationRepository notificationRepo, IHubContext<FriendshipHub> friendshipHubContext)
         {
             _dbContext = dbContext;
             _notificationRepo = notificationRepo;
+            _friendshipHubContext = friendshipHubContext;
         }
 
         public async Task<Friendship> CreateAsync(Friendship friendship)
@@ -49,6 +53,8 @@ namespace backend.Repository
             _dbContext.Friendships.Remove(existingFriendship);
             await _dbContext.SaveChangesAsync();
 
+            await _friendshipHubContext.Clients.All.SendAsync("ReceiveFriendshipDelete", existingFriendship.FirstUserId, existingFriendship.SecondUserId);
+
             return existingFriendship;
         }
 
@@ -63,6 +69,8 @@ namespace backend.Repository
             existingFriendship.Status = FriendshipStatus.Accepted;
             existingFriendship.AcceptedAt = DateTime.Now;
             await _dbContext.SaveChangesAsync();
+
+            await _friendshipHubContext.Clients.All.SendAsync("ReceiveFriendshipUpdate", existingFriendship.FirstUserId, existingFriendship.SecondUserId);
 
             //IMPORTANT: The user who accepts the friend request must be the firstUser
             var notifcation = new Notification{
