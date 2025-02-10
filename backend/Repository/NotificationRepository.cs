@@ -25,6 +25,21 @@ namespace backend.Repository
 
         public async Task<Notification> CreateAsync(Notification notification)
         {
+            var existingUserNotifications = await _dbContext.Notifications
+                                                        .Where((notifi) =>
+                                                                notifi.EntityType == notification.EntityType
+                                                                && (notifi.EntityId == notification.EntityId || notifi.EntityId == notification.ReceiveUserId)
+                                                                && (notifi.ReceiveUserId == notification.ReceiveUserId || notifi.ReceiveUserId == notification.EntityId))
+                                                        .ToListAsync();
+
+            if(existingUserNotifications != null){
+                foreach(var existingUserNotification in existingUserNotifications){
+                    _dbContext.Notifications.Remove(existingUserNotification);
+                    await _dbContext.SaveChangesAsync();
+                    await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationDelete", existingUserNotification.Id);
+                }
+
+            }
             await _dbContext.Notifications.AddAsync(notification);
             await _dbContext.SaveChangesAsync();
 
@@ -83,6 +98,14 @@ namespace backend.Repository
                 PageNumber = pageNumber,
                 PageSize = pageSize,
             };
+        }
+
+        public async Task<Notification?> GetUserNotificationByEntityIdReceiveUserIdEntityTypeAndTypeAsync(string entityId, string receiveUserId, NotificationEntityType entityType, NotificationType type)
+        {
+            return await _dbContext.Notifications.FirstOrDefaultAsync((notification) => notification.EntityId == entityId
+                                                                        && notification.EntityType == entityType
+                                                                        && notification.ReceiveUserId == receiveUserId
+                                                                        &&notification.Type == type);
         }
     }
 }

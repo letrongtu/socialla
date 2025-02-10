@@ -5,6 +5,7 @@ import { FriendButton } from "./friend-button";
 import { UseCreateFriendship } from "../api/use-create-friendship";
 import { CancelRequestButton } from "./cancel-request-button";
 import { Button } from "@/components/ui/button";
+import { ResponseButton } from "./response-button";
 
 interface AddFriendButtonProps {
   currentUserId: string;
@@ -44,9 +45,14 @@ export const AddFriendButton = ({
           <p className="text-sm font-semibold">Add Friend</p>
         </Button>
       ) : data.isAccepted ? (
-        <FriendButton />
-      ) : (
+        <FriendButton currentUserId={currentUserId} otherUserId={otherUserId} />
+      ) : data.isFirstUserSent ? (
         <CancelRequestButton
+          currentUserId={currentUserId}
+          otherUserId={otherUserId}
+        />
+      ) : (
+        <ResponseButton
           currentUserId={currentUserId}
           otherUserId={otherUserId}
         />

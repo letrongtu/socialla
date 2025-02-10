@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 const baseURL = "http://localhost:5096/api";
 
 type RequestType = {
-  notificationId: string;
+  id: string;
 };
 
 type ResponseType = {
@@ -37,7 +37,7 @@ export const UseUpdateReadNotification = () => {
       setStatus("pending");
 
       const response = await axios.put<ResponseType>(
-        `${baseURL}/friendship/${values.notificationId}`
+        `${baseURL}/notification/${values.id}`
       );
 
       options?.onSuccess?.(response.data);

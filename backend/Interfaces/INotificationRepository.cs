@@ -13,5 +13,6 @@ namespace backend.Interfaces
         Task<Notification?> DeleteAsync(string notificationId);
         Task<Notification?> UpdateReadAsync(string notificationId);
         Task<PagedResult<Notification>> GetPaginatedByUserIdAsync(string userId, int pageNumber, int pageSize);
+        Task<Notification?> GetUserNotificationByEntityIdReceiveUserIdEntityTypeAndTypeAsync(string entityId, string receiveUserId, NotificationEntityType entityType, NotificationType type);
     }
 }

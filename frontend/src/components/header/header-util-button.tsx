@@ -52,7 +52,9 @@ export const HeaderUtilButton = ({
         </DropdownMenuTrigger>
       </Hint>
 
-      <DropdownMenuContent>{children}</DropdownMenuContent>
+      <DropdownMenuContent align={label === "Notifications" ? "end" : "center"}>
+        {children}
+      </DropdownMenuContent>
     </DropdownMenu>
   );
 };

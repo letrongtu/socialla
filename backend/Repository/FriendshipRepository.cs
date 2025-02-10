@@ -32,6 +32,7 @@ namespace backend.Repository
             await _friendshipHubContext.Clients.All.SendAsync("ReceiveFriendshipCreate", friendship.FirstUserId, friendship.SecondUserId);
 
 
+
             var notifcation = new Notification{
                 ReceiveUserId = friendship.SecondUserId,
                 EntityType = NotificationEntityType.User,
@@ -39,6 +40,12 @@ namespace backend.Repository
                 Type = NotificationType.Friend_Request,
                 Content = "sent you a friend request",
             };
+
+            var existingNotification = await _notificationRepo.GetUserNotificationByEntityIdReceiveUserIdEntityTypeAndTypeAsync(notifcation.EntityId, notifcation.ReceiveUserId, notifcation.EntityType, notifcation.Type);
+
+            if(existingNotification != null){
+                await _notificationRepo.DeleteAsync(existingNotification.Id);
+            }
 
             await _notificationRepo.CreateAsync(notifcation);
 
@@ -77,9 +84,9 @@ namespace backend.Repository
 
             //IMPORTANT: The user who accepts the friend request must be the firstUser
             var notifcation = new Notification{
-                ReceiveUserId = existingFriendship.SecondUserId,
+                ReceiveUserId = existingFriendship.FirstUserId,
                 EntityType = NotificationEntityType.User,
-                EntityId = existingFriendship.FirstUserId,
+                EntityId = existingFriendship.SecondUserId,
                 Type = NotificationType.Friend_Accept,
                 Content = "accepted your friend request",
             };

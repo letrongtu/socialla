@@ -19,7 +19,7 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const UseGetNotifications = (userId: string) => {
+export const useGetNotifications = (userId: string | null) => {
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [canLoadMore, setCanLoadMore] = useState(true);
 
@@ -41,10 +41,7 @@ export const UseGetNotifications = (userId: string) => {
         }
       );
 
-      setData((previousData) => [
-        ...previousData,
-        ...response.data.notifications,
-      ]);
+      setData((prev) => [...prev, ...response.data.notifications]);
       setCanLoadMore(response.data.hasNextPage);
 
       options?.onSuccess?.(response.data);
@@ -60,6 +57,10 @@ export const UseGetNotifications = (userId: string) => {
 
   //fetch the first page when mounted
   useEffect(() => {
+    if (!userId) {
+      return;
+    }
+
     fetchNotifications(userId, 1);
 
     const connection = new signalR.HubConnectionBuilder()
@@ -81,7 +82,9 @@ export const UseGetNotifications = (userId: string) => {
     connection.on(
       "ReceiveNotificationCreate",
       (notification: NotificationType) => {
-        setData((prev) => [notification, ...prev]);
+        if (notification.receiveUserId === userId) {
+          setData((prev) => [notification, ...prev]);
+        }
       }
     );
 
@@ -108,18 +111,18 @@ export const UseGetNotifications = (userId: string) => {
         .stop()
         .then(() => {
           ////TODO: Find a way to handle this
-          console.log("SignalR disconnected");
+          // console.log("SignalR disconnected");
         })
         .catch((error) => {
           //TODO: Find a way to handle this
-          console.log("Error stopping SignalR:", error);
+          // console.log("Error stopping SignalR:", error);
         });
     };
   }, [userId]);
 
   const loadMore = async (options?: Options) => {
     // prevent duplicate requests
-    if (!canLoadMore || isLoading) return;
+    if (!canLoadMore || isLoading || !userId) return;
 
     const nextPage = currentPageNumber + 1;
     await fetchNotifications(userId, nextPage);

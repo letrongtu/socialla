@@ -7,14 +7,9 @@ import { HeaderUtilButton } from "./header-util-button";
 import { UserButton } from "./user-button";
 import { useRouter } from "next/navigation";
 
-import {
-  Home,
-  Search,
-  TvMinimalPlay,
-  Layers2,
-  MessagesSquare,
-  Bell,
-} from "lucide-react";
+import { NotificationDisplayModal } from "@/features/notifications/components/notification-display-modal";
+
+import { Home, Search, TvMinimalPlay, Layers2, Bell } from "lucide-react";
 import { MdGroups } from "react-icons/md";
 import { FiMessageCircle } from "react-icons/fi";
 
@@ -28,7 +23,7 @@ const pages = [
 const utilButtons = [
   { label: "Menu", icon: Layers2, chilren: <div>Hello</div> },
   { label: "Messenger", icon: FiMessageCircle, chilren: <div>Hello</div> },
-  { label: "Notifications", icon: Bell, chilren: <div>Hello</div> },
+  { label: "Notifications", icon: Bell, chilren: <NotificationDisplayModal /> },
 ];
 
 export const Header = () => {

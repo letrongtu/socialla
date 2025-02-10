@@ -8,6 +8,7 @@ const BASE_API_URL = "http://localhost:5096/api";
 type ResponseType = {
   hasFriendship: boolean;
   isAccepted: boolean;
+  isFirstUserSent: boolean;
 } | null;
 
 type Options = {
@@ -65,19 +66,21 @@ export const useCheckFriendShip = (
       .start()
       .then(() => {
         //TODO: Find a way to handle this
-        console.log("SignalR connected");
+        // console.log("SignalR connected");
       })
       .catch((error) => {
         //TODO: Find a way to handle this
-        console.log("SignalR connection error: ", error);
+        // console.log("SignalR connection error: ", error);
       });
 
     connection.on(
       "ReceiveFriendshipCreate",
       (firstCreatedUserId: string, secondCreatedUserId: string) => {
         if (
-          firstUserId === firstCreatedUserId &&
-          secondUserId === secondCreatedUserId
+          (firstUserId === firstCreatedUserId &&
+            secondUserId === secondCreatedUserId) ||
+          (firstUserId === secondCreatedUserId &&
+            secondUserId === firstCreatedUserId)
         ) {
           checkIsFriendShip(firstUserId, secondUserId);
         }
@@ -88,8 +91,10 @@ export const useCheckFriendShip = (
       "ReceiveFriendshipDelete",
       (firstDeletedUserId: string, secondDeletedUserId: string) => {
         if (
-          firstUserId === firstDeletedUserId &&
-          secondUserId === secondDeletedUserId
+          (firstUserId === firstDeletedUserId &&
+            secondUserId === secondDeletedUserId) ||
+          (firstUserId === secondDeletedUserId &&
+            secondUserId === firstDeletedUserId)
         ) {
           checkIsFriendShip(firstUserId, secondUserId);
         }
@@ -100,8 +105,10 @@ export const useCheckFriendShip = (
       "ReceiveFriendshipUpdate",
       (firstUpdatedUserId: string, secondUpdatedUserId: string) => {
         if (
-          firstUserId === firstUpdatedUserId &&
-          secondUserId === secondUpdatedUserId
+          (firstUserId === firstUpdatedUserId &&
+            secondUserId === secondUpdatedUserId) ||
+          (firstUserId === secondUpdatedUserId &&
+            secondUserId === firstUpdatedUserId)
         ) {
           checkIsFriendShip(firstUserId, secondUserId);
         }
@@ -113,11 +120,11 @@ export const useCheckFriendShip = (
         .stop()
         .then(() => {
           ////TODO: Find a way to handle this
-          console.log("SignalR disconnected");
+          // console.log("SignalR disconnected");
         })
         .catch((error) => {
           //TODO: Find a way to handle this
-          console.log("Error stopping SignalR:", error);
+          // console.log("Error stopping SignalR:", error);
         });
     };
   }, [firstUserId, secondUserId]);

@@ -146,7 +146,7 @@ namespace backend.Controllers.Friendship
 
             var friendship = await _friendshipRepo.CheckFriendshipAsync(friendshipDto.FirstUserId, friendshipDto.SecondUserId);
 
-            return Ok(new {hasFriendship = friendship != null, isAccepted = friendship?.Status == FriendshipStatus.Accepted });
+            return Ok(new {HasFriendship = friendship != null, IsAccepted = friendship?.Status == FriendshipStatus.Accepted, IsFirstUserSent = friendship?.FirstUserId == friendshipDto.FirstUserId });
         }
     }
 }
