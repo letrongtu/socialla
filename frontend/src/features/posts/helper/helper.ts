@@ -48,3 +48,41 @@ export const getCreatedDisplayString = (CreatedAt: Date) => {
 
   return { createdDisplayString, createdDayDateTime };
 };
+
+export const getCountString = (
+  reactionsCount: number,
+  type: string
+): string => {
+  const typeString = " " + type;
+  const typesString = " " + type + "s";
+
+  let reactionsCountString: string;
+
+  if (reactionsCount === 1) {
+    reactionsCountString = reactionsCount.toString() + typeString;
+  } else if (reactionsCount < 1000) {
+    reactionsCountString = reactionsCount.toString() + typesString; // Less than 1K, show full number
+  } else if (reactionsCount < 1_000_000) {
+    reactionsCountString =
+      (reactionsCount / 1000).toFixed(1).replace(/\.0$/, "") +
+      "K" +
+      typesString; // Thousands
+  } else if (reactionsCount < 1_000_000_000) {
+    reactionsCountString =
+      (reactionsCount / 1_000_000).toFixed(1).replace(/\.0$/, "") +
+      "M" +
+      typesString; // Millions
+  } else if (reactionsCount < 1_000_000_000_000) {
+    reactionsCountString =
+      (reactionsCount / 1_000_000_000).toFixed(1).replace(/\.0$/, "") +
+      "B" +
+      typesString; // Billions
+  } else {
+    reactionsCountString =
+      (reactionsCount / 1_000_000_000_000).toFixed(1).replace(/\.0$/, "") +
+      "T" +
+      typesString; // Trillions
+  }
+
+  return reactionsCountString;
+};

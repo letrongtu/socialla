@@ -17,7 +17,7 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const useGetPostReactions = (postId: string) => {
+export const useGetPostReactions = (postId: string | null) => {
   const [data, setData] = useState<ReactionType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -76,11 +76,11 @@ export const useGetPostReactions = (postId: string) => {
         .stop()
         .then(() => {
           ////TODO: Find a way to handle this
-          console.log("SignalR disconnected");
+          // console.log("SignalR disconnected");
         })
         .catch((error) => {
           //TODO: Find a way to handle this
-          console.log("Error stopping SignalR:", error);
+          // console.log("Error stopping SignalR:", error);
         });
     };
   }, [postId]);

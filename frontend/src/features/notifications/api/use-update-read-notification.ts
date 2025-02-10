@@ -5,6 +5,7 @@ const baseURL = "http://localhost:5096/api";
 
 type RequestType = {
   id: string;
+  isRead: boolean;
 };
 
 type ResponseType = {
@@ -37,7 +38,7 @@ export const UseUpdateReadNotification = () => {
       setStatus("pending");
 
       const response = await axios.put<ResponseType>(
-        `${baseURL}/notification/${values.id}`
+        `${baseURL}/notification/${values.id}?isRead=${values.isRead}`
       );
 
       options?.onSuccess?.(response.data);

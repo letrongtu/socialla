@@ -27,7 +27,8 @@ namespace backend.Repository
         {
             var existingUserNotifications = await _dbContext.Notifications
                                                         .Where((notifi) =>
-                                                                notifi.EntityType == notification.EntityType
+                                                                (notifi.Type == NotificationType.Friend_Request || notifi.Type == NotificationType.Friend_Accept)
+                                                                && notifi.EntityType == notification.EntityType
                                                                 && (notifi.EntityId == notification.EntityId || notifi.EntityId == notification.ReceiveUserId)
                                                                 && (notifi.ReceiveUserId == notification.ReceiveUserId || notifi.ReceiveUserId == notification.EntityId))
                                                         .ToListAsync();
@@ -64,18 +65,18 @@ namespace backend.Repository
             return existingNotification;
         }
 
-        public async Task<Notification?> UpdateReadAsync(string notificationId)
+        public async Task<Notification?> UpdateReadStatusAsync(string id, bool isRead)
         {
-            var existingNotification = await _dbContext.Notifications.FindAsync(notificationId);
-
-            if(existingNotification == null){
+            var existingNotification = await _dbContext.Notifications.FirstOrDefaultAsync(n => n.Id == id);
+            if (existingNotification == null)
+            {
                 return null;
             }
 
-            existingNotification.IsRead = true;
+            existingNotification.IsRead = isRead;
             await _dbContext.SaveChangesAsync();
 
-            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationUpdate", existingNotification.Id);
+            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationUpdate", existingNotification.Id, isRead);
 
             return existingNotification;
         }

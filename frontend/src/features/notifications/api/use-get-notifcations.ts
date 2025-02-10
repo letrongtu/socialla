@@ -96,15 +96,18 @@ export const useGetNotifications = (userId: string | null) => {
       );
     });
 
-    connection.on("ReceiveNotificationUpdate", (notificationId: string) => {
-      setData((prev) =>
-        prev.map((existingNotification) =>
-          existingNotification.id === notificationId
-            ? { ...existingNotification, isRead: true }
-            : existingNotification
-        )
-      );
-    });
+    connection.on(
+      "ReceiveNotificationUpdate",
+      (notificationId: string, isRead: boolean) => {
+        setData((prev) =>
+          prev.map((existingNotification) =>
+            existingNotification.id === notificationId
+              ? { ...existingNotification, isRead: isRead }
+              : existingNotification
+          )
+        );
+      }
+    );
 
     return () => {
       connection

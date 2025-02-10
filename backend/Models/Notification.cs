@@ -9,8 +9,9 @@ namespace backend.Models
         Null,
         Friend_Request,
         Friend_Accept,
+        Post_Created,
         React_Post,
-        Comment_Post,
+        Comment_Created,
         React_Comment,
         Reply_Comment
         //TODO: Tag
@@ -28,6 +29,8 @@ namespace backend.Models
         public NotificationEntityType EntityType { get; set; } = NotificationEntityType.Null;
         public string EntityId { get; set; } = string.Empty; // The one who triggers the notification
         public NotificationType Type { get; set; } = NotificationType.Null;
+        public string? PostId { get; set; }
+        public string? CommentId { get; set; }
         public string Content { get; set; } = string.Empty;
         public Boolean IsRead { get; set; } = false;
         public DateTime CreatedAt { get; set; } = DateTime.Now;

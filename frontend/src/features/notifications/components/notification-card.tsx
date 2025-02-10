@@ -2,12 +2,12 @@ import { useRouter } from "next/navigation";
 
 import { useGetUser } from "@/features/auth/api/use-get-user";
 import { UseUpdateReadNotification } from "../api/use-update-read-notification";
-import { NotificationEntityTypeMap, NotificationType } from "../types";
+import { NotificationType, NotificationTypeMap } from "../types";
 
 import { FriendRequestNotificationContent } from "./friend-request-notification-content";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { FaTrash } from "react-icons/fa";
-import { UseDeleteNotification } from "../api/use-delete-notification";
+import { PostCreatedNotificationContent } from "./post-created-notification-content";
+import { EditNotificationButton } from "./edit-notification-button";
 
 interface NotificationCardProps {
   notification: NotificationType;
@@ -20,9 +20,7 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
     notification.entityId
   );
 
-  const { mutate: deleteNotification, isPending: isPendingDeleteNotification } =
-    UseDeleteNotification();
-  const { mutate: updateRead, isPending: isPendingUpdateRead } =
+  const { mutate: readNotification, isPending: isPendingReadNotification } =
     UseUpdateReadNotification();
 
   if (!user) {
@@ -32,10 +30,8 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
   const userFullname = user.firstName + " " + user.lastName;
   const avatarFallback = user.firstName?.charAt(0).toUpperCase();
 
-  const notificationEntityType =
-    NotificationEntityTypeMap[
-      notification.entityType as keyof typeof NotificationEntityTypeMap
-    ];
+  const notificationType =
+    NotificationTypeMap[notification.type as keyof typeof NotificationTypeMap];
 
   const handleOnClick = () => {
     if (!notification.isRead) {
@@ -45,25 +41,9 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
     handleRedirect();
   };
 
-  const handleDeleteNotification = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    deleteNotification(
-      { notificationId: notification.id },
-      {
-        onSuccess: (data) => {
-          //   console.log(data);
-        },
-        onError: (error) => {
-          //   console.log(error);
-        },
-      }
-    );
-  };
-
   const handleReadNotification = () => {
-    updateRead(
-      { id: notification.id },
+    readNotification(
+      { id: notification.id, isRead: true },
       {
         onSuccess: (data) => {
           //   console.log(data);
@@ -76,7 +56,7 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
   };
 
   const handleRedirect = () => {
-    if (notificationEntityType === "user") {
+    if (notificationType === "friend_request") {
       router.push(`/friends/requests/${user.id}`);
     }
   };
@@ -84,7 +64,7 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
   return (
     <div
       onClick={handleOnClick}
-      className="relative py-2 px-2 flex items-center gap-x-2 rounded-md hover:bg-[#c9ccd1]/30 cursor-pointer group/notification"
+      className="relative py-2 px-2 flex items-center gap-x-2 rounded-md hover:bg-[#c9ccd1]/20 cursor-pointer group/notification"
     >
       <div className="w-full flex items-start gap-x-2">
         <div className="flex justify-center">
@@ -96,11 +76,19 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
           </Avatar>
         </div>
 
-        {notificationEntityType === "user" && (
+        {(notificationType === "friend_request" ||
+          notificationType === "friend_accept") && (
           <FriendRequestNotificationContent
             notification={notification}
             userFullname={userFullname}
             handleReadNotification={handleReadNotification}
+          />
+        )}
+
+        {notificationType === "post_created" && (
+          <PostCreatedNotificationContent
+            notification={notification}
+            userFullname={userFullname}
           />
         )}
       </div>
@@ -111,14 +99,7 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
         </div>
       )}
 
-      {
-        <div
-          onClick={handleDeleteNotification}
-          className="absolute hidden top-1 right-1 p-1.5 rounded-full bg-[#c9ccd1]/30 hover:bg-red-500/20 cursor-pointer group-hover/notification:flex group/delete"
-        >
-          <FaTrash className="size-3 group-hover/delete:text-red-500 text-muted-foreground" />
-        </div>
-      }
+      <EditNotificationButton notification={notification} />
     </div>
   );
 };

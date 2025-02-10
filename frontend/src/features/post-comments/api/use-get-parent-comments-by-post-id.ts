@@ -21,7 +21,7 @@ type Options = {
 };
 
 export const UseGetParentCommentsByPostId = (
-  postId: string,
+  postId: string | null,
   sortBy: string = "top"
 ) => {
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
@@ -68,6 +68,10 @@ export const UseGetParentCommentsByPostId = (
   };
 
   useEffect(() => {
+    if (!postId) {
+      return;
+    }
+
     setData([]); // Reset comments
     setCurrentPageNumber(1); // Reset page number
     setTotalPostComments(0);
@@ -77,6 +81,10 @@ export const UseGetParentCommentsByPostId = (
 
   //fetch the first page when mounted
   useEffect(() => {
+    if (!postId) {
+      return;
+    }
+
     const connection = new signalR.HubConnectionBuilder()
       .withUrl(`${BASE_URL}/postCommentHub`)
       .withAutomaticReconnect()
@@ -157,6 +165,10 @@ export const UseGetParentCommentsByPostId = (
   }, [postId, sortBy]);
 
   const loadMore = async (options?: Options) => {
+    if (!postId) {
+      return;
+    }
+
     // prevent duplicate requests
     if (!canLoadMore || isLoading) return;
 

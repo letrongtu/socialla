@@ -44,12 +44,12 @@ namespace backend.Controllers.Notification
         [HttpPut]
         [Route("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateRead(string id){
+        public async Task<IActionResult> UpdateReadStatus(string id, [FromQuery] bool isRead){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
 
-            var updatedNotification = await _notificationRepo.UpdateReadAsync(id);
+            var updatedNotification = await _notificationRepo.UpdateReadStatusAsync(id, isRead);
 
             if(updatedNotification == null){
                 return NotFound("Notification not found");

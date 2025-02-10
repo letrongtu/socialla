@@ -19,10 +19,14 @@ namespace backend.Controllers.Post
     {
         private readonly IPostRepository _postRepo;
         private readonly UserManager<AppUser> _userManager;
-        public PostController(IPostRepository postRepo, UserManager<AppUser> userManager)
+        private readonly INotificationRepository _notificationRepo;
+        private readonly IFriendshipRepository _friendshipRepo;
+        public PostController(IPostRepository postRepo, UserManager<AppUser> userManager, INotificationRepository notificationRepo, IFriendshipRepository friendshipRepo)
         {
             _postRepo = postRepo;
             _userManager = userManager;
+            _notificationRepo= notificationRepo;
+            _friendshipRepo = friendshipRepo;
         }
 
         [HttpPost]
@@ -58,6 +62,23 @@ namespace backend.Controllers.Post
 
             await _postRepo.CreatePostAsync(post);
 
+            var userFriends = await _friendshipRepo.GetAllByUserIdAsync(user.Id);
+
+            foreach(var friend in userFriends){
+                var friendId = friend.FirstUserId == user.Id ? friend.SecondUserId : friend.FirstUserId;
+
+                var notification = new backend.Models.Notification{
+                    ReceiveUserId = friendId,
+                    EntityType = NotificationEntityType.User,
+                    EntityId = user.Id,
+                    Type = NotificationType.Post_Created,
+                    PostId = post.Id,
+                    Content = "posted ",
+                };
+
+                await _notificationRepo.CreateAsync(notification);
+            }
+
             return Ok(new {Message="Post created", PostId = post.Id});
         }
 
@@ -91,8 +112,24 @@ namespace backend.Controllers.Post
 
             var paginatedPosts = await _postRepo.GetAllPaginatedAsync(pageNumber, pageSize);
 
-            //TODO: Push the userId new created post to the top of the list
             return Ok(new {Posts = paginatedPosts.Records, TotalPosts = paginatedPosts.TotalRecords, HasNextPage = paginatedPosts.HasNextPage});
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetById(string id){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var post = await _postRepo.GetByIdAsync(id);
+
+            if(post == null){
+                return NotFound("Post not found");
+            }
+
+            return Ok(new {Post = post});
         }
     }
 }
