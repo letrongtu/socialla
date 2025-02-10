@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 
+import { HeaderPageButton } from "./header-page-button";
+import { HeaderUtilButton } from "./header-util-button";
+import { UserButton } from "./user-button";
+import { useRouter } from "next/navigation";
+
 import {
   Home,
   Search,
@@ -11,10 +16,7 @@ import {
   Bell,
 } from "lucide-react";
 import { MdGroups } from "react-icons/md";
-import { HeaderPageButton } from "./header-page-button";
-import { HeaderUtilButton } from "./header-util-button";
-import { UserButton } from "./user-button";
-import { useRouter } from "next/navigation";
+import { FiMessageCircle } from "react-icons/fi";
 
 const pages = [
   { label: "Home", icon: Home },
@@ -25,7 +27,7 @@ const pages = [
 //TODO: Change the chilren to proper one
 const utilButtons = [
   { label: "Menu", icon: Layers2, chilren: <div>Hello</div> },
-  { label: "Messenger", icon: MessagesSquare, chilren: <div>Hello</div> },
+  { label: "Messenger", icon: FiMessageCircle, chilren: <div>Hello</div> },
   { label: "Notifications", icon: Bell, chilren: <div>Hello</div> },
 ];
 

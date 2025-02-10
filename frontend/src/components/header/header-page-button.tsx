@@ -24,7 +24,9 @@ export const HeaderPageButton = ({
       <button
         onClick={() => {
           onClick(label);
-          router.push(`/${label.toLowerCase()}`);
+          if (label.toLocaleLowerCase() !== "home") {
+            router.push(`/${label.toLowerCase()}`);
+          }
         }}
         className={cn(
           "flex h-full w-full items-center justify-center transition-all duration-200 group",
