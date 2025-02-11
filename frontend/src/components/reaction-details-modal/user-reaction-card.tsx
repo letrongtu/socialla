@@ -11,6 +11,7 @@ import { FaHeart } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
 import { FaUserPlus } from "react-icons/fa6";
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
+import { AddFriendButton } from "@/features/friendships/components/add-friend-button";
 
 interface UserReactionCardProps {
   reaction: string;
@@ -29,7 +30,7 @@ export const UserReactionCard = ({
   const { data: reactedUser, isLoading: isLoadingReactedUser } =
     useGetUser(userId);
 
-  if (!reactedUser || !currentUser) {
+  if (!reactedUser || !reactedUser.id || !currentUser || !currentUser.id) {
     return null;
   }
 
@@ -86,10 +87,12 @@ export const UserReactionCard = ({
       </div>
 
       {userId !== currentUser.id && (
-        <Button className="text-black bg-[#c9ccd1]/50 hover:bg-[#c9ccd1] ">
-          <FaUserPlus />
-          Add friend
-        </Button>
+        <div className="lg:w-28">
+          <AddFriendButton
+            currentUserId={currentUser.id}
+            otherUserId={reactedUser.id}
+          />
+        </div>
       )}
     </div>
   );

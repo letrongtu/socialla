@@ -19,19 +19,23 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const UseGetPosts = () => {
+export const UseGetPosts = (userId: string | null) => {
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [canLoadMore, setCanLoadMore] = useState(true);
 
   const [data, setData] = useState<PostType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchPosts = async (pageNumber: number, options?: Options) => {
+  const fetchPosts = async (
+    userId: string,
+    pageNumber: number,
+    options?: Options
+  ) => {
     try {
       setIsLoading(true);
 
       const response = await axios.get<ResponseType>(`${BASE_URL_API}/post`, {
-        params: { pageNumber, pageSize: PAGE_SIZE },
+        params: { userId, pageNumber, pageSize: PAGE_SIZE },
       });
 
       setData((previousData) => [...previousData, ...response.data.posts]);
@@ -50,7 +54,11 @@ export const UseGetPosts = () => {
 
   //fetch the first page when mounted
   useEffect(() => {
-    fetchPosts(1);
+    if (!userId) {
+      return;
+    }
+
+    fetchPosts(userId, 1);
 
     const connection = new signalR.HubConnectionBuilder()
       .withUrl(`${BASE_URL}/postHub`)
@@ -69,7 +77,9 @@ export const UseGetPosts = () => {
       });
 
     connection.on("ReceivePostCreate", (post: PostType) => {
-      setData((prev) => [post, ...prev]);
+      if (post.userId === userId) {
+        setData((prev) => [post, ...prev]);
+      }
     });
 
     connection.on("ReceivePostDelete", (post: PostType) => {
@@ -90,14 +100,14 @@ export const UseGetPosts = () => {
           console.log("Error stopping SignalR:", error);
         });
     };
-  }, []);
+  }, [userId]);
 
   const loadMore = async (options?: Options) => {
     // prevent duplicate requests
-    if (!canLoadMore || isLoading) return;
+    if (!canLoadMore || isLoading || !userId) return;
 
     const nextPage = currentPageNumber + 1;
-    await fetchPosts(nextPage);
+    await fetchPosts(userId, nextPage);
     setCurrentPageNumber(nextPage);
   };
 

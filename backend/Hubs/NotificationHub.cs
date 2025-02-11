@@ -12,8 +12,8 @@ namespace backend.Hubs
         public async Task SendCreateNotification(Notification notification){
             await Clients.All.SendAsync("ReceiveNotificationCreate", notification);
         }
-        public async Task SendUpdateNotification(string notificationId, bool isRead){
-            await Clients.All.SendAsync("ReceiveNotificationUpdate", notificationId, isRead);
+        public async Task SendUpdateNotification(Notification notification){
+            await Clients.All.SendAsync("ReceiveNotificationUpdate", notification);
         }
         public async Task SendDeleteNotification(Notification notification){
             await Clients.All.SendAsync("ReceiveNotificationDelete", notification);

@@ -2,16 +2,19 @@ import { useEffect, useRef } from "react";
 import { UseGetPosts } from "../api/use-get-posts";
 import { PostCard } from "./post-card";
 import { Loader2 } from "lucide-react";
+import { useCurrentUser } from "@/features/auth/api/use-current-user";
 
 export const PostsDisplaySection = () => {
   const postEndRef = useRef<HTMLDivElement | null>(null);
 
+  const { data: currentUser, isLoading: isLoadingCurrentUser } =
+    useCurrentUser();
   const {
     data: posts,
     isLoading: isLoadingPosts,
     canLoadMore,
     loadMore,
-  } = UseGetPosts();
+  } = UseGetPosts(currentUser?.id ? currentUser.id : null);
 
   return (
     <div className="flex flex-col space-y-5">

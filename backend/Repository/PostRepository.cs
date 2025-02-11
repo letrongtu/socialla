@@ -18,11 +18,13 @@ namespace backend.Repository
     {
         private readonly ApplicationDBContext _dbContext;
         private readonly ICommentRepository _commentRepo;
+        private readonly IFriendshipRepository _friendshipRepo;
         private readonly IHubContext<PostHub> _postHubContext;
-        public PostRepository(ApplicationDBContext dbContext, ICommentRepository commentRepo, IHubContext<PostHub> postHubContext)
+        public PostRepository(ApplicationDBContext dbContext, ICommentRepository commentRepo, IFriendshipRepository friendshipRepo, IHubContext<PostHub> postHubContext)
         {
             _dbContext = dbContext;
             _commentRepo = commentRepo;
+            _friendshipRepo = friendshipRepo;
             _postHubContext = postHubContext;
         }
 
@@ -61,15 +63,34 @@ namespace backend.Repository
             return post;
         }
 
-        public async Task<PagedResult<Post>> GetAllPaginatedAsync(int pageNumber, int pageSize)
+        public async Task<PagedResult<Post>> GetAllPaginatedAsync(string userId, int pageNumber, int pageSize)
         {
             var totalRecords = await _dbContext.Posts.CountAsync();
 
-            var paginatedPosts = await _dbContext.Posts
+            var publicAndOnlyMePosts = await _dbContext.Posts
+                                                .Where(post => post.PostAudience == "Public"
+                                                                || (post.PostAudience== "Only Me" && post.UserId == userId))
+                                                .ToListAsync();
+
+            var friendsPosts = await _dbContext.Posts
+                                            .Where(post => post.PostAudience.ToLower().Trim() == "Friends")
+                                            .ToListAsync();
+
+            var filteredFriendPosts = new List<Post>();
+
+            foreach(var post in friendsPosts){
+                var existingFriendship = await _friendshipRepo.CheckFriendshipAsync(userId, post.UserId);
+
+                if(existingFriendship != null && existingFriendship.Status == FriendshipStatus.Accepted){
+                    filteredFriendPosts.Add(post);
+                }
+            }
+
+            var paginatedPosts = publicAndOnlyMePosts.Concat(filteredFriendPosts)
                     .OrderByDescending(post => post.CreatedAt)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
-                    .ToListAsync();
+                    .ToList();
 
             return new PagedResult<Post>{
                 Records = paginatedPosts,

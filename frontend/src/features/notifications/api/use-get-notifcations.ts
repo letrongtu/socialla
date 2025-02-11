@@ -88,13 +88,17 @@ export const useGetNotifications = (userId: string | null) => {
       }
     );
 
-    connection.on("ReceiveNotificationDelete", (notificationId: string) => {
-      setData((prev) =>
-        prev.filter(
-          (existingNotification) => existingNotification.id !== notificationId
-        )
-      );
-    });
+    connection.on(
+      "ReceiveNotificationDelete",
+      (notification: NotificationType) => {
+        setData((prev) =>
+          prev.filter(
+            (existingNotification) =>
+              existingNotification.id !== notification.id
+          )
+        );
+      }
+    );
 
     connection.on(
       "ReceiveNotificationUpdate",

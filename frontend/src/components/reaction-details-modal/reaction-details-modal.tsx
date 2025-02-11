@@ -42,7 +42,7 @@ export const ReactionDetailsModal = ({
               setReaction={setReaction}
             />
 
-            {reactions.length >= 3 && (
+            {reactions.length > 3 && (
               <ReactionDetailsModalDropdownMenu
                 reactions={reactionsWithOutAll.slice(3)}
                 currentReaction={currentReaction}

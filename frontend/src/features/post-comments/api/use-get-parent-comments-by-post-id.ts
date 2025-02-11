@@ -115,9 +115,9 @@ export const UseGetParentCommentsByPostId = (
             ? [createdComment, ...filteredComments] // Newest at the top
             : [...filteredComments, createdComment]; // Oldest at the top
         });
-      }
 
-      setTotalPostComments((prevTotal) => prevTotal + 1);
+        setTotalPostComments((prevTotal) => prevTotal + 1);
+      }
     });
 
     connection.on("ReceivePostCommentUpdate", (updatedComment: CommentType) => {
@@ -145,9 +145,9 @@ export const UseGetParentCommentsByPostId = (
             (existingComment) => existingComment.id !== deletedComment.id
           )
         );
-      }
 
-      setTotalPostComments((prevTotal) => prevTotal - 1);
+        setTotalPostComments((prevTotal) => prevTotal - 1);
+      }
     });
 
     return () => {

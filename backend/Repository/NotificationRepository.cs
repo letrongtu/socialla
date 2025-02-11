@@ -40,7 +40,7 @@ namespace backend.Repository
                 foreach(var existingUserNotification in existingUserNotifications){
                     _dbContext.Notifications.Remove(existingUserNotification);
                     await _dbContext.SaveChangesAsync();
-                    await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationDelete", existingUserNotification.Id);
+                    await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationDelete", existingUserNotification);
                 }
 
             }
@@ -63,7 +63,7 @@ namespace backend.Repository
             _dbContext.Notifications.Remove(existingNotification);
             await _dbContext.SaveChangesAsync();
 
-            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationDelete", existingNotification.Id, existingNotification.IsRead);
+            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationDelete", existingNotification);
 
             return existingNotification;
         }
@@ -107,19 +107,19 @@ namespace backend.Repository
 
         public async Task<PagedResult<Notification>> GetPaginatedByUserIdAsync(string userId , int pageNumber, int pageSize, bool isFetchingUnRead = false)
         {
-            var userNotifications = await _dbContext.Notifications.Where((notification) => notification.ReceiveUserId == userId).ToListAsync();
+            var query = _dbContext.Notifications.Where((notification) => notification.ReceiveUserId == userId);
 
-            var totalRecords = userNotifications.Count;
+            if(isFetchingUnRead){
+                query = query.Where((notification) => notification.IsRead == false);
+            }
 
-            var paginatedUserNotifications = userNotifications
+            var paginatedUserNotifications = await query
                                             .OrderByDescending((notifcation) => notifcation.CreatedAt)
                                             .Skip((pageNumber - 1) * pageSize)
                                             .Take(pageSize)
-                                            .ToList();
+                                            .ToListAsync();
 
-            if(isFetchingUnRead){
-                paginatedUserNotifications = paginatedUserNotifications.Where((notification) => notification.IsRead == false).ToList();
-            }
+            var totalRecords = await query.CountAsync();
 
             return new PagedResult<Notification>{
                 Records = paginatedUserNotifications,

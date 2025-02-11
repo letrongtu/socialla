@@ -20,6 +20,7 @@ type Options = {
 };
 
 export const useGetUnReadNotifications = (userId: string | null) => {
+  const [totalNotifications, setTotalNotifications] = useState(0);
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [canLoadMore, setCanLoadMore] = useState(true);
 
@@ -42,6 +43,7 @@ export const useGetUnReadNotifications = (userId: string | null) => {
       );
 
       setData((prev) => [...prev, ...response.data.notifications]);
+      setTotalNotifications(response.data.totalNotifications);
       setCanLoadMore(response.data.hasNextPage);
 
       options?.onSuccess?.(response.data);
@@ -84,23 +86,34 @@ export const useGetUnReadNotifications = (userId: string | null) => {
       (notification: NotificationType) => {
         if (notification.receiveUserId === userId) {
           setData((prev) => [notification, ...prev]);
+
+          setTotalNotifications((prev) => prev + 1);
         }
       }
     );
 
-    connection.on("ReceiveNotificationDelete", (notificationId: string) => {
-      setData((prev) =>
-        prev.filter(
-          (existingNotification) => existingNotification.id !== notificationId
-        )
-      );
-    });
+    connection.on(
+      "ReceiveNotificationDelete",
+      (notification: NotificationType) => {
+        setData((prev) =>
+          prev.filter(
+            (existingNotification) =>
+              existingNotification.id !== notification.id
+          )
+        );
+
+        if (!notification.isRead) {
+          setTotalNotifications((prev) => prev - 1);
+        }
+      }
+    );
 
     connection.on(
       "ReceiveNotificationUpdate",
       (notification: NotificationType) => {
         if (!notification.isRead) {
           setData((prev) => [notification, ...prev]);
+          setTotalNotifications((prev) => prev + 1);
         } else {
           setData((prev) =>
             prev.filter(
@@ -108,6 +121,8 @@ export const useGetUnReadNotifications = (userId: string | null) => {
                 existingNotification.id !== notification.id
             )
           );
+
+          setTotalNotifications((prev) => prev - 1);
         }
       }
     );
@@ -138,6 +153,7 @@ export const useGetUnReadNotifications = (userId: string | null) => {
   return {
     data,
     isLoading,
+    totalNotifications,
     canLoadMore,
     loadMore,
   };

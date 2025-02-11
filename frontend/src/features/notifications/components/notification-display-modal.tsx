@@ -15,14 +15,33 @@ export const NotificationDisplayModal = () => {
   const { data: currentUser, isLoading: isLoadingCurrentUser } =
     useCurrentUser();
 
-  const { data: notifications, isLoading: isLoadingNotifications } =
-    useGetNotifications(currentUser?.id ? currentUser.id : null);
-  const { data: unReadNotifications, isLoading: isLoadingUnReadNotifications } =
-    useGetUnReadNotifications(currentUser?.id ? currentUser.id : null);
+  const {
+    data: notifications,
+    isLoading: isLoadingNotifications,
+    canLoadMore: canLoadMoreNotifications,
+    loadMore: loadMoreNotifications,
+  } = useGetNotifications(currentUser?.id ? currentUser.id : null);
+
+  const {
+    data: unReadNotifications,
+    isLoading: isLoadingUnReadNotifications,
+    canLoadMore: canLoadMoreUnReadNotifications,
+    loadMore: loadMoreUnReadNotifications,
+  } = useGetUnReadNotifications(currentUser?.id ? currentUser.id : null);
 
   const [notificationFilter, setNotificationFilter] = useState(
     notificationFilterButtons[0].label
   );
+
+  const handleLoadMore = () => {
+    if (notificationFilter === "All" && canLoadMoreNotifications) {
+      loadMoreNotifications();
+    }
+
+    if (notificationFilter === "Unread" && canLoadMoreUnReadNotifications) {
+      loadMoreUnReadNotifications();
+    }
+  };
 
   return (
     <div className="flex flex-col gap-y-2 max-w-96  lg:w-96">
@@ -61,7 +80,7 @@ export const NotificationDisplayModal = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-y-3 px-2">
+      <div className="flex flex-col gap-y-3 px-2 max-h-[43rem] overflow-auto custom-scrollbar">
         {notificationFilter === "All" &&
           notifications.map((notification, index) => (
             <NotificationCard key={index} notification={notification} />
@@ -72,6 +91,19 @@ export const NotificationDisplayModal = () => {
             <NotificationCard key={index} notification={notification} />
           ))}
       </div>
+
+      {((notificationFilter === "All" && canLoadMoreNotifications) ||
+        (notificationFilter === "Unread" &&
+          canLoadMoreUnReadNotifications)) && (
+        <div
+          onClick={handleLoadMore}
+          className="w-full flex items-center justify-center py-2 rounded-sm hover:bg-[#c9ccd1]/30 cursor-pointer group/load-more"
+        >
+          <p className="text-sm font-semibold text-[#1823ab] group-hover/load-more:underline">
+            Load more notifications
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -62,21 +62,24 @@ namespace backend.Controllers.Post
 
             await _postRepo.CreatePostAsync(post);
 
-            var userFriends = await _friendshipRepo.GetAllByUserIdAsync(user.Id);
+            if(post.PostAudience != "Only Me")
+            {
+                var userFriends = await _friendshipRepo.GetAllByUserIdAsync(user.Id);
 
-            foreach(var friend in userFriends){
-                var friendId = friend.FirstUserId == user.Id ? friend.SecondUserId : friend.FirstUserId;
+                foreach(var friend in userFriends){
+                    var friendId = friend.FirstUserId == user.Id ? friend.SecondUserId : friend.FirstUserId;
 
-                var notification = new backend.Models.Notification{
-                    ReceiveUserId = friendId,
-                    EntityType = NotificationEntityType.User,
-                    EntityId = user.Id,
-                    Type = NotificationType.Post_Created,
-                    PostId = post.Id,
-                    Content = "posted ",
-                };
+                    var notification = new backend.Models.Notification{
+                        ReceiveUserId = friendId,
+                        EntityType = NotificationEntityType.User,
+                        EntityId = user.Id,
+                        Type = NotificationType.Post_Created,
+                        PostId = post.Id,
+                        Content = "posted ",
+                    };
 
-                await _notificationRepo.CreateAsync(notification);
+                    await _notificationRepo.CreateAsync(notification);
+                }
             }
 
             return Ok(new {Message="Post created", PostId = post.Id});
@@ -101,16 +104,22 @@ namespace backend.Controllers.Post
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAllPaginated(int pageNumber = 1, int pageSize = 20){
+        public async Task<IActionResult> GetAllPaginated(string userId, int pageNumber = 1, int pageSize = 20){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(user => user.Id == userId);
+
+            if(user == null){
+                return StatusCode(400, "User not found");
             }
 
             if(pageNumber < 1 || pageSize < 1){
                 return BadRequest("Page number and page size must be greater than 0");
             }
 
-            var paginatedPosts = await _postRepo.GetAllPaginatedAsync(pageNumber, pageSize);
+            var paginatedPosts = await _postRepo.GetAllPaginatedAsync(userId, pageNumber, pageSize);
 
             return Ok(new {Posts = paginatedPosts.Records, TotalPosts = paginatedPosts.TotalRecords, HasNextPage = paginatedPosts.HasNextPage});
         }

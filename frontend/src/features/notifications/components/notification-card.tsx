@@ -80,8 +80,13 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
   };
 
   const handleRedirect = () => {
-    if (notificationType === "friend_request") {
+    if (
+      notificationType === "friend_request" ||
+      notificationType === "friend_accept"
+    ) {
       router.push(`/friends/requests/${user.id}`);
+    } else {
+      router.push(`/posts/${notification.postId}`);
     }
   };
 

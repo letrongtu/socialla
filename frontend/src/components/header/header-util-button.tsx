@@ -31,10 +31,8 @@ export const HeaderUtilButton = ({
   const { data: currentUser, isLoading: isLoadingCurrentUser } =
     useCurrentUser();
 
-  const { data: unReadNotifications, isLoading: isLoadingUnReadNotifications } =
+  const { totalNotifications: totalUnReadNotifications } =
     useGetUnReadNotifications(currentUser?.id ? currentUser.id : null);
-
-  const totalUnReadNotifications = unReadNotifications.length;
 
   const isOpen = currentButton === label;
 

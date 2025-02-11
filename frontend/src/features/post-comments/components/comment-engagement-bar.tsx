@@ -18,6 +18,7 @@ import { BiSolidCommentEdit } from "react-icons/bi";
 import { Separator } from "@/components/ui/separator";
 import { Pen, Trash } from "lucide-react";
 import { CommentReactionDetails } from "@/features/comment-reactions/components/comment-reaction-details";
+import { useGetPost } from "@/features/posts/api/use-get-post";
 
 interface CommentEngagementBarProps {
   comment: CommentType;
@@ -38,6 +39,9 @@ export const CommentEngagementBar = ({
   const { data: currentUser, isLoading } = useCurrentUser();
   const { data: commentReactions, isLoading: isLoadingCommentReactions } =
     useGetCommentReactions(comment.id);
+  const { data: postData, isLoading: isLoadingPostData } = useGetPost(
+    comment.postId
+  );
 
   const { mutate: deleteComment, isPending: isDeletePending } =
     UseDeleteComment();
@@ -46,7 +50,8 @@ export const CommentEngagementBar = ({
     return null;
   }
 
-  const isCurrentUserComment = currentUser.id === comment.userId;
+  const hasEditPermission =
+    currentUser.id === comment.userId || currentUser.id === postData?.userId;
 
   const { createdDisplayString, createdDayDateTime } = getCreatedDisplayString(
     comment.createdAt
@@ -95,7 +100,7 @@ export const CommentEngagementBar = ({
         </p>
       </Hint>
 
-      {isCurrentUserComment && !isEditComment && (
+      {hasEditPermission && !isEditComment && (
         <TooltipProvider>
           <Tooltip delayDuration={50}>
             <TooltipTrigger>
