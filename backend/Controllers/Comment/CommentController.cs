@@ -23,7 +23,6 @@ namespace backend.Controllers.Comment
         private readonly ICommentRepository _commentRepo;
         private readonly IPostRepository _postRepository;
         private readonly  INotificationRepository _notificationRepo;
-
         public CommentController(UserManager<AppUser> userManager, ICommentRepository commentRepo, IPostRepository postRepository,  INotificationRepository notificationRepo)
         {
             _userManager = userManager;
@@ -68,7 +67,7 @@ namespace backend.Controllers.Comment
 
             await _commentRepo.CreateAsync(comment);
 
-            if(post.UserId != user.Id){
+            if(comment.ParentCommentId == null && post.UserId != user.Id){
                 var notification = new backend.Models.Notification{
                     ReceiveUserId = post.UserId, //User who created the post
                     EntityType = NotificationEntityType.User,
@@ -76,6 +75,25 @@ namespace backend.Controllers.Comment
                     Type = NotificationType.Comment_Created,
                     PostId = post.Id,
                     Content = "commented to your post",
+                };
+
+                await _notificationRepo.CreateAsync(notification);
+            }
+
+            if(comment.ParentCommentId != null){
+                var parentComment = await _commentRepo.GetByIdAsync(comment.ParentCommentId);
+                if(parentComment == null){
+                    return StatusCode(400, "Parent Comment not found");
+                }
+
+                var notification = new backend.Models.Notification{
+                    ReceiveUserId = parentComment.UserId, //User who created the parent comment
+                    EntityType = NotificationEntityType.User,
+                    EntityId = comment.UserId, //User who created the replied comment
+                    Type = NotificationType.Reply_Comment,
+                    PostId = post.Id,
+                    CommentId = parentComment.Id,
+                    Content = "replied to your comment",
                 };
 
                 await _notificationRepo.CreateAsync(notification);
@@ -115,6 +133,23 @@ namespace backend.Controllers.Comment
             }
 
             return Ok(new {Message = "Comment deleted", commentId = id});
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetById(string id){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var comment = await _commentRepo.GetByIdAsync(id);
+
+            if(comment == null){
+                return NotFound("Comment not found");
+            }
+
+            return Ok(new {Comment = comment});
         }
 
         [HttpGet]

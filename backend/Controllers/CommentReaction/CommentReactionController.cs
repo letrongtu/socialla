@@ -22,13 +22,17 @@ namespace backend.Controllers.CommentReaction
     public class CommentReactionController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
+
         private readonly ICommentRepository _commentRepo;
         private readonly ICommentReactionRepository _commentReactionRepo;
-        public CommentReactionController(UserManager<AppUser> userManager, ICommentRepository commentRepo, ICommentReactionRepository commentReactionRepo)
+        private readonly INotificationRepository _notificationRepo;
+        public CommentReactionController(UserManager<AppUser> userManager, ICommentRepository commentRepo, ICommentReactionRepository commentReactionRepo, INotificationRepository notificationRepo)
         {
             _userManager = userManager;
+
             _commentRepo = commentRepo;
             _commentReactionRepo = commentReactionRepo;
+            _notificationRepo = notificationRepo;
         }
 
         [HttpPost]
@@ -52,6 +56,20 @@ namespace backend.Controllers.CommentReaction
 
             await _commentReactionRepo.CreateAsync(commentReaction);
 
+            if(comment.UserId != user.Id){
+                var notification = new backend.Models.Notification{
+                    ReceiveUserId = comment.UserId, //User who created the post
+                    EntityType = NotificationEntityType.User,
+                    EntityId = user.Id,
+                    Type = NotificationType.React_Comment,
+                    PostId = comment.PostId,
+                    CommentId = comment.Id,
+                    Content = "reacted to your comment",
+                };
+
+                await _notificationRepo.CreateAsync(notification);
+            }
+
             return Ok(new {Message = "Reaction created", ReactionId = commentReaction.Id});
         }
 
@@ -67,9 +85,6 @@ namespace backend.Controllers.CommentReaction
             if(deletedCommentReaction == null){
                 return NotFound("Comment Reaction doesn't exist");
             }
-
-            // var hubContext = HttpContext.RequestServices.GetRequiredService<IHubContext<PostReactionHub>>();
-            // await hubContext.Clients.All.SendAsync("ReceivePostReactionUpdate", postReactionDto.PostId);
 
             return Ok(new {Message = "Comment Reaction deleted", ReactionId = deletedCommentReaction.Id});
         }
@@ -93,10 +108,34 @@ namespace backend.Controllers.CommentReaction
                 return NotFound("Cannot update comment reaction");
             }
 
-            // var hubContext = HttpContext.RequestServices.GetRequiredService<IHubContext<PostReactionHub>>();
-            // await hubContext.Clients.All.SendAsync("ReceivePostReactionUpdate", postReactionDto.PostId);
-
             return Ok(new {Message = "Comment Reaction updated", ReactionId = newCommentReaction.Id});
+        }
+
+        [HttpGet]
+        [Route("{commentId}/{postId}/{userId}")]
+        [Authorize]
+        public async Task<IActionResult> GetByPostIdCommentIdAndUserId([FromRoute] string commentId, [FromRoute] string postId, [FromRoute] string userId){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(user => user.Id == userId);
+            if(user == null){
+                return StatusCode(400, "User not found");
+            }
+
+            var comment = await _commentRepo.GetByIdAsync(commentId);
+            if(comment == null){
+                return StatusCode(400, "Comment not found");
+            }
+
+            var commentReaction = await _commentReactionRepo.GetByCommentIdPostIdAndUserIdAsync(commentId, postId, userId);
+
+            if(commentReaction == null){
+                return NotFound("User hasn't reacted to the comment");
+            }
+
+            return Ok(new {reaction = commentReaction});
         }
 
         [HttpGet]

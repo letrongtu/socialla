@@ -49,7 +49,7 @@ export const CommentCard = ({
   const [isEditComment, setIsEditComment] = useState(false);
   const [isLastChildEditing, setIsLastChildEditing] = useState(false);
 
-  if (!createdCommentUser || !currentUserData) {
+  if (!createdCommentUser || !currentUserData || !currentUserData.id) {
     return null;
   }
 
@@ -163,7 +163,7 @@ export const CommentCard = ({
           <div className="py-2">
             <CommentEditor
               postId={comment.postId}
-              userId={comment.userId}
+              userId={currentUserData.id}
               parentCommentId={comment.id}
               isReply={isReply}
               setIsReply={setIsReply}

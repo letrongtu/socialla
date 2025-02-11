@@ -14,6 +14,8 @@ import { ReactionOrCommentPostNotificationContent } from "./reaction-or-comment-
 import { cn } from "@/lib/utils";
 import { FaHeart } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
+import { useGetCommentReaction } from "@/features/comment-reactions/api/use-get-comment-reaction";
+import { ReactionOrReplyCommentNotificationContent } from "./reaction-or-reply-comment-notification-content";
 
 interface NotificationCardProps {
   notification: NotificationType;
@@ -25,10 +27,14 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
   const { data: user, isLoading: isLoadingUser } = useGetUser(
     notification.entityId
   );
-  const { data: reaction, isLoading: isLoadingReaction } = useGetPostReaction(
-    notification.postId,
-    notification.entityId
-  );
+  const { data: postReaction, isLoading: isLoadingPostReaction } =
+    useGetPostReaction(notification.postId, notification.entityId);
+  const { data: commentReaction, isLoading: isLoadingCommentReaction } =
+    useGetCommentReaction(
+      notification.commentId,
+      notification.postId,
+      notification.entityId
+    );
 
   const { mutate: readNotification, isPending: isPendingReadNotification } =
     UseUpdateReadNotification();
@@ -45,7 +51,10 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
 
   const reactionWithEmojiAndIcon = reactionsWithEmojiAndIcon.find(
     (reactionWithEmojiAndIcon) =>
-      reactionWithEmojiAndIcon.reaction === reaction?.reaction.reaction
+      reactionWithEmojiAndIcon.reaction ===
+      (postReaction
+        ? postReaction.reaction.reaction
+        : commentReaction?.reaction.reaction)
   );
 
   const handleOnClick = () => {
@@ -143,6 +152,14 @@ export const NotificationCard = ({ notification }: NotificationCardProps) => {
         {(notificationType === "react_post" ||
           notificationType === "comment_created") && (
           <ReactionOrCommentPostNotificationContent
+            notification={notification}
+            userFullname={userFullname}
+          />
+        )}
+
+        {(notificationType === "reply_comment" ||
+          notificationType === "react_comment") && (
+          <ReactionOrReplyCommentNotificationContent
             notification={notification}
             userFullname={userFullname}
           />
