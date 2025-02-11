@@ -19,7 +19,7 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const useGetNotifications = (userId: string | null) => {
+export const useGetUnReadNotifications = (userId: string | null) => {
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [canLoadMore, setCanLoadMore] = useState(true);
 
@@ -37,7 +37,7 @@ export const useGetNotifications = (userId: string | null) => {
       const response = await axios.get<ResponseType>(
         `${BASE_URL_API}/notification/${userId}`,
         {
-          params: { pageNumber, pageSize: PAGE_SIZE },
+          params: { pageNumber, pageSize: PAGE_SIZE, isFetchingUnRead: true },
         }
       );
 
@@ -99,13 +99,16 @@ export const useGetNotifications = (userId: string | null) => {
     connection.on(
       "ReceiveNotificationUpdate",
       (notification: NotificationType) => {
-        setData((prev) =>
-          prev.map((existingNotification) =>
-            existingNotification.id === notification.id
-              ? { ...existingNotification, isRead: notification.isRead }
-              : existingNotification
-          )
-        );
+        if (!notification.isRead) {
+          setData((prev) => [notification, ...prev]);
+        } else {
+          setData((prev) =>
+            prev.filter(
+              (existingNotification) =>
+                existingNotification.id !== notification.id
+            )
+          );
+        }
       }
     );
 

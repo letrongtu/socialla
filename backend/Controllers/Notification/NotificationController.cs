@@ -61,7 +61,7 @@ namespace backend.Controllers.Notification
         [HttpGet]
         [Route("{userId}")]
         // [Authorize]
-        public async Task<IActionResult> GetPaginatedByUserId([FromRoute] string userId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20){
+        public async Task<IActionResult> GetPaginatedByUserId([FromRoute] string userId, [FromQuery] bool isFetchingUnread = false, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
@@ -76,7 +76,7 @@ namespace backend.Controllers.Notification
                 return BadRequest("Page number and page size must be greater than 0");
             }
 
-            var paginatedNotifications = await _notificationRepo.GetPaginatedByUserIdAsync(userId, pageNumber, pageSize);
+            var paginatedNotifications = await _notificationRepo.GetPaginatedByUserIdAsync(userId, pageNumber, pageSize, isFetchingUnread);
 
             return Ok(new {Notifications = paginatedNotifications.Records, TotalNotifications = paginatedNotifications.TotalRecords, HasNextPage = paginatedNotifications.HasNextPage});
         }

@@ -60,7 +60,7 @@ namespace backend.Repository
             _dbContext.Notifications.Remove(existingNotification);
             await _dbContext.SaveChangesAsync();
 
-            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationDelete", existingNotification.Id);
+            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationDelete", existingNotification.Id, existingNotification.IsRead);
 
             return existingNotification;
         }
@@ -76,12 +76,12 @@ namespace backend.Repository
             existingNotification.IsRead = isRead;
             await _dbContext.SaveChangesAsync();
 
-            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationUpdate", existingNotification.Id, isRead);
+            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationUpdate", existingNotification);
 
             return existingNotification;
         }
 
-        public async Task<PagedResult<Notification>> GetPaginatedByUserIdAsync(string userId, int pageNumber, int pageSize)
+        public async Task<PagedResult<Notification>> GetPaginatedByUserIdAsync(string userId , int pageNumber, int pageSize, bool isFetchingUnRead = false)
         {
             var userNotifications = await _dbContext.Notifications.Where((notification) => notification.ReceiveUserId == userId).ToListAsync();
 
@@ -92,6 +92,10 @@ namespace backend.Repository
                                             .Skip((pageNumber - 1) * pageSize)
                                             .Take(pageSize)
                                             .ToList();
+
+            if(isFetchingUnRead){
+                paginatedUserNotifications = paginatedUserNotifications.Where((notification) => notification.IsRead == false).ToList();
+            }
 
             return new PagedResult<Notification>{
                 Records = paginatedUserNotifications,
