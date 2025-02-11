@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NotificationType } from "../types";
+import { NotificationType } from "../../types";
 
 import { MarkAsReadButton } from "./mark-as-read-button";
 import { DeleteNotificationButton } from "./delete-notification-button";

@@ -22,12 +22,14 @@ namespace backend.Controllers.Comment
         private readonly UserManager<AppUser> _userManager;
         private readonly ICommentRepository _commentRepo;
         private readonly IPostRepository _postRepository;
+        private readonly  INotificationRepository _notificationRepo;
 
-        public CommentController(UserManager<AppUser> userManager, ICommentRepository commentRepo, IPostRepository postRepository)
+        public CommentController(UserManager<AppUser> userManager, ICommentRepository commentRepo, IPostRepository postRepository,  INotificationRepository notificationRepo)
         {
             _userManager = userManager;
             _commentRepo = commentRepo;
             _postRepository = postRepository;
+            _notificationRepo = notificationRepo;
         }
 
         [HttpPost]
@@ -65,6 +67,19 @@ namespace backend.Controllers.Comment
             var comment = commentDto.ToCommentFromCreateCommentDto();
 
             await _commentRepo.CreateAsync(comment);
+
+            if(post.UserId != user.Id){
+                var notification = new backend.Models.Notification{
+                    ReceiveUserId = post.UserId, //User who created the post
+                    EntityType = NotificationEntityType.User,
+                    EntityId = user.Id,
+                    Type = NotificationType.Comment_Created,
+                    PostId = post.Id,
+                    Content = "commented to your post",
+                };
+
+                await _notificationRepo.CreateAsync(notification);
+            }
 
             return Ok(new {Message = "Comment created", commentId = comment.Id});
         }

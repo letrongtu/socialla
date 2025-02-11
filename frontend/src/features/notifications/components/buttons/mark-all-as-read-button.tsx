@@ -1,9 +1,9 @@
-import { NotificationType } from "../types";
-import { UseUpdateReadNotification } from "../api/use-update-read-notification";
+import { NotificationType } from "../../types";
+import { UseUpdateReadNotification } from "../../api/use-update-read-notification";
 
 import { Button } from "@/components/ui/button";
 import { FaCheck } from "react-icons/fa6";
-import { UseUpdateReadNotifications } from "../api/use-update-read-notifications";
+import { UseUpdateReadNotifications } from "../../api/use-update-read-notifications";
 
 interface MarkAsReadButtonProps {
   notifications: NotificationType[];

@@ -1,12 +1,11 @@
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaEllipsis } from "react-icons/fa6";
 import { useGetNotifications } from "../api/use-get-notifcations";
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
 import { NotificationCard } from "./notification-card";
 import { useGetUnReadNotifications } from "../api/use-get-unread-notifications";
-import { EditAllNotificationsButton } from "./edit-all-notifications-button";
+import { EditAllNotificationsButton } from "./buttons/edit-all-notifications-button";
 
 const notificationFilterButtons = [{ label: "All" }, { label: "Unread" }];
 

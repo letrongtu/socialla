@@ -27,7 +27,10 @@ namespace backend.Repository
         {
             var existingUserNotifications = await _dbContext.Notifications
                                                         .Where((notifi) =>
-                                                                (notifi.Type == NotificationType.Friend_Request || notifi.Type == NotificationType.Friend_Accept)
+                                                                (notifi.Type == NotificationType.Friend_Request || notifi.Type == NotificationType.Friend_Accept // For friend accept or request
+                                                                || (notifi.Type == NotificationType.React_Post && notifi.PostId == notification.PostId) // For post reactions if user modifies or deletes then creates a new reaction
+                                                                || (notifi.Type == NotificationType.Comment_Created && notifi.PostId == notification.PostId) // For post comments
+                                                                )
                                                                 && notifi.EntityType == notification.EntityType
                                                                 && (notifi.EntityId == notification.EntityId || notifi.EntityId == notification.ReceiveUserId)
                                                                 && (notifi.ReceiveUserId == notification.ReceiveUserId || notifi.ReceiveUserId == notification.EntityId))

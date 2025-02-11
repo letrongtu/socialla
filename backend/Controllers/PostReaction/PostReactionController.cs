@@ -54,6 +54,19 @@ namespace backend.Controllers.Post
 
             await _postReactionRepo.CreateAsync(postReaction);
 
+            if(post.UserId != user.Id){
+                var notification = new backend.Models.Notification{
+                    ReceiveUserId = post.UserId, //User who created the post
+                    EntityType = NotificationEntityType.User,
+                    EntityId = user.Id,
+                    Type = NotificationType.React_Post,
+                    PostId = post.Id,
+                    Content = "reacted to your post",
+                };
+
+                await _notificationRepo.CreateAsync(notification);
+            }
+
             return Ok(new {Message = "Reaction created", ReactionId = postReaction.Id});
         }
 
@@ -80,6 +93,11 @@ namespace backend.Controllers.Post
                 return BadRequest(ModelState);
             }
 
+            var post = await _postRepo.GetByIdAsync(postReactionDto.PostId);
+            if(post == null){
+                return NotFound("Post not found");
+            }
+
             var existingPostReaction = await _postReactionRepo.GetByPostIdAndUserIdAsync(postReactionDto.PostId, postReactionDto.UserId);
 
             if(existingPostReaction == null){
@@ -92,7 +110,47 @@ namespace backend.Controllers.Post
                 return NotFound("Cannot update post reaction");
             }
 
+            if(post.UserId != newPostReaction.UserId){
+                var notification = new backend.Models.Notification{
+                    ReceiveUserId = post.UserId, //User who created the post
+                    EntityType = NotificationEntityType.User,
+                    EntityId = newPostReaction.UserId,
+                    Type = NotificationType.React_Post,
+                    PostId = post.Id,
+                    Content = "reacted to your post",
+                };
+
+                await _notificationRepo.CreateAsync(notification);
+            }
+
             return Ok(new {Message = "Post Reaction updated", PostId = newPostReaction.Id});
+        }
+
+        [HttpGet]
+        [Route("{postId}/{userId}")]
+        [Authorize]
+        public async Task<IActionResult> GetByPostIdAndUserId([FromRoute] string postId, [FromRoute] string userId){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(user => user.Id == userId);
+            if(user == null){
+                return StatusCode(400, "User not found");
+            }
+
+            var post = await _postRepo.GetByIdAsync(postId);
+            if(post == null){
+                return StatusCode(400, "Post not found");
+            }
+
+            var postReaction = await _postReactionRepo.GetByPostIdAndUserIdAsync(postId, userId);
+
+            if(postReaction == null){
+                return NotFound("User hasn't reacted to the post");
+            }
+
+            return Ok(new {reaction = postReaction});
         }
 
         [HttpGet]

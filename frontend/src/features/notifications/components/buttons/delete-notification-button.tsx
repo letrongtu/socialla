@@ -1,5 +1,5 @@
-import { UseDeleteNotification } from "../api/use-delete-notification";
-import { NotificationType } from "../types";
+import { UseDeleteNotification } from "../../api/use-delete-notification";
+import { NotificationType } from "../../types";
 
 import { Button } from "@/components/ui/button";
 import { MdDelete } from "react-icons/md";

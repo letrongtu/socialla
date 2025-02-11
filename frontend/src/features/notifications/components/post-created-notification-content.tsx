@@ -54,7 +54,7 @@ export const PostCreatedNotificationContent = ({
           )}
         >
           <span className="text-base font-semibold">{userFullname}</span>{" "}
-          {notification.content}
+          <span className="font-semibold">{notification.content}</span>
           &quot;{truncateContent}&quot;
         </p>
 
