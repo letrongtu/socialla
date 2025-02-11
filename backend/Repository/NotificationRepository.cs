@@ -81,6 +81,27 @@ namespace backend.Repository
             return existingNotification;
         }
 
+        public async Task<List<Notification>?> UpdateMultipleReadStatusAsync(List<string> ids)
+        {
+            var notifications = await _dbContext.Notifications
+                .Where(n => ids.Contains(n.Id))
+                .ToListAsync();
+
+            if (notifications.Count == 0)
+            {
+                return null;
+            }
+
+            foreach(var notification in notifications){
+                notification.IsRead = true;
+                await _notificationHubContext.Clients.All.SendAsync("ReceiveNotificationUpdate", notification);
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            return notifications;
+        }
+
         public async Task<PagedResult<Notification>> GetPaginatedByUserIdAsync(string userId , int pageNumber, int pageSize, bool isFetchingUnRead = false)
         {
             var userNotifications = await _dbContext.Notifications.Where((notification) => notification.ReceiveUserId == userId).ToListAsync();

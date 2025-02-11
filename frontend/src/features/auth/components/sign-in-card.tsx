@@ -77,8 +77,8 @@ const SignInCard = ({ setState }: SignInCardProps) => {
         {errorMessages && (
           <div className="w-full p-2 rounded-sm bg-rose-200 space-y-1">
             <TriangleAlert className="size-5 text-rose-500" />
-            {errorMessages.map((errorMessage) => (
-              <p key={errorMessage} className="text-sm text-rose-500">
+            {errorMessages.map((errorMessage, index) => (
+              <p key={index} className="text-sm text-rose-500">
                 {errorMessage}
               </p>
             ))}

@@ -26,11 +26,7 @@ export const PostCommentModal = () => {
     useCurrentUser();
 
   const { data, isLoading } = useGetUser(
-    postData?.userId
-      ? postData.userId
-      : currentUser?.id
-      ? currentUser.id
-      : "edge-case-that-never-happen"
+    postData?.userId ? postData.userId : currentUser?.id ? currentUser.id : null
   );
 
   if (

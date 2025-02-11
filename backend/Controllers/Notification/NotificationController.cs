@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Dtos.Notification;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -57,6 +58,27 @@ namespace backend.Controllers.Notification
 
             return Ok(new {Message = "Nofitication updated", notificationId = updatedNotification.Id});
         }
+
+        [HttpPut]
+        [Route("update-multiple")]
+        [Authorize]
+        public async Task<IActionResult> UpdateMultipleReadStatus([FromBody] UpdateNotificationsDto notificationsDto)
+        {
+            if (!ModelState.IsValid || notificationsDto.Ids == null || notificationsDto.Ids.Count == 0)
+            {
+                return BadRequest("Invalid request. No notification IDs provided.");
+            }
+
+            var updatedNotifications = await _notificationRepo.UpdateMultipleReadStatusAsync(notificationsDto.Ids);
+
+            if (updatedNotifications == null || updatedNotifications.Count == 0)
+            {
+                return NotFound("No notifications were updated.");
+            }
+
+            return Ok(new { Message = "Notifications updated", UpdatedNotificationIds = updatedNotifications.Select(n => n.Id).ToList() });
+        }
+
 
         [HttpGet]
         [Route("{userId}")]

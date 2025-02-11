@@ -14,12 +14,16 @@ type ResponseType = {
   createdAt: Date | undefined;
 } | null;
 
-export const useGetUser = (userId: string) => {
+export const useGetUser = (userId: string | null) => {
   const [data, setData] = useState<ResponseType>(null);
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!userId) {
+      return;
+    }
+
     const fetchData = async () => {
       try {
         setIsLoading(true);

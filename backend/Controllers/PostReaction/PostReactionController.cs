@@ -24,11 +24,13 @@ namespace backend.Controllers.Post
         private readonly UserManager<AppUser> _userManager;
         private readonly IPostRepository _postRepo;
         private readonly IPostReactionRepository _postReactionRepo;
-        public PostReactionController(UserManager<AppUser> userManager, IPostRepository postRepo, IPostReactionRepository postReactionRepo)
+        private readonly INotificationRepository _notificationRepo;
+        public PostReactionController(UserManager<AppUser> userManager, IPostRepository postRepo, IPostReactionRepository postReactionRepo, INotificationRepository notificationRepo)
         {
             _userManager = userManager;
             _postRepo = postRepo;
             _postReactionRepo = postReactionRepo;
+            _notificationRepo= notificationRepo;
         }
 
         [HttpPost]
