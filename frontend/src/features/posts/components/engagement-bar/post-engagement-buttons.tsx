@@ -12,6 +12,7 @@ import { ReactionPickerTooltip } from "@/components/reaction-details-modal/react
 
 import { PiShareFat } from "react-icons/pi";
 import { MessageCircle } from "lucide-react";
+import { Hint } from "@/components/ui/hint";
 
 interface PostEngagementButtonsProps {
   postData: PostType;
@@ -184,15 +185,19 @@ export const PostEngagementButtons = ({
         </div>
       )}
 
+      {/*
+      //TODO: Enable this if possible
       {enableShare && (
-        <div className="w-full flex justify-center items-center space-x-2 hover:bg-[#c9ccd1]/30 rounded-md cursor-pointer">
-          <div className="py-1 rounded-full cursor-pointer">
+        <div className="w-full flex justify-center items-center space-x-2 hover:bg-[#c9ccd1]/30 rounded-md">
+          <div className="py-1 rounded-full">
             <PiShareFat className="text-muted-foreground size-6" />
           </div>
 
-          <p className="text-base font-semibold text-muted-foreground">Share</p>
+          <p className="text-base font-semibold text-muted-foreground cursor-default">
+            Share
+          </p>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

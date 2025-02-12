@@ -8,7 +8,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
-import { useGetNotifications } from "@/features/notifications/api/use-get-notifcations";
 import { useGetUnReadNotifications } from "@/features/notifications/api/use-get-unread-notifications";
 
 interface HeaderUtilButtonProps {

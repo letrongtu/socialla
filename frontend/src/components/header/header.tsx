@@ -1,15 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { HeaderPageButton } from "./header-page-button";
 import { HeaderUtilButton } from "./header-util-button";
 import { UserButton } from "./user-button";
-import { useRouter } from "next/navigation";
+import { SearchBar } from "@/features/search/components/search-bar";
 
 import { NotificationDisplayModal } from "@/features/notifications/components/notification-display-modal";
 
-import { Home, Search, TvMinimalPlay, Layers2, Bell } from "lucide-react";
+import { Home, TvMinimalPlay, Bell } from "lucide-react";
 import { MdGroups } from "react-icons/md";
 import { FiMessageCircle } from "react-icons/fi";
 
@@ -19,11 +20,14 @@ const pages = [
   { label: "Groups", icon: MdGroups },
 ];
 
-//TODO: Change the chilren to proper one
 const utilButtons = [
-  { label: "Menu", icon: Layers2, chilren: <div>Hello</div> },
-  { label: "Messenger", icon: FiMessageCircle, chilren: <div>Hello</div> },
-  { label: "Notifications", icon: Bell, chilren: <NotificationDisplayModal /> },
+  //TODO: Enable this if possible { label: "Menu", icon: Layers2, children: <div>Hello</div> },
+  { label: "Messenger", icon: FiMessageCircle, children: <div>Hello</div> },
+  {
+    label: "Notifications",
+    icon: Bell,
+    children: <NotificationDisplayModal />,
+  },
 ];
 
 export const Header = () => {
@@ -36,7 +40,7 @@ export const Header = () => {
 
   return (
     <div className="flex flex-row justify-between bg-[#ffffff] px-5 shadow-md">
-      <div className="lg:min-w-96 flex justify-start items-center py-3 ">
+      <div className="lg:min-w-96 flex justify-start items-center py-3 gap-x-3">
         <button
           onClick={() => {
             router.push("/");
@@ -47,16 +51,7 @@ export const Header = () => {
         </button>
 
         <div className="flex flex-grow">
-          <div
-            onClick={() => {}}
-            className="p-1.5 rounded-full bg-[#c9ccd1]/30 ml-6 lg:flex lg:gap-x-2 lg:items-center lg:w-full flex-grow"
-          >
-            {/**TODO: Onclick Search button */}
-            <Search className="text-[#606770] size-6" />
-            <p className="hidden lg:inline-block text-sm text-muted-foreground">
-              Search Socialla
-            </p>
-          </div>
+          <SearchBar />
         </div>
       </div>
 
@@ -82,7 +77,7 @@ export const Header = () => {
             setCurrentButton={setCurrentUtilButton}
             isActive={currentUtilButton === utilButton.label}
           >
-            {utilButton.chilren}
+            {utilButton.children}
           </HeaderUtilButton>
         ))}
 

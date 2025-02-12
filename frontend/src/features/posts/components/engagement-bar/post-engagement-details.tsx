@@ -48,13 +48,15 @@ export const PostEngagementDetails = ({
           </EngagementHint>
         )}
 
+        {/*
+        //TODO: Enable this if possible
         {enableShare && (
           <EngagementHint label="10 shares">
             <p className="text-base text-muted-foreground hover:underline cursor-pointer">
               10 shares
             </p>
           </EngagementHint>
-        )}
+        )} */}
       </div>
     </div>
   );

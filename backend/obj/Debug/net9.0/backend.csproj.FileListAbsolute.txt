@@ -163,3 +163,4 @@ D:\socialla\backend\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\socialla\backend\bin\Debug\net9.0\Newtonsoft.Json.dll
 D:\socialla\backend\bin\Debug\net9.0\Newtonsoft.Json.Bson.dll
 D:\socialla\backend\bin\Debug\net9.0\backend.staticwebassets.runtime.json
+D:\socialla\backend\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll

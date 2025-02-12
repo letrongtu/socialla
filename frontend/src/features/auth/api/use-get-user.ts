@@ -33,7 +33,7 @@ export const useGetUser = (userId: string | null) => {
 
         setData(response.data);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       } finally {
         setIsLoading(false);
       }
