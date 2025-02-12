@@ -108,6 +108,19 @@ namespace backend.Repository
                                                 (f.SecondUserId == firstUserId && f.FirstUserId == secondUserId));
         }
 
+        public async Task<int> GetMutualFriendCountAsync(string firstUserId, string secondUserId)
+        {
+            var firstUserFriends = await _dbContext.Friendships
+                    .Where(f => f.FirstUserId == firstUserId || f.SecondUserId == firstUserId)
+                    .Select(f => f.FirstUserId == firstUserId ? f.SecondUserId : f.FirstUserId)
+                    .ToListAsync();
 
+            var secondUserFriends = await _dbContext.Friendships
+                    .Where(f => f.FirstUserId == secondUserId || f.SecondUserId == secondUserId)
+                    .Select(f => f.FirstUserId == secondUserId ? f.SecondUserId : f.FirstUserId)
+                    .ToListAsync();
+
+            return firstUserFriends.Intersect(secondUserFriends).Count();
+        }
     }
 }

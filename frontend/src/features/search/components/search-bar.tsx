@@ -51,7 +51,7 @@ export const SearchBar = () => {
           />
         </DialogHeader>
 
-        <SearchResults />
+        <SearchResults searchContent={searchContent} />
       </DialogContent>
     </Dialog>
   );

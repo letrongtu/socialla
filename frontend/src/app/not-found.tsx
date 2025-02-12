@@ -7,7 +7,7 @@ import { GiReturnArrow } from "react-icons/gi";
 const NotFound = () => {
   const router = useRouter();
   return (
-    <div className="w-screen h-screen flex items-center justify-center space-x-16 bg-gradient-to-br from-[#d4f0f0]/50 via-[#0f9bf6]/5 to-[#ecd5e3]/50">
+    <div className="w-screen h-screen flex items-center justify-center space-x-16 bg-gradient-to-br from-[#d4f0f0]/30 via-[#0f9bf6]/5 to-[#ecd5e3]/20">
       <div className="flex items-center justify-center">
         <Image
           src="/not-found/maintain.png"

@@ -13,6 +13,7 @@ namespace backend.Interfaces
         Task<Friendship?> DeleteAsync(DeleteFriendshipDto friendDto);
         Task<Friendship?> UpdateAcceptAsync(UpdateAcceptFriendshipDto friendDto);
         Task<List<Friendship>> GetAllByUserIdAsync(string userId);
-        Task<Friendship?> CheckFriendshipAsync(string firstUser, string secondUser);
+        Task<int> GetMutualFriendCountAsync(string firstUserId, string secondUserId);
+        Task<Friendship?> CheckFriendshipAsync(string firstUserId, string secondUserId);
     }
 }
