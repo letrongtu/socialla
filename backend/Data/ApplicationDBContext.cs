@@ -23,6 +23,10 @@ namespace api.Data
         public DbSet<CommentReaction> CommentReactions { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<ConversationMember> ConversationMembers { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<MessageVisibility> MessageVisibilities { get; set;}
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -44,6 +48,12 @@ namespace api.Data
 
             //Friends Table
             builder.Entity<Friendship>().HasKey(f => new {f.FirstUserId, f.SecondUserId});
+
+            //Conversation Members Table
+            builder.Entity<ConversationMember>().HasKey(cm => new {cm.ConversationId, cm.UserId});
+
+            //Message Visibilities Table
+            builder.Entity<MessageVisibility>().HasKey(mv => new {mv.MessageId, mv.UserId});
         }
     }
 }

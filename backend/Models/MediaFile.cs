@@ -11,7 +11,5 @@ namespace backend.Models
         public string FileName { get; set; } = string.Empty;
         public byte[] Data { get; set; } = [];
         public string ContentType { get; set; } = string.Empty;
-
-        //TODO: Add Post Id
     }
 }

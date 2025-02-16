@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 
 namespace backend.Models
 {
-    public class Comment
+    public class Message
     {
         public string Id { get; set; } = Guid.NewGuid().ToString().ToLower();
+        public string ConversationId { get; set; } = string.Empty;
+        public string SenderId { get; set; } = string.Empty;
         public string[] Content { get; set; } = [];
+        public string[]? FileUrls { get; set; } = [];
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime? UpdatedAt { get; set; }
-        public string? ParentCommentId { get; set; }
-        public string UserId { get; set; } = string.Empty;
-        public string PostId { get; set; } = string.Empty;
     }
 }

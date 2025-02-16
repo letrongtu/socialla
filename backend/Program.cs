@@ -108,6 +108,10 @@ builder.Services.AddScoped<ICommentRepository, CommentReposity>();
 builder.Services.AddScoped<ICommentReactionRepository, CommentReactionRepository>();
 builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
+builder.Services.AddScoped<IConversationMemberRepository, ConversatioMemberRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IMessageVisibilityRepository, MessageVisibilityRepository>();
 
 builder.Services.AddSignalR();
 
