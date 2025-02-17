@@ -11,29 +11,11 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { MdDynamicFeed } from "react-icons/md";
 import { BiSolidMessageSquareDetail } from "react-icons/bi";
+import { UserType } from "@/features/auth/types";
 
 interface UserHoverCardProps {
-  user: {
-    id: string | undefined;
-    firstName: string | undefined;
-    lastName: string | undefined;
-    dateOfBirth: Date | undefined;
-    email: string | undefined;
-    phoneNumber: string | undefined;
-    profilePictureUrl: string | undefined;
-    createdAt: Date | undefined;
-  };
-  currentUser: {
-    id: string | undefined;
-    firstName: string | undefined;
-    lastName: string | undefined;
-    dateOfBirth: Date | undefined;
-    email: string | undefined;
-    phoneNumber: string | undefined;
-    profilePictureUrl: string | undefined;
-    createdAt: Date | undefined;
-  };
-
+  user: UserType;
+  currentUser: UserType;
   children: React.ReactNode;
 }
 

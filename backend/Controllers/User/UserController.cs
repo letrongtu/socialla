@@ -113,19 +113,17 @@ namespace backend.Controllers.User
                 return NotFound("User not found");
             }
 
-            user.IsActive = statusDto.IsActive;
+             user.IsActive = statusDto.IsActive;
 
-            // Going offline
-            if(user.IsActive && !statusDto.IsActive){
+            // going offline
+            if (user.IsActive == false) {
                 user.LastActiveAt = DateTime.Now;
-
                 await _hubContext.Clients.All.SendAsync("ReceiveUserOffline", user.Id, user.LastActiveAt);
             }
 
-            // Going online
-            if(!user.IsActive && statusDto.IsActive){
+            // going online
+            if (user.IsActive == true) {
                 user.LastActiveAt = null;
-
                 await _hubContext.Clients.All.SendAsync("ReceiveUserOnline", user.Id);
             }
 

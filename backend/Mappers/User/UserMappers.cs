@@ -20,8 +20,9 @@ namespace backend.Mappers.User
                 ProfilePictureUrl = appUser.ProfilePictureUrl,
                 CreatedAt = appUser.CreatedAt,
                 PhoneNumber = appUser.PhoneNumber,
+                IsActive = appUser.IsActive,
+                LastActiveAt = appUser.LastActiveAt,
             };
-
         }
 
         public static ReturnUserForReactionDto ToReturnUserForReactionDto (this AppUser appUser){

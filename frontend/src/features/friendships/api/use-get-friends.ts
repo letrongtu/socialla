@@ -17,7 +17,7 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const useGetFriends = (userId: string) => {
+export const useGetFriends = (userId: string | null) => {
   const [data, setData] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 

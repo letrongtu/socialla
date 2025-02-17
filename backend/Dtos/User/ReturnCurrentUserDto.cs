@@ -14,6 +14,8 @@ namespace backend.Dtos.User
         public string? Email { get; set; } = string.Empty;
         public string? PhoneNumber { get; set; } = string.Empty;
         public string ProfilePictureUrl { get; set; } = string.Empty;
+        public bool IsActive { get; set; }
+        public DateTime? LastActiveAt { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

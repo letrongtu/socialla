@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Header } from "./header/header";
 import { Sidebar } from "./sidebar/sidebar";
 import { FeedSection } from "./feed-section/feed-section";
-import { ContactSection } from "./contact-section";
+import { ContactSection } from "./contact-section/contact-section";
 
 export const HomePage = () => {
   return (

@@ -53,25 +53,17 @@ export const useGetUser = (userId: string | null) => {
 
     connection.on("ReceiveUserOnline", (id: string) => {
       if (userId === id) {
-        setData((prev) => {
-          if (prev) {
-            prev.isActive = true;
-            prev.lastActiveAt = null;
-          }
-          return prev;
-        });
+        setData((prev) =>
+          prev ? { ...prev, isActive: true, lastActiveAt: null } : prev
+        );
       }
     });
 
     connection.on("ReceiveUserOffline", (id: string, lastActiveAt: Date) => {
       if (userId === id) {
-        setData((prev) => {
-          if (prev) {
-            prev.isActive = false;
-            prev.lastActiveAt = lastActiveAt;
-          }
-          return prev;
-        });
+        setData((prev) =>
+          prev ? { ...prev, isActive: false, lastActiveAt } : prev
+        );
       }
     });
 
@@ -80,7 +72,7 @@ export const useGetUser = (userId: string | null) => {
         .stop()
         .then(() => {
           ////TODO: Find a way to handle this
-          console.log("SignalR disconnected");
+          // console.log("SignalR disconnected");
         })
         .catch((error) => {
           //TODO: Find a way to handle this

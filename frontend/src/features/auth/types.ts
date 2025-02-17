@@ -1,14 +1,14 @@
 export type SignInFlow = "signIn" | "signUp";
 
 export type UserType = {
-  id: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  dateOfBirth: Date | null;
-  email: string | null;
-  phoneNumber: string | null;
-  profilePictureUrl: string | null;
-  isActive: boolean | null;
-  lastActiveAt: Date | null;
-  createdAt: Date | null;
+  id: string | undefined;
+  firstName: string | undefined;
+  lastName: string | undefined;
+  dateOfBirth: Date | undefined;
+  email: string | undefined;
+  phoneNumber: string | undefined;
+  profilePictureUrl: string | undefined;
+  isActive: boolean | undefined;
+  lastActiveAt: Date | undefined;
+  createdAt: Date | undefined;
 };
