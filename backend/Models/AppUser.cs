@@ -12,6 +12,8 @@ namespace backend.Models
         public string LastName { get; set; } = string.Empty;
         public DateTime DateOfBirth { get; set; }
         public string ProfilePictureUrl { get; set; } = string.Empty;
+        public Boolean IsActive { get; set; } = false;
+        public DateTime? LastActiveAt { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

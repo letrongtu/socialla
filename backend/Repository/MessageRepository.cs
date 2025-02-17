@@ -37,5 +37,9 @@ namespace backend.Repository
 
             return existingMessage;
         }
+
+        public async Task<Message?> GetById(string messageId){
+            return await _dbContext.Messages.FindAsync(messageId);
+        }
     }
 }

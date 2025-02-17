@@ -10,5 +10,6 @@ namespace backend.Interfaces
     {
         Task<Message> CreateAsync(Message message);
         Task<Message?> DeleteAsync(string messageId);
+        Task<Message?> GetById(string messageId);
     }
 }

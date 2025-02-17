@@ -10,9 +10,10 @@ namespace backend.Mappers.Message
     {
         public static backend.Models.Message ToMessageFromCreate(this CreateMessageDto messageDto){
             return new Models.Message {
-                Content = messageDto.Content,
                 ConversationId = messageDto.ConversationId,
                 SenderId = messageDto.SenderId,
+                ParentMessageId = messageDto.ParentMessageId,
+                Content = messageDto.Content,
                 FileUrls = messageDto.FileUrls,
                 CreatedAt = DateTime.Now
             };

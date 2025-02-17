@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Dtos.Account;
+using backend.Hubs;
 using backend.Interfaces;
 using backend.Mappers.User;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers.User
@@ -18,10 +21,12 @@ namespace backend.Controllers.User
     {
         public readonly UserManager<AppUser> _userManager;
         public readonly IFriendshipRepository _friendshipRepo;
-        public UserController(UserManager<AppUser> userManager, IFriendshipRepository friendshipRepo)
+        private readonly IHubContext<UserStatusHub> _hubContext;
+        public UserController(UserManager<AppUser> userManager, IFriendshipRepository friendshipRepo, IHubContext<UserStatusHub> hubContext)
         {
             _userManager = userManager;
             _friendshipRepo = friendshipRepo;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -94,6 +99,39 @@ namespace backend.Controllers.User
             }
 
             return Ok(new {Results = usersWithDetails});
+        }
+
+        [HttpPost("active")]
+        public async Task<IActionResult> SetIsActive([FromBody] SetActiveStatusDto statusDto){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(statusDto.UserId);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            user.IsActive = statusDto.IsActive;
+
+            // Going offline
+            if(user.IsActive && !statusDto.IsActive){
+                user.LastActiveAt = DateTime.Now;
+
+                await _hubContext.Clients.All.SendAsync("ReceiveUserOffline", user.Id, user.LastActiveAt);
+            }
+
+            // Going online
+            if(!user.IsActive && statusDto.IsActive){
+                user.LastActiveAt = null;
+
+                await _hubContext.Clients.All.SendAsync("ReceiveUserOnline", user.Id);
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new {Message = "User status updated"});
         }
     }
 }

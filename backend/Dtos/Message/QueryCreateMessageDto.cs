@@ -10,6 +10,7 @@ namespace backend.Dtos.Message
         public string[]? UserIds { get; set; }
         public string? ConversationId { get; set; }
         public string SenderId { get; set; } = string.Empty;
+        public string? ParentMessageId { get; set; }
         public string[] Content { get; set; } = [];
         public string[]? FileUrls { get; set; }
     }

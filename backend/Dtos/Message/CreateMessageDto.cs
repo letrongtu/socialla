@@ -9,6 +9,7 @@ namespace backend.Dtos.Message
     {
         public string ConversationId { get; set; } = string.Empty;
         public string SenderId { get; set; } = string.Empty;
+        public string? ParentMessageId { get; set; }
         public string[] Content { get; set; } = [];
         public string[]? FileUrls { get; set; }
     }

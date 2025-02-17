@@ -10,6 +10,7 @@ namespace backend.Models
         public string Id { get; set; } = Guid.NewGuid().ToString().ToLower();
         public string ConversationId { get; set; } = string.Empty;
         public string SenderId { get; set; } = string.Empty;
+        public string? ParentMessageId { get; set; }
         public string[] Content { get; set; } = [];
         public string[]? FileUrls { get; set; } = [];
         public DateTime CreatedAt { get; set; } = DateTime.Now;

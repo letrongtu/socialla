@@ -1,45 +1,92 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useMemo, useState } from "react";
+import { UserType } from "../types";
+import * as signalR from "@microsoft/signalr";
 
-const baseURL = "http://localhost:5096/api";
+const BASE_URL = "http://localhost:5096";
+const BASE_URL_API = "http://localhost:5096/api";
 
-type ResponseType = {
-  id: string | undefined;
-  firstName: string | undefined;
-  lastName: string | undefined;
-  dateOfBirth: Date | undefined;
-  email: string | undefined;
-  phoneNumber: string | undefined;
-  profilePictureUrl: string | undefined;
-  createdAt: Date | undefined;
-} | null;
+type ResponseType = UserType | null;
 
 export const useGetUser = (userId: string | null) => {
   const [data, setData] = useState<ResponseType>(null);
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const fetchData = async (userId: string) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get<ResponseType>(
+        `${BASE_URL_API}/user/${userId}`
+      );
+
+      setData(response.data);
+    } catch (error) {
+      // console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!userId) {
       return;
     }
 
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios.get<ResponseType>(
-          `${baseURL}/user/${userId}`
-        );
+    fetchData(userId);
 
-        setData(response.data);
-      } catch (error) {
-        // console.log(error);
-      } finally {
-        setIsLoading(false);
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl(`${BASE_URL}/userStatusHub`)
+      .withAutomaticReconnect()
+      .build();
+
+    connection
+      .start()
+      .then(() => {
+        //TODO: Find a way to handle this
+        // console.log("SignalR connected");
+      })
+      .catch((error) => {
+        //TODO: Find a way to handle this
+        // console.log("SignalR connection error: ", error);
+      });
+
+    connection.on("ReceiveUserOnline", (id: string) => {
+      if (userId === id) {
+        setData((prev) => {
+          if (prev) {
+            prev.isActive = true;
+            prev.lastActiveAt = null;
+          }
+          return prev;
+        });
       }
-    };
+    });
 
-    fetchData();
+    connection.on("ReceiveUserOffline", (id: string, lastActiveAt: Date) => {
+      if (userId === id) {
+        setData((prev) => {
+          if (prev) {
+            prev.isActive = false;
+            prev.lastActiveAt = lastActiveAt;
+          }
+          return prev;
+        });
+      }
+    });
+
+    return () => {
+      connection
+        .stop()
+        .then(() => {
+          ////TODO: Find a way to handle this
+          console.log("SignalR disconnected");
+        })
+        .catch((error) => {
+          //TODO: Find a way to handle this
+          console.log("Error stopping SignalR:", error);
+        });
+    };
   }, [userId]);
 
   return {

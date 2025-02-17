@@ -1,19 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { getCookie, hasCookie } from "cookies-next";
+import { UserType } from "../types";
 
 const baseURL = "http://localhost:5096/api";
 
-type ResponseType = {
-  id: string | undefined;
-  firstName: string | undefined;
-  lastName: string | undefined;
-  dateOfBirth: Date | undefined;
-  email: string | undefined;
-  phoneNumber: string | undefined;
-  profilePictureUrl: string | undefined;
-  createdAt: Date | undefined;
-} | null;
+type ResponseType = UserType | null;
 
 export const useCurrentUser = () => {
   const [data, setData] = useState<ResponseType>(null);
@@ -30,11 +22,34 @@ export const useCurrentUser = () => {
           `${baseURL}/user/${userId}`
         );
         setData(response.data);
+
+        // Online/Offline update
+        await axios.post(`${baseURL}/user/active`, {
+          userId,
+          isActive: true,
+        });
       }
       setIsLoading(false);
     };
 
     fetchUser();
+
+    // Mark the user as offline when they leave
+    const handleOffline = async () => {
+      if (hasCookie("userId")) {
+        const userId = getCookie("userId");
+        await axios.post(`${baseURL}/user/active`, {
+          userId,
+          isActive: false,
+        });
+      }
+    };
+
+    window.addEventListener("beforeunload", handleOffline);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleOffline);
+    };
   }, []);
 
   return {

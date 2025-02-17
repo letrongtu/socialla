@@ -58,6 +58,7 @@ namespace backend.Controllers.Message
                 return StatusCode(400, "Requires Conversation Id or UserIds");
             }
 
+            // First message to a conversation -> create conversation
             if(queryMessageDto.ConversationId == null && queryMessageDto.UserIds != null){
                 var conversation = new Conversation {
                     IsGroup = queryMessageDto.UserIds.Length > 1 ? true : false
@@ -97,6 +98,7 @@ namespace backend.Controllers.Message
             var createMessageDto = new CreateMessageDto {
                 ConversationId = queryMessageDto.ConversationId,
                 SenderId = queryMessageDto.SenderId,
+                ParentMessageId = queryMessageDto.ParentMessageId,
                 Content = queryMessageDto.Content,
                 FileUrls = queryMessageDto.FileUrls,
             };
@@ -109,7 +111,7 @@ namespace backend.Controllers.Message
             var conversationMembers = await _conversationMemberRepo.GetByConversationId(message.ConversationId);
 
             foreach(var member in conversationMembers){
-                var messageVisibility = new MessageVisibility{
+                var messageVisibility = new backend.Models.MessageVisibility{
                     ConversationId = message.ConversationId,
                     MessageId = message.Id,
                     UserId = member.UserId
@@ -119,6 +121,22 @@ namespace backend.Controllers.Message
             }
 
             return Ok(new {Message = "Message created", messageId = message.Id});
+        }
+
+        [HttpDelete]
+        [Route("{messageId}")]
+        public async Task<IActionResult> Delete([FromRoute] string messageId){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var deletedMessage = await _messageRepo.DeleteAsync(messageId);
+
+            if(deletedMessage == null){
+                return NotFound("Message not found");
+            }
+
+            return Ok(new {Message = "message deleted", MessageId = deletedMessage.Id});
         }
     }
 }

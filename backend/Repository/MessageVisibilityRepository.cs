@@ -16,7 +16,6 @@ namespace backend.Repository
         public MessageVisibilityRepository(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
-
         }
 
         public async Task<MessageVisibility> CreateAsync(MessageVisibility messageVisibility)
