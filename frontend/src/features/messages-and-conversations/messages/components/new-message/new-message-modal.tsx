@@ -50,7 +50,10 @@ export const NewMessageModal = ({ currentUser }: NewMessageModalProps) => {
       )}
 
       {resultData && resultData.results && (
-        <SearchUserList searchedUsers={resultData.results} />
+        <SearchUserList
+          searchedUsers={resultData.results}
+          currentUser={currentUser}
+        />
       )}
 
       {!resultData && friendIds && (

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Dtos.Message;
+using backend.Hubs;
 using backend.Interfaces;
 using backend.Mappers.Message;
 using backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers.Message
@@ -21,18 +23,21 @@ namespace backend.Controllers.Message
         private readonly IConversationMemberRepository _conversationMemberRepo;
         private readonly IMessageRepository _messageRepo;
         private readonly IMessageVisibilityRepository _messageVisibilityRepo;
+        private readonly IHubContext<ConversationHub> _conversationHubContext;
         public MessageController(
             UserManager<AppUser> userManager,
             IConversationRepository conversationRepo,
             IConversationMemberRepository conversationMemberRepo,
             IMessageRepository messageRepo,
-            IMessageVisibilityRepository messageVisibilityRepo)
-        {
+            IMessageVisibilityRepository messageVisibilityRepo,
+            IHubContext<ConversationHub> conversationHubContext
+        ){
             _userManager = userManager;
             _conversationRepo = conversationRepo;
             _conversationMemberRepo = conversationMemberRepo;
             _messageRepo = messageRepo;
             _messageVisibilityRepo = messageVisibilityRepo;
+            _conversationHubContext = conversationHubContext;
         }
 
         [HttpPost]
@@ -54,19 +59,23 @@ namespace backend.Controllers.Message
                 return NotFound("Sender not found");
             }
 
-            if(queryMessageDto.ConversationId == null && queryMessageDto.UserIds == null){
+            if(string.IsNullOrEmpty(queryMessageDto.ConversationId) && queryMessageDto.UserIds == null){
                 return StatusCode(400, "Requires Conversation Id or UserIds");
             }
 
             // First message to a conversation -> create conversation
-            if(queryMessageDto.ConversationId == null && queryMessageDto.UserIds != null){
-                var conversation = new Conversation {
-                    IsGroup = queryMessageDto.UserIds.Length > 1 ? true : false
+            if(string.IsNullOrEmpty(queryMessageDto.ConversationId) && queryMessageDto.UserIds != null){
+                var conversation = new backend.Models.Conversation {
+                    IsGroup = queryMessageDto.UserIds.Count > 1
                 };
                 // Create conversation if its not created
                 var createdConversation = await _conversationRepo.CreateAsync(conversation);
 
                 queryMessageDto.ConversationId = createdConversation.Id;
+
+                queryMessageDto.UserIds.Add(sender.Id);
+                // Send notification to the conversationHub
+                await _conversationHubContext.Clients.All.SendAsync("ReceiveConversationCreate", conversation.Id, queryMessageDto.UserIds);
 
                 foreach(var userId in queryMessageDto.UserIds){
                     var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);

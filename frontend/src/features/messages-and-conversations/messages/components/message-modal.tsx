@@ -20,7 +20,7 @@ import { DisplayMessageModal } from "./display-message-modal";
 export const MessageModal = () => {
   const { data: currentUser, isLoading: isLoadingCurrentUser } =
     useCurrentUser();
-  const [{ open, userId }, setOpen] = useMessageModal();
+  const [{ open, userId, conversationId }, setOpen] = useMessageModal();
 
   if (!currentUser) {
     return null;
@@ -49,7 +49,7 @@ export const MessageModal = () => {
           <DialogClose>
             <div
               onClick={() => {
-                setOpen({ open: false, userId: null });
+                setOpen({ open: false, userId: null, conversationId: null });
               }}
               className="absolute -top-[0.1rem] right-3 flex p-0.5 justify-center items-center rounded-full hover:bg-[#c9ccd1]/50 cursor-pointer"
             >
@@ -59,7 +59,11 @@ export const MessageModal = () => {
         </DialogHeader>
 
         {userId ? (
-          <DisplayMessageModal currentUser={currentUser} otherUserId={userId} />
+          <DisplayMessageModal
+            currentUser={currentUser}
+            otherUserId={userId}
+            conversationId={conversationId}
+          />
         ) : (
           <NewMessageModal currentUser={currentUser} />
         )}

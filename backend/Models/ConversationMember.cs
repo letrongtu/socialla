@@ -9,6 +9,7 @@ namespace backend.Models
     {
         public string ConversationId { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
+        public string? Nickname { get; set; }
         public DateTime? DeletedConversationAt { get; set; }
         public DateTime JoinAt { get; set; } = DateTime.Now;
     }

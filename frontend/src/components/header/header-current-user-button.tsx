@@ -35,8 +35,9 @@ export const HeaderCurrentUserButton = ({
   const signOut = () => {
     deleteCookie("token");
     deleteCookie("userId");
+
     toast.success("Logout successfully");
-    router.replace("/");
+    window.location.reload();
   };
 
   return (

@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using backend.Hubs;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository
 {
     public class ConversationRepository : IConversationRepository
     {
         private readonly ApplicationDBContext _dbContext;
+
         public ConversationRepository(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
@@ -40,6 +44,16 @@ namespace backend.Repository
 
         public async Task<Conversation?> GetById(string conversationId){
             return await _dbContext.Conversations.FindAsync(conversationId);
+        }
+
+        public async Task<Conversation?> GetDmConversationByUserIds(string firstUserId, string secondUserId)
+        {
+            return await _dbContext.Conversations
+                .Where(c => !c.IsGroup) //Dm convo
+                .Where(c => _dbContext.ConversationMembers
+                    .Count(cm => cm.ConversationId == c.Id &&
+                            (cm.UserId == firstUserId || cm.UserId == secondUserId)) == 2)
+                .FirstOrDefaultAsync();
         }
     }
 }

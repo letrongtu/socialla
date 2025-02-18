@@ -3,7 +3,8 @@ import { useGetUser } from "@/features/auth/api/use-get-user";
 import { UserButton } from "../user-button";
 import { UserType } from "@/features/auth/types";
 import { getLastActiveTimeString } from "@/utils/helper";
-import { useMessageModal } from "@/features/messages/store/use-message-modal";
+import { useMessageModal } from "@/features/messages-and-conversations/messages/store/use-message-modal";
+import { useGetDmConversationId } from "@/features/messages-and-conversations/conversations/api/use-get-dm-conversation-id";
 
 interface UserContactCardProps {
   userId: string;
@@ -16,6 +17,8 @@ export const UserContactCard = ({
   const [, setOpen] = useMessageModal();
 
   const { data: user, isLoading: isLoadingUser } = useGetUser(userId);
+  const { data: conversationId, isLoading: isLoadingConversationId } =
+    useGetDmConversationId(userId, currentUser.id ? currentUser.id : null);
 
   if (!user) {
     return null;
@@ -29,10 +32,20 @@ export const UserContactCard = ({
     <div
       onClick={() => {
         setOpen((prev) => {
-          if (prev.open && prev.userId) {
-            return { open: false, userId: null };
+          if (prev.open && prev.userId && prev.userId === user.id) {
+            return { open: false, userId: null, conversationId: null };
+          } else if (prev.open && prev.userId && prev.userId !== user.id) {
+            return {
+              open: true,
+              userId: user.id ? user.id : null,
+              conversationId: conversationId,
+            };
           } else {
-            return { open: true, userId: user.id ? user.id : null };
+            return {
+              open: true,
+              userId: user.id ? user.id : null,
+              conversationId: conversationId,
+            };
           }
         });
       }}

@@ -12,7 +12,8 @@ import { MdEmail } from "react-icons/md";
 import { MdDynamicFeed } from "react-icons/md";
 import { BiSolidMessageSquareDetail } from "react-icons/bi";
 import { UserType } from "@/features/auth/types";
-import { useMessageModal } from "@/features/messages/store/use-message-modal";
+import { useMessageModal } from "@/features/messages-and-conversations/messages/store/use-message-modal";
+import { useGetDmConversationId } from "@/features/messages-and-conversations/conversations/api/use-get-dm-conversation-id";
 
 interface UserHoverCardProps {
   user: UserType;
@@ -26,6 +27,12 @@ export const UserHoverCard = ({
   children,
 }: UserHoverCardProps) => {
   const [, setOpen] = useMessageModal();
+
+  const { data: conversationId, isLoading: isLoadingConversationId } =
+    useGetDmConversationId(
+      user.id ? user.id : null,
+      currentUser.id ? currentUser.id : null
+    );
 
   if (!user.id || !currentUser.id) {
     return null;
@@ -81,7 +88,11 @@ export const UserHoverCard = ({
             <div className="w-full flex items-center justify-center gap-x-2">
               <Button
                 onClick={() => {
-                  setOpen({ open: true, userId: user.id ? user.id : null });
+                  setOpen({
+                    open: true,
+                    userId: user.id ? user.id : null,
+                    conversationId: conversationId,
+                  });
                 }}
                 className="w-full py-2 px-4 flex items-center justify-center gap-x-2 rounded-md text-black bg-[#c9ccd1]/30 hover:bg-[#c9ccd1]/70 cursor-pointer"
               >

@@ -7,7 +7,7 @@ namespace backend.Dtos.Message
 {
     public class QueryCreateMessageDto
     {
-        public string[]? UserIds { get; set; }
+        public List<string>? UserIds { get; set; }
         public string? ConversationId { get; set; }
         public string SenderId { get; set; } = string.Empty;
         public string? ParentMessageId { get; set; }

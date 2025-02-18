@@ -11,5 +11,6 @@ namespace backend.Interfaces
         Task<Conversation> CreateAsync(Conversation conversation);
         Task<Conversation?> DeleteAsync(string convId);
         Task<Conversation?> GetById(string conversationId);
+        Task<Conversation?> GetDmConversationByUserIds(string firstUserId, string secondUserId);
     }
 }
