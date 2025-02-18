@@ -6,6 +6,8 @@ import { Separator } from "@/components/ui/separator";
 import { SearchUserList } from "./search-user-list";
 import { ContactContainer } from "@/components/contact-section/contact-container";
 import { useMessageModal } from "../store/use-message-modal";
+import { Loader2 } from "lucide-react";
+import { useSearch } from "@/features/search/api/use-search";
 
 interface NewMessageModal {
   currentUser: UserType;
@@ -14,15 +16,17 @@ interface NewMessageModal {
 export const NewMessageModal = ({ currentUser }: NewMessageModal) => {
   const [{ open }, setOpen] = useMessageModal();
 
+  const [query, setQuery] = useState("");
+
   const { data: friendIds, isLoading: isLoadingFriendIds } = useGetFriends(
     currentUser?.id ? currentUser.id : null,
     10
   );
+  const { data: resultData, isLoading: isLoadingResultData } = useSearch(
+    query,
+    currentUser.id ? currentUser.id : null
+  );
 
-  const [message, setMessage] = useState("");
-  const [userIds, setUserIds] = useState<string[] | null>(null);
-
-  //TODO: Get pp and search api
   return (
     <div className="flex flex-col overflow-auto custom-scrollbar">
       <div className="px-3.5 w-full flex gap-x-2">
@@ -31,18 +35,31 @@ export const NewMessageModal = ({ currentUser }: NewMessageModal) => {
         <input
           autoFocus={open}
           type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           className="w-full text-sm font-medium focus:outline-none"
         />
       </div>
 
       <Separator className="w-full mt-2" />
 
-      {userIds && <SearchUserList />}
+      {(isLoadingFriendIds || isLoadingResultData) && (
+        <div className="w-full h-14 flex items-center justify-center">
+          <Loader2 className="animate-spin" />
+        </div>
+      )}
 
-      {!userIds && friendIds && (
-        <ContactContainer currentUser={currentUser} friendIds={friendIds} />
+      {resultData && resultData.results && (
+        <SearchUserList searchedUsers={resultData.results} />
+      )}
+
+      {!resultData && friendIds && (
+        <div className="flex flex-col py-2">
+          <p className="px-2 text-sm font-semibold text-muted-foreground">
+            Friends
+          </p>
+          <ContactContainer currentUser={currentUser} friendIds={friendIds} />
+        </div>
       )}
     </div>
   );

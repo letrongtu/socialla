@@ -12,6 +12,7 @@ import { MdEmail } from "react-icons/md";
 import { MdDynamicFeed } from "react-icons/md";
 import { BiSolidMessageSquareDetail } from "react-icons/bi";
 import { UserType } from "@/features/auth/types";
+import { useMessageModal } from "@/features/messages/store/use-message-modal";
 
 interface UserHoverCardProps {
   user: UserType;
@@ -24,6 +25,8 @@ export const UserHoverCard = ({
   currentUser,
   children,
 }: UserHoverCardProps) => {
+  const [, setOpen] = useMessageModal();
+
   if (!user.id || !currentUser.id) {
     return null;
   }
@@ -77,7 +80,9 @@ export const UserHoverCard = ({
           {!isCurrentUser && (
             <div className="w-full flex items-center justify-center gap-x-2">
               <Button
-                onClick={() => {}}
+                onClick={() => {
+                  setOpen({ open: true, userId: user.id ? user.id : null });
+                }}
                 className="w-full py-2 px-4 flex items-center justify-center gap-x-2 rounded-md text-black bg-[#c9ccd1]/30 hover:bg-[#c9ccd1]/70 cursor-pointer"
               >
                 <BiSolidMessageSquareDetail className="size-5" />
