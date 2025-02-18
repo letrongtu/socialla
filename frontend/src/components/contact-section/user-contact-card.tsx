@@ -3,6 +3,7 @@ import { useGetUser } from "@/features/auth/api/use-get-user";
 import { UserButton } from "../user-button";
 import { UserType } from "@/features/auth/types";
 import { getLastActiveTimeString } from "@/utils/helper";
+import { useMessageModal } from "@/features/messages/store/use-message-modal";
 
 interface UserContactCardProps {
   userId: string;
@@ -12,6 +13,8 @@ export const UserContactCard = ({
   userId,
   currentUser,
 }: UserContactCardProps) => {
+  const [, setOpen] = useMessageModal();
+
   const { data: user, isLoading: isLoadingUser } = useGetUser(userId);
 
   if (!user) {
@@ -24,7 +27,15 @@ export const UserContactCard = ({
 
   return (
     <div
-      onClick={() => {}}
+      onClick={() => {
+        setOpen((prev) => {
+          if (prev.open && prev.userId) {
+            return { open: false, userId: null };
+          } else {
+            return { open: true, userId: user.id ? user.id : null };
+          }
+        });
+      }}
       className=" w-full p-2 flex items-center justify-start gap-x-2 hover:bg-[#c9ccd1]/30 rounded-md cursor-pointer"
     >
       <div className="relative flex items-center justify-center">

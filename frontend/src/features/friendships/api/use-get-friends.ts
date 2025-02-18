@@ -8,7 +8,9 @@ const BASE_URL = "http://localhost:5096";
 const BASE_API_URL = "http://localhost:5096/api";
 
 type ResponseType = {
-  userFriendIds: string[];
+  friendIds: string[];
+  totalFriends: number;
+  hasNextPage: boolean;
 };
 
 type Options = {
@@ -17,19 +19,29 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const useGetFriends = (userId: string | null) => {
+export const useGetFriends = (userId: string | null, pageSize: number) => {
+  const [currentPageNumber, setCurrentPageNumber] = useState(1);
+  const [canLoadMore, setCanLoadMore] = useState(true);
+
   const [data, setData] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchFriends = async (userId: string, options?: Options) => {
+  const fetchFriends = async (
+    userId: string,
+    pageNumber: number,
+    pageSize: number,
+    options?: Options
+  ) => {
     try {
       setIsLoading(true);
 
       const response = await axios.get<ResponseType>(
-        `${BASE_API_URL}/friendship/${userId}`
+        `${BASE_API_URL}/friendship/${userId}`,
+        { params: { pageNumber, pageSize: pageSize } }
       );
 
-      setData(response.data.userFriendIds);
+      setData(response.data.friendIds);
+      setCanLoadMore(response.data.hasNextPage);
 
       options?.onSuccess?.(response.data);
 
@@ -47,7 +59,7 @@ export const useGetFriends = (userId: string | null) => {
       return;
     }
 
-    fetchFriends(userId);
+    fetchFriends(userId, 1, 20);
 
     const connection = new signalR.HubConnectionBuilder()
       .withUrl(`${BASE_URL}/friendshipHub`)
@@ -96,17 +108,28 @@ export const useGetFriends = (userId: string | null) => {
         .stop()
         .then(() => {
           ////TODO: Find a way to handle this
-          console.log("SignalR disconnected");
+          // console.log("SignalR disconnected");
         })
         .catch((error) => {
           //TODO: Find a way to handle this
-          console.log("Error stopping SignalR:", error);
+          // console.log("Error stopping SignalR:", error);
         });
     };
   }, [userId]);
 
+  const loadMore = async (options?: Options) => {
+    // prevent duplicate requests
+    if (!canLoadMore || isLoading || !userId) return;
+
+    const nextPage = currentPageNumber + 1;
+    await fetchFriends(userId, nextPage, pageSize);
+    setCurrentPageNumber(nextPage);
+  };
+
   return {
     data,
     isLoading,
+    canLoadMore,
+    loadMore,
   };
 };

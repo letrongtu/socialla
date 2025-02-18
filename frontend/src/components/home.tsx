@@ -7,6 +7,7 @@ import { Header } from "./header/header";
 import { Sidebar } from "./sidebar/sidebar";
 import { FeedSection } from "./feed-section/feed-section";
 import { ContactSection } from "./contact-section/contact-section";
+import { CreateMessageModalTrigger } from "@/features/messages/components/create-mesage-modal-trigger";
 
 export const HomePage = () => {
   return (

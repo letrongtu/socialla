@@ -93,11 +93,11 @@ export const UseGetPosts = (userId: string | null) => {
         .stop()
         .then(() => {
           ////TODO: Find a way to handle this
-          console.log("SignalR disconnected");
+          // console.log("SignalR disconnected");
         })
         .catch((error) => {
           //TODO: Find a way to handle this
-          console.log("Error stopping SignalR:", error);
+          // console.log("Error stopping SignalR:", error);
         });
     };
   }, [userId]);

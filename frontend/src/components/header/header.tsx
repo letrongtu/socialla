@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 
 import { HeaderPageButton } from "./header-page-button";
 import { HeaderUtilButton } from "./header-util-button";
-import { UserButton } from "./user-button";
 import { SearchBar } from "@/features/search/components/search-bar";
 
 import { NotificationDisplayModal } from "@/features/notifications/components/notification-display-modal";
+import { HeaderCurrentUserButton } from "./header-current-user-button";
 
 import { Home, TvMinimalPlay, Bell } from "lucide-react";
 import { MdGroups } from "react-icons/md";
@@ -81,7 +81,7 @@ export const Header = () => {
           </HeaderUtilButton>
         ))}
 
-        <UserButton />
+        <HeaderCurrentUserButton setCurrentUtilButton={setCurrentUtilButton} />
       </div>
     </div>
   );

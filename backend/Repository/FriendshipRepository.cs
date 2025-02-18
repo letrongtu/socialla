@@ -7,6 +7,7 @@ using backend.Dtos.Friendship;
 using backend.Hubs;
 using backend.Interfaces;
 using backend.Models;
+using backend.Utils;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -99,6 +100,41 @@ namespace backend.Repository
         public async Task<List<Friendship>> GetAllByUserIdAsync(string userId)
         {
             return await _dbContext.Friendships.Where((friendship) => friendship.FirstUserId == userId || friendship.SecondUserId == userId).ToListAsync();
+        }
+
+        public async Task<PagedResult<string>> GetPaginatedByUserIdAsync(string userId, int pageNumber, int pageSize)
+        {
+            var userFriendIds = await _dbContext.Friendships
+                            .Where((friendship) => friendship.FirstUserId == userId || friendship.SecondUserId == userId)
+                            .Select((friendship) => friendship.FirstUserId == userId ? friendship.SecondUserId : friendship.FirstUserId)
+                            .ToListAsync();
+
+            var totalRecords = userFriendIds.Count;
+
+
+
+            var friendIdsWithMutualFriendCount = new List<Tuple<string, int>>();
+
+            foreach (var friendId in userFriendIds)
+            {
+                var mutualFriendsCount = await GetMutualFriendCountAsync(userId, friendId);
+
+                friendIdsWithMutualFriendCount.Add(new Tuple<string, int>(friendId, mutualFriendsCount));
+            }
+
+            var paginatedFriendIds = friendIdsWithMutualFriendCount
+                                            .OrderBy(f => f.Item2)
+                                            .Select(f => f.Item1)
+                                            .Skip((pageNumber - 1) * pageSize)
+                                            .Take(pageSize)
+                                            .ToList();
+
+            return new PagedResult<string>{
+                Records = paginatedFriendIds,
+                TotalRecords = totalRecords,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+            };
         }
 
         public async Task<Friendship?> CheckFriendshipAsync(string firstUserId, string secondUserId)

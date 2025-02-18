@@ -36,10 +36,7 @@ export const HeaderUtilButton = ({
   const isOpen = currentButton === label;
 
   return (
-    <DropdownMenu
-      open={isOpen}
-      onOpenChange={(open) => setCurrentButton(open ? label : null)}
-    >
+    <DropdownMenu open={isOpen} modal={false}>
       <Hint label={label}>
         <DropdownMenuTrigger asChild>
           <button

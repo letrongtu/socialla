@@ -110,7 +110,7 @@ namespace backend.Controllers.Friendship
         [HttpGet]
         [Route("{userId}")]
         [Authorize]
-        public async Task<IActionResult> GetAllByUserId([FromRoute] string userId){
+        public async Task<IActionResult> GetPaginatedByUserId([FromRoute] string userId, int pageNumber = 1, int pageSize = 20){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
@@ -120,11 +120,9 @@ namespace backend.Controllers.Friendship
                 return StatusCode(400, "User not found");
             }
 
-            var userFriends = await _friendshipRepo.GetAllByUserIdAsync(userId);
+            var paginatedUserFriendIds = await _friendshipRepo.GetPaginatedByUserIdAsync(userId, pageNumber, pageSize);
 
-            var userFriendIds = userFriends.Select(friend => friend.FirstUserId == userId ? friend.SecondUserId : friend.FirstUserId).ToList();
-
-            return Ok(new {userFriendIds = userFriendIds});
+            return Ok(new {FriendIds = paginatedUserFriendIds.Records, TotalFriends = paginatedUserFriendIds.TotalRecords, HasNextPage = paginatedUserFriendIds.HasNextPage});
         }
 
         [HttpGet]

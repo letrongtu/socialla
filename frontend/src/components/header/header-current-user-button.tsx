@@ -15,7 +15,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 import { ChevronDown, LogOut, Moon } from "lucide-react";
 
-export const UserButton = ({}) => {
+interface HeaderCurrentUserButtonProps {
+  setCurrentUtilButton?: (currentUtilButton: string | null) => void;
+}
+export const HeaderCurrentUserButton = ({
+  setCurrentUtilButton,
+}: HeaderCurrentUserButtonProps) => {
   const router = useRouter();
 
   const { data } = useCurrentUser();
@@ -35,7 +40,14 @@ export const UserButton = ({}) => {
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu
+      modal={false}
+      onOpenChange={() => {
+        if (setCurrentUtilButton) {
+          setCurrentUtilButton(null);
+        }
+      }}
+    >
       <Hint label="Account">
         <DropdownMenuTrigger asChild>
           <div className="relative hover:cursor-pointer">
