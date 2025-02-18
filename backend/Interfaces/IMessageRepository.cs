@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Models;
+using backend.Utils;
 
 namespace backend.Interfaces
 {
@@ -11,5 +12,6 @@ namespace backend.Interfaces
         Task<Message> CreateAsync(Message message);
         Task<Message?> DeleteAsync(string messageId);
         Task<Message?> GetById(string messageId);
+        Task<PagedResult<Message>> GetPaginatedByConversationId(string conversationId, int pageNumber, int pageSize);
     }
 }

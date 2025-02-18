@@ -11,6 +11,8 @@ const MessageEditor = dynamic(
 import { UserType } from "@/features/auth/types";
 import { DisplayMessageModalHeader } from "./display-message-modal-header";
 import { useGetUser } from "@/features/auth/api/use-get-user";
+import { MessageList } from "./message-list";
+import { useMessageModal } from "../store/use-message-modal";
 
 interface DisplayMessageModalProps {
   currentUser: UserType;
@@ -23,18 +25,24 @@ export const DisplayMessageModal = ({
   otherUserId,
   conversationId,
 }: DisplayMessageModalProps) => {
-  const { data: otherUserData, isLoading: isLoadingOtherUserData } =
+  const { data: otherUser, isLoading: isLoadingOtherUserData } =
     useGetUser(otherUserId);
 
-  if (!otherUserData || !currentUser.id) {
+  if (!otherUser || !currentUser.id) {
     return null;
   }
 
   return (
-    <div className="w-full h-full flex flex-col justify-between">
+    <div className="w-full h-full flex flex-col justify-between ">
       <DisplayMessageModalHeader
-        otherUser={otherUserData}
+        otherUser={otherUser}
         currentUser={currentUser}
+      />
+
+      <MessageList
+        currentUser={currentUser}
+        otherUser={otherUser}
+        conversationId={conversationId}
       />
 
       <div className="border-t-[1px] border-[#c9ccd1]/30">

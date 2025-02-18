@@ -147,5 +147,23 @@ namespace backend.Controllers.Message
 
             return Ok(new {Message = "message deleted", MessageId = deletedMessage.Id});
         }
+
+        [HttpGet]
+        [Route("{conversationId}")]
+        public async Task<IActionResult> GetPaginatedByConversationId(string conversationId, int pageNumber = 1, int pageSize = 20){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var existingConversation = await _conversationRepo.GetById(conversationId);
+
+            if(existingConversation == null){
+                return NotFound("Conversation not found");
+            }
+
+            var paginatedMessages = await _messageRepo.GetPaginatedByConversationId(conversationId, pageNumber, pageSize);
+
+            return Ok(new {Messages = paginatedMessages.Records, TotalMessages = paginatedMessages.TotalRecords, HasNextPage = paginatedMessages.HasNextPage});
+        }
     }
 }

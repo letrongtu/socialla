@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { MdEmojiEmotions } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 import { UseCreateDmMessage } from "../api/use-create-dm-message";
+import { useMessageModal } from "../store/use-message-modal";
 
 interface MessageEditorProps {
   senderId: string;
@@ -24,6 +25,8 @@ const MessageEditor = ({
   parentMessageId,
 }: MessageEditorProps) => {
   const editorRef = useRef<Editor | null>(null);
+
+  const [{ open }] = useMessageModal();
 
   const { mutate: createDmMessage, isPending: isPendingCreateDmMessage } =
     UseCreateDmMessage();
@@ -122,6 +125,16 @@ const MessageEditor = ({
 
     return getDefaultKeyBinding(e);
   };
+
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => {
+        if (editorRef.current) {
+          editorRef.current.focus();
+        }
+      }, 0);
+    }
+  }, [open]);
 
   return (
     <div

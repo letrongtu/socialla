@@ -40,7 +40,8 @@ export const UserButton = ({
       <AvatarFallback
         className={cn(
           "rounded-full bg-custom-gradient text-white font-semibold",
-          size > 9 ? "text-xl" : "text-lg"
+          size > 9 ? "text-xl" : "text-lg",
+          size > 13 && "text-2xl"
         )}
       >
         {avatarFallback}

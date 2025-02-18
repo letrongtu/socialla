@@ -142,5 +142,6 @@ app.MapHub<FriendshipHub>("/friendshipHub");
 app.MapHub<NotificationHub>("/notificationHub");
 app.MapHub<UserStatusHub>("/userStatusHub");
 app.MapHub<ConversationHub>("/conversationHub");
+app.MapHub<MessageHub>("messageHub");
 
 app.Run();
