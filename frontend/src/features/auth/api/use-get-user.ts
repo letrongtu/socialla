@@ -54,7 +54,7 @@ export const useGetUser = (userId: string | null) => {
     connection.on("ReceiveUserOnline", (id: string) => {
       if (userId === id) {
         setData((prev) =>
-          prev ? { ...prev, isActive: true, lastActiveAt: null } : prev
+          prev ? { ...prev, isActive: true, lastActiveAt: undefined } : prev
         );
       }
     });

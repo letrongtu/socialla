@@ -1,6 +1,6 @@
 import { UserButton } from "@/components/user-button";
 import { SearchUserType } from "@/features/search/types";
-import { useMessageModal } from "../store/use-message-modal";
+import { useMessageModal } from "../../store/use-message-modal";
 
 interface SearchUserListProps {
   searchedUsers: SearchUserType[];

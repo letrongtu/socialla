@@ -1,6 +1,7 @@
-import { HiOutlinePencilAlt } from "react-icons/hi";
-import { useMessageModal } from "../store/use-message-modal";
+import { useMessageModal } from "../../store/use-message-modal";
 import { Hint } from "@/components/ui/hint";
+
+import { HiOutlinePencilAlt } from "react-icons/hi";
 
 export const CreateMessageModalTrigger = () => {
   const [, setOpen] = useMessageModal();

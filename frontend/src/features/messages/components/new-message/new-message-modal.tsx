@@ -5,15 +5,15 @@ import { UserType } from "@/features/auth/types";
 import { Separator } from "@/components/ui/separator";
 import { SearchUserList } from "./search-user-list";
 import { ContactContainer } from "@/components/contact-section/contact-container";
-import { useMessageModal } from "../store/use-message-modal";
+import { useMessageModal } from "../../store/use-message-modal";
 import { Loader2 } from "lucide-react";
 import { useSearch } from "@/features/search/api/use-search";
 
-interface NewMessageModal {
+interface NewMessageModalProps {
   currentUser: UserType;
 }
 
-export const NewMessageModal = ({ currentUser }: NewMessageModal) => {
+export const NewMessageModal = ({ currentUser }: NewMessageModalProps) => {
   const [{ open }, setOpen] = useMessageModal();
 
   const [query, setQuery] = useState("");

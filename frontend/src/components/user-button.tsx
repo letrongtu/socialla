@@ -8,9 +8,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 interface UserButtonProps {
   user: UserType | SearchUserType;
   activeOnClick?: boolean;
+  size?: number;
 }
 
-export const UserButton = ({ user, activeOnClick = true }: UserButtonProps) => {
+export const UserButton = ({
+  user,
+  activeOnClick = true,
+  size = 11,
+}: UserButtonProps) => {
   const router = useRouter();
 
   const avatarFallback = user.firstName?.charAt(0).toUpperCase();
@@ -23,15 +28,21 @@ export const UserButton = ({ user, activeOnClick = true }: UserButtonProps) => {
         }
       }}
       className={cn(
-        "rounded size-11 transition cursor-pointer",
-        activeOnClick && "hover:opacity-75"
+        "rounded transition cursor-pointer",
+        activeOnClick && "hover:opacity-75",
+        `size-${size}`
       )}
     >
       {user.profilePictureUrl && (
         <AvatarImage alt={user.firstName} src={user.profilePictureUrl} />
       )}
 
-      <AvatarFallback className="rounded-full bg-custom-gradient text-white font-semibold text-xl">
+      <AvatarFallback
+        className={cn(
+          "rounded-full bg-custom-gradient text-white font-semibold",
+          size > 9 ? "text-xl" : "text-lg"
+        )}
+      >
         {avatarFallback}
       </AvatarFallback>
     </Avatar>

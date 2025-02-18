@@ -11,10 +11,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { CreateMessageModalTrigger } from "./create-mesage-modal-trigger";
-import { NewMessageModal } from "./new-message-modal";
+import { CreateMessageModalTrigger } from "./new-message/create-mesage-modal-trigger";
+import { NewMessageModal } from "./new-message/new-message-modal";
 
 import { MdClose } from "react-icons/md";
+import { DisplayMessageModal } from "./display-message-modal";
 
 export const MessageModal = () => {
   const { data: currentUser, isLoading: isLoadingCurrentUser } =
@@ -34,7 +35,10 @@ export const MessageModal = () => {
         isMessageModalDialog={true}
         showOverlayBackground={false}
         showCloseButton={false}
-        className="lg:max-w-80 lg:h-[27rem] px-0 py-3 flex flex-col gap-2"
+        className={cn(
+          "lg:max-w-80 lg:h-[27rem] px-0 py-0 flex flex-col gap-2",
+          !userId && "py-3"
+        )}
       >
         <DialogHeader className={cn("relative", userId && "hidden")}>
           <DialogTitle className="px-3 text-base font-semibold">
@@ -55,7 +59,7 @@ export const MessageModal = () => {
         </DialogHeader>
 
         {userId ? (
-          <div>Mesage with user</div>
+          <DisplayMessageModal currentUser={currentUser} otherUserId={userId} />
         ) : (
           <NewMessageModal currentUser={currentUser} />
         )}
