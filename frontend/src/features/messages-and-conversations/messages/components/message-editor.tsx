@@ -31,6 +31,7 @@ const MessageEditor = ({
   const { mutate: createDmMessage, isPending: isPendingCreateDmMessage } =
     UseCreateDmMessage();
 
+  const [_isEmojiOnly, setIsEmojiOnly] = useState(false);
   const [messageContent, setMessageContent] = useState<string[]>([]);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -46,6 +47,11 @@ const MessageEditor = ({
     const contentState = editorState.getCurrentContent();
     const plainText = contentState.getPlainText();
     const lines = plainText.split("\n");
+
+    setTimeout(() => {
+      const isEmojiOnly = /^[\p{Emoji}\s]+$/u.test(plainText.trim());
+      setIsEmojiOnly(isEmojiOnly);
+    }, 0);
 
     setMessageContent(lines);
   };
@@ -79,6 +85,7 @@ const MessageEditor = ({
     createDmMessage(
       {
         content: messageContent,
+        isEmojiOnly: _isEmojiOnly,
         senderId: senderId,
         userIds: userIds,
         conversationId: conversationId,
@@ -111,6 +118,7 @@ const MessageEditor = ({
     if (command === "cancel" && isPendingCreateDmMessage) {
       return "handled";
     }
+
     return "not-handled";
   };
 

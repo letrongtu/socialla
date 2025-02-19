@@ -14,7 +14,8 @@ export const UserContactCard = ({
   userId,
   currentUser,
 }: UserContactCardProps) => {
-  const [, setOpen] = useMessageModal();
+  const [{ open, userId: uId, conversationId: convoId }, setOpen] =
+    useMessageModal();
 
   const { data: user, isLoading: isLoadingUser } = useGetUser(userId);
   const { data: conversationId, isLoading: isLoadingConversationId } =
@@ -31,23 +32,15 @@ export const UserContactCard = ({
   return (
     <div
       onClick={() => {
-        setOpen((prev) => {
-          if (prev.open && prev.userId && prev.userId === user.id) {
-            return { open: false, userId: null, conversationId: null };
-          } else if (prev.open && prev.userId && prev.userId !== user.id) {
-            return {
-              open: true,
-              userId: user.id ? user.id : null,
-              conversationId: conversationId,
-            };
-          } else {
-            return {
-              open: true,
-              userId: user.id ? user.id : null,
-              conversationId: conversationId,
-            };
-          }
-        });
+        if (open && uId && uId === userId) {
+          setOpen({ open: false, userId: null, conversationId: null });
+        } else {
+          setOpen({
+            open: true,
+            userId: userId,
+            conversationId: conversationId,
+          });
+        }
       }}
       className=" w-full p-2 flex items-center justify-start gap-x-2 hover:bg-[#c9ccd1]/30 rounded-md cursor-pointer"
     >

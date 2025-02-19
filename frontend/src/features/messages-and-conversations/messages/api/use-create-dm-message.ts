@@ -5,6 +5,7 @@ const baseURL = "http://localhost:5096/api";
 
 type RequestType = {
   content: string[];
+  isEmojiOnly: boolean;
   senderId: string;
   userIds: string[];
   conversationId: string | null;

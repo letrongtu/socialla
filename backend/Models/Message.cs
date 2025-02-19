@@ -13,6 +13,7 @@ namespace backend.Models
         public string? ParentMessageId { get; set; }
         public string[] Content { get; set; } = [];
         public string[]? FileUrls { get; set; } = [];
+        public Boolean IsEmojiOnly { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

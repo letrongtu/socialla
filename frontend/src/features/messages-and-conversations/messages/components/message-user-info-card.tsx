@@ -12,7 +12,7 @@ export const MessageUserInfoCard = ({ user }: MessageUserInfoCardProps) => {
   const createdDisplayString = getLastActiveTimeString(lastActiveAt);
 
   return (
-    <div className="py-10 flex flex-col items-center justify-center gap-y-2">
+    <div className="py-7 flex flex-col items-center justify-center gap-y-2">
       <div className="relative flex items-center justify-center">
         <UserButton user={user} activeOnClick={false} size={14} />
 

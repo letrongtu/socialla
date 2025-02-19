@@ -13,5 +13,6 @@ namespace backend.Dtos.Message
         public string? ParentMessageId { get; set; }
         public string[] Content { get; set; } = [];
         public string[]? FileUrls { get; set; }
+        public Boolean IsEmojiOnly { get; set; }
     }
 }

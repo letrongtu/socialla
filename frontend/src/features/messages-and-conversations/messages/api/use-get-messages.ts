@@ -25,6 +25,9 @@ export const useGetMessages = (conversationId: string | null) => {
 
   const [data, setData] = useState<MessageType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(true);
+
+  console.log(conversationId, data);
 
   const fetchMessages = async (
     conversationId: string,
@@ -35,6 +38,7 @@ export const useGetMessages = (conversationId: string | null) => {
       setIsLoading(true);
 
       if (pageNumber > 1) {
+        setIsLoadingMore(true);
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
 
@@ -56,6 +60,10 @@ export const useGetMessages = (conversationId: string | null) => {
     } finally {
       options?.onSettled?.();
       setIsLoading(false);
+
+      if (pageNumber > 1) {
+        setIsLoadingMore(false);
+      }
     }
   };
 
@@ -64,6 +72,9 @@ export const useGetMessages = (conversationId: string | null) => {
     if (!conversationId) {
       return;
     }
+
+    // prevent -> When one conversation is open, click on another user will keep the old data, then add the new data on top of the old data
+    setData([]);
 
     fetchMessages(conversationId, 1);
 
@@ -113,6 +124,7 @@ export const useGetMessages = (conversationId: string | null) => {
     // prevent duplicate requests
     if (!canLoadMore || isLoading || !conversationId) return;
 
+    setIsLoadingMore(true);
     const nextPage = currentPageNumber + 1;
     await fetchMessages(conversationId, nextPage);
     setCurrentPageNumber(nextPage);
@@ -121,6 +133,7 @@ export const useGetMessages = (conversationId: string | null) => {
   return {
     data,
     isLoading,
+    isLoadingMore,
     canLoadMore,
     loadMore,
   };

@@ -110,6 +110,7 @@ namespace backend.Controllers.Message
                 ParentMessageId = queryMessageDto.ParentMessageId,
                 Content = queryMessageDto.Content,
                 FileUrls = queryMessageDto.FileUrls,
+                IsEmojiOnly = queryMessageDto.IsEmojiOnly,
             };
 
             // MESSAGE

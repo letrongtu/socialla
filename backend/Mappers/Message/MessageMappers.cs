@@ -15,6 +15,7 @@ namespace backend.Mappers.Message
                 ParentMessageId = messageDto.ParentMessageId,
                 Content = messageDto.Content,
                 FileUrls = messageDto.FileUrls,
+                IsEmojiOnly = messageDto.IsEmojiOnly,
                 CreatedAt = DateTime.Now
             };
         }

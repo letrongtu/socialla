@@ -6,6 +6,7 @@ import { useGetMessages } from "../api/use-get-messages";
 import { MessageUserInfoCard } from "./message-user-info-card";
 import { Message } from "./message/message";
 import { Loader2 } from "lucide-react";
+import { differenceInMinutes } from "date-fns";
 
 interface MessageListProps {
   currentUser: UserType;
@@ -20,6 +21,7 @@ export const MessageList = ({
   const {
     data: messages,
     isLoading: isLoadingMessages,
+    isLoadingMore: isLoadingMoreMessages,
     loadMore: loadMoreMessages,
     canLoadMore: canLoadMoreMessages,
   } = useGetMessages(conversationId);
@@ -27,11 +29,17 @@ export const MessageList = ({
   const messagesStartRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+  const [hasScrolledInitially, setHasScrolledInitially] = useState(false);
+
   useEffect(() => {
-    if (messages.length <= 10) {
+    if (
+      !hasScrolledInitially ||
+      (hasScrolledInitially && isLoadingMoreMessages)
+    ) {
       messagesEndRef.current?.scrollIntoView();
+      setHasScrolledInitially(true);
     }
-  }, [messages]);
+  }, [messages, hasScrolledInitially, isLoadingMoreMessages]);
 
   return (
     <div className="flex-1 max-h-full justify-end overflow-y-auto custom-scrollbar">
@@ -64,14 +72,26 @@ export const MessageList = ({
         </div>
       )}
 
-      <div className="relative flex flex-col flex-grow px-2">
-        {messages.map((message, index) => (
-          <Message
-            key={index}
-            message={message}
-            isCurrentUserMessage={currentUser.id === message.senderId}
-          />
-        ))}
+      <div className="relative flex flex-col flex-grow space-y-0.5 px-2 pb-2">
+        {messages.map((message, index) => {
+          const prevMessage = messages[index - 1];
+
+          const isCompact =
+            prevMessage &&
+            (prevMessage.senderId === currentUser.id ||
+              prevMessage.senderId === otherUser.id) &&
+            differenceInMinutes(message.createdAt, prevMessage.createdAt) < 3; // 3mins
+
+          return (
+            <Message
+              key={index}
+              message={message}
+              isCompact={isCompact}
+              isFirstIndex={index === 0}
+              isCurrentUserMessage={currentUser.id === message.senderId}
+            />
+          );
+        })}
 
         <div ref={messagesEndRef} />
       </div>

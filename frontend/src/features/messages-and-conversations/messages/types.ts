@@ -5,5 +5,6 @@ export type MessageType = {
   parentMessageId: string | null;
   content: string[] | null;
   fileUrls: string[] | null;
+  isEmojiOnly: boolean;
   createdAt: Date;
 };
