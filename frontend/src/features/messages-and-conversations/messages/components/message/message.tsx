@@ -1,10 +1,19 @@
-import { MessageType } from "../../types";
 import { cn } from "@/lib/utils";
-import { PopoverBar } from "./popover-bar";
+import { useState } from "react";
+
+import { MessageType } from "../../types";
 import { getMessageCreatedAtString } from "../../helper";
+import { useGetMessage } from "../../api/use-get-message";
+import { useGetUser } from "@/features/auth/api/use-get-user";
+
+import { MessageActionToolbar } from "./message-action-toolbar";
+
+import { FaReply } from "react-icons/fa";
+import { UserType } from "@/features/auth/types";
 
 interface MessageProps {
   message: MessageType;
+  currentUser: UserType;
   isCompact: boolean;
   isFirstIndex: boolean;
   isCurrentUserMessage: boolean;
@@ -12,18 +21,36 @@ interface MessageProps {
 
 export const Message = ({
   message,
+  currentUser,
   isCompact,
   isFirstIndex,
   isCurrentUserMessage,
 }: MessageProps) => {
+  const { data: parentMessage, isLoading: isLoadingParentMessage } =
+    useGetMessage(message.parentMessageId);
+  const { data: parentMessageSender, isLoading: isLoadingParentMessageSender } =
+    useGetUser(parentMessage?.senderId ? parentMessage.senderId : null);
+
+  const [isMessageHovered, setIsMessageHovered] = useState(false);
+
   const messageCreatedAtString = getMessageCreatedAtString(message.createdAt);
 
+  const parentMessageContent = parentMessage?.content?.join(" ");
+
+  const truncateContent =
+    parentMessageContent && parentMessageContent.length > 70
+      ? parentMessageContent.slice(0, 80) + "..."
+      : parentMessageContent;
+
   return (
-    <>
+    <div
+      onMouseEnter={() => setIsMessageHovered(true)}
+      onMouseLeave={() => setIsMessageHovered(false)}
+    >
       {!isCompact && (
         <div
           className={cn(
-            " flex items-center justify-center",
+            "flex items-center justify-center",
             isFirstIndex ? "pb-4" : "py-4"
           )}
         >
@@ -32,18 +59,61 @@ export const Message = ({
           </p>
         </div>
       )}
+
+      {message.parentMessageId && (
+        <div
+          className={cn(
+            "-mb-3.5 flex flex-col items-start  space-y-0.5",
+            isCurrentUserMessage && "items-end",
+            isCompact && "pt-3"
+          )}
+        >
+          <div className="px-2 flex items-center space-x-1 text-xs text-muted-foreground">
+            <FaReply className="size-3" />
+
+            <p className="">
+              You replied to{" "}
+              <span className="font-bold">
+                {currentUser.id === parentMessage?.senderId && "yourself"}
+
+                {currentUser.id !== parentMessage?.senderId &&
+                  parentMessageSender &&
+                  `${parentMessageSender.firstName} ${parentMessageSender.lastName}`}
+
+                {!parentMessage && "a removed message"}
+              </span>
+            </p>
+          </div>
+
+          <div
+            className={
+              "max-w-80 w-fit break-words rounded-xl px-3 pt-1.5 pb-5 bg-[#c9ccd1]/50"
+            }
+          >
+            <p className="text-xs text-muted-foreground">
+              {parentMessage ? truncateContent : "Message removed"}
+            </p>
+          </div>
+        </div>
+      )}
+
       <div
         className={cn(
           "flex items-center justify-start group/message",
           isCurrentUserMessage && "justify-end"
         )}
       >
-        {isCurrentUserMessage && <PopoverBar message={message} />}
+        {isCurrentUserMessage && isMessageHovered && (
+          <MessageActionToolbar
+            message={message}
+            setIsMessageHovered={setIsMessageHovered}
+          />
+        )}
 
         {!message.isEmojiOnly && (
           <div
             className={cn(
-              "w-fit px-3 py-2 text-sm",
+              "max-w-[68%] w-fit px-3 py-2 text-sm break-words",
               isCurrentUserMessage
                 ? "bg-[#1823ab]/90 text-white rounded-l-3xl rounded-r-md"
                 : "bg-[#c9ccd1]/50 rounded-r-3xl rounded-l-md"
@@ -63,8 +133,13 @@ export const Message = ({
           </div>
         )}
 
-        {!isCurrentUserMessage && <PopoverBar message={message} />}
+        {!isCurrentUserMessage && isMessageHovered && (
+          <MessageActionToolbar
+            message={message}
+            setIsMessageHovered={setIsMessageHovered}
+          />
+        )}
       </div>
-    </>
+    </div>
   );
 };

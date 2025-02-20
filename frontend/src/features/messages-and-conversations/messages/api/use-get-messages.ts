@@ -27,8 +27,6 @@ export const useGetMessages = (conversationId: string | null) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(true);
 
-  console.log(conversationId, data);
-
   const fetchMessages = async (
     conversationId: string,
     pageNumber: number,

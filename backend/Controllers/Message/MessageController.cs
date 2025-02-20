@@ -150,6 +150,22 @@ namespace backend.Controllers.Message
         }
 
         [HttpGet]
+        [Route("get-by-id/{messageId}")]
+        public async Task<IActionResult> GetById(string messageId){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var existingMessage = await _messageRepo.GetById(messageId);
+
+            if(existingMessage == null){
+                return Ok(new {Message = existingMessage});
+            }
+
+            return Ok(new {Message = existingMessage});
+        }
+
+        [HttpGet]
         [Route("{conversationId}")]
         public async Task<IActionResult> GetPaginatedByConversationId(string conversationId, int pageNumber = 1, int pageSize = 20){
             if(!ModelState.IsValid){

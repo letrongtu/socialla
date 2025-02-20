@@ -86,6 +86,7 @@ export const MessageList = ({
             <Message
               key={index}
               message={message}
+              currentUser={currentUser}
               isCompact={isCompact}
               isFirstIndex={index === 0}
               isCurrentUserMessage={currentUser.id === message.senderId}

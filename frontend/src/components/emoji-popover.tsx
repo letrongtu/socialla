@@ -19,15 +19,28 @@ interface EmojiPopoverProps {
   children: React.ReactNode;
   hint?: string;
   onEmojiSelect: (emoji: any) => void;
+  onOpen?: () => void;
+  onClose?: () => void;
 }
 
 export const EmojiPopover = ({
   children,
   hint = "Emoji",
   onEmojiSelect,
+  onOpen,
+  onClose,
 }: EmojiPopoverProps) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  const handleOpenChange = (open: boolean) => {
+    setPopoverOpen(open);
+    if (open) {
+      onOpen?.();
+    } else {
+      onClose?.();
+    }
+  };
 
   const onSelect = (emoji: any) => {
     onEmojiSelect(emoji);
@@ -40,7 +53,7 @@ export const EmojiPopover = ({
 
   return (
     <TooltipProvider>
-      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+      <Popover open={popoverOpen} onOpenChange={handleOpenChange}>
         <Tooltip
           open={tooltipOpen}
           onOpenChange={setTooltipOpen}

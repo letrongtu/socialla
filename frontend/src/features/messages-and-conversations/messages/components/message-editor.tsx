@@ -10,6 +10,7 @@ import { MdEmojiEmotions } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 import { UseCreateDmMessage } from "../api/use-create-dm-message";
 import { useMessageModal } from "../store/use-message-modal";
+import { useReplyMessage } from "../store/use-reply-message";
 
 interface MessageEditorProps {
   senderId: string;
@@ -26,7 +27,8 @@ const MessageEditor = ({
 }: MessageEditorProps) => {
   const editorRef = useRef<Editor | null>(null);
 
-  const [{ open }] = useMessageModal();
+  const [{ open: messageModalOpen }] = useMessageModal();
+  const [{ open: replyingMessage }, setOpen] = useReplyMessage();
 
   const { mutate: createDmMessage, isPending: isPendingCreateDmMessage } =
     UseCreateDmMessage();
@@ -96,14 +98,18 @@ const MessageEditor = ({
           handleCreateSuccess();
         },
         onError: (error) => {
-          console.log(error);
+          // console.log(error);
         },
       }
     );
   };
+
   const handleCreateSuccess = () => {
     setMessageContent([]);
     setEditorState(() => EditorState.createEmpty());
+
+    //set Replying message
+    setOpen({ open: false, message: null });
   };
 
   const handleKeyCommand = (command: string): "handled" | "not-handled" => {
@@ -135,14 +141,14 @@ const MessageEditor = ({
   };
 
   useEffect(() => {
-    if (open) {
+    if (messageModalOpen || replyingMessage) {
       setTimeout(() => {
         if (editorRef.current) {
           editorRef.current.focus();
         }
       }, 0);
     }
-  }, [open]);
+  }, [messageModalOpen, replyingMessage]);
 
   return (
     <div
