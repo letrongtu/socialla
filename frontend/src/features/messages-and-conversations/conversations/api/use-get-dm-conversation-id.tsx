@@ -17,23 +17,23 @@ type Options = {
 };
 
 export const useGetDmConversationId = (
-  firstUserId: string | null,
-  secondUserId: string | null
+  otherUserId: string | null,
+  currentUserId: string | null
 ) => {
   const [, setOpen] = useMessageModal();
   const [data, setData] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchConversationId = async (
-    firstUserId: string,
-    secondUserId: string,
+    otherUserId: string,
+    currentUserId: string,
     options?: Options
   ) => {
     try {
       setIsLoading(true);
 
       const response = await axios.get<ResponseType>(
-        `${BASE_URL_API}/conversations/${firstUserId}/${secondUserId}`
+        `${BASE_URL_API}/conversations/${currentUserId}/${otherUserId}`
       );
 
       setData(response.data.conversationId);
@@ -50,11 +50,11 @@ export const useGetDmConversationId = (
   };
 
   useEffect(() => {
-    if (!firstUserId || !secondUserId) {
+    if (!currentUserId || !otherUserId) {
       return;
     }
 
-    fetchConversationId(firstUserId, secondUserId);
+    fetchConversationId(otherUserId, currentUserId);
 
     const connection = new signalR.HubConnectionBuilder()
       .withUrl(`${BASE_URL}/conversationHub`)
@@ -75,10 +75,14 @@ export const useGetDmConversationId = (
     connection.on(
       "ReceiveConversationCreate",
       (conversationId: string, userIds: string[]) => {
-        if (userIds.includes(firstUserId) && userIds.includes(secondUserId)) {
+        if (
+          userIds.includes(currentUserId) &&
+          userIds.includes(otherUserId) &&
+          !open
+        ) {
           setOpen({
             open: true,
-            userId: userIds[0], //This is dm -> the only user
+            userId: currentUserId == userIds[0] ? userIds[1] : userIds[0], //This is dm -> the only user
             conversationId: conversationId,
           });
         }
@@ -97,7 +101,7 @@ export const useGetDmConversationId = (
           // console.log("Error stopping SignalR:", error);
         });
     };
-  }, [firstUserId, secondUserId, setOpen]);
+  }, [currentUserId, otherUserId, setOpen]);
 
   return {
     data,

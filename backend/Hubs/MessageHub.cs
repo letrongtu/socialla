@@ -15,5 +15,9 @@ namespace backend.Hubs
         public async Task SendDeleteMessage(Message message){
             await Clients.All.SendAsync("ReceiveMessageDelete", message);
         }
+
+        public async Task SendDeleteMessageVisibility(string messageId, string userId, string conversationId){
+            await Clients.All.SendAsync("ReceiveMessageVisibilityDelete", messageId, userId, conversationId);
+        }
     }
 }

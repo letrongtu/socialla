@@ -12,6 +12,6 @@ namespace backend.Interfaces
         Task<Message> CreateAsync(Message message);
         Task<Message?> DeleteAsync(string messageId);
         Task<Message?> GetById(string messageId);
-        Task<PagedResult<Message>> GetPaginatedByConversationId(string conversationId, int pageNumber, int pageSize);
+        Task<PagedResult<Message>> GetPaginatedByConversationIdAndUserId(string conversationId, string userId, int pageNumber, int pageSize);
     }
 }

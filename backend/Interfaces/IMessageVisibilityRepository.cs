@@ -12,5 +12,6 @@ namespace backend.Interfaces
 
         Task<MessageVisibility> CreateAsync(MessageVisibility messageVisibility);
         Task<MessageVisibility?> DeleteAsync(DeleteMessageVisibilityDto messageVisibilityDto);
+        Task<MessageVisibility?> GetByMessageIdAndUserID(string messageId, string userId);
     }
 }

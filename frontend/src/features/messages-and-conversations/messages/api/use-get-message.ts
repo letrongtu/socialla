@@ -10,16 +10,19 @@ type ResponseType = {
   message: MessageType | null;
 };
 
-export const useGetMessage = (messageId: string | null) => {
+export const useGetMessage = (
+  messageId: string | null,
+  userId: string | null
+) => {
   const [data, setData] = useState<MessageType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchReaction = async (messageId: string) => {
+  const fetchReaction = async (messageId: string, userId: string) => {
     try {
       setIsLoading(true);
 
       const response = await axios.get<ResponseType>(
-        `${BASE_API_URL}/messages/get-by-id/${messageId}`
+        `${BASE_API_URL}/messages/get-by-id/${messageId}/${userId}`
       );
 
       setData(response.data.message);
@@ -33,11 +36,11 @@ export const useGetMessage = (messageId: string | null) => {
   };
 
   useEffect(() => {
-    if (!messageId) {
+    if (!messageId || !userId) {
       return;
     }
-    fetchReaction(messageId);
-  }, [messageId]);
+    fetchReaction(messageId, userId);
+  }, [messageId, userId]);
 
   return {
     data,

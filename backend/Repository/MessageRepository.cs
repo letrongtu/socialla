@@ -15,10 +15,12 @@ namespace backend.Repository
     public class MessageRepository : IMessageRepository
     {
         private readonly ApplicationDBContext _dbContext;
+        private readonly IMessageVisibilityRepository _messageVisibilityRepo;
         private readonly IHubContext<MessageHub> _hubContext;
-        public MessageRepository(ApplicationDBContext dbContext, IHubContext<MessageHub> hubContext)
+        public MessageRepository(ApplicationDBContext dbContext,IMessageVisibilityRepository messageVisibilityRepo, IHubContext<MessageHub> hubContext)
         {
             _dbContext = dbContext;
+            _messageVisibilityRepo = messageVisibilityRepo;
             _hubContext = hubContext;
         }
 
@@ -41,6 +43,11 @@ namespace backend.Repository
             }
 
             _dbContext.Messages.Remove(existingMessage);
+
+            var allMessageVisibilities = await _dbContext.MessageVisibilities.Where((mv) => mv.MessageId == existingMessage.Id).ToListAsync();
+
+            _dbContext.MessageVisibilities.RemoveRange(allMessageVisibilities);
+
             await _dbContext.SaveChangesAsync();
 
             await _hubContext.Clients.All.SendAsync("ReceiveMessageDelete", existingMessage);
@@ -52,9 +59,12 @@ namespace backend.Repository
             return await _dbContext.Messages.FindAsync(messageId);
         }
 
-        public async Task<PagedResult<Message>> GetPaginatedByConversationId(string conversationId, int pageNumber, int pageSize)
+        public async Task<PagedResult<Message>> GetPaginatedByConversationIdAndUserId(string conversationId, string userId, int pageNumber, int pageSize)
         {
-            var query = _dbContext.Messages.Where((m) => m.ConversationId == conversationId);
+            var query = _dbContext.Messages.Where((m) => m.ConversationId == conversationId
+                                                    && _dbContext.MessageVisibilities.Any(mv => mv.MessageId == m.Id
+                                                                                        && mv.ConversationId == conversationId
+                                                                                        && mv.UserId == userId ));
 
             var totalRecords = await query.CountAsync();
 

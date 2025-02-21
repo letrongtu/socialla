@@ -6,6 +6,7 @@ import { getMessageCreatedAtString } from "../../helper";
 import { useGetMessage } from "../../api/use-get-message";
 import { useGetUser } from "@/features/auth/api/use-get-user";
 
+import { Hint } from "@/components/ui/hint";
 import { MessageActionToolbar } from "./message-action-toolbar";
 
 import { FaReply } from "react-icons/fa";
@@ -27,9 +28,15 @@ export const Message = ({
   isCurrentUserMessage,
 }: MessageProps) => {
   const { data: parentMessage, isLoading: isLoadingParentMessage } =
-    useGetMessage(message.parentMessageId);
+    useGetMessage(
+      message.parentMessageId,
+      currentUser.id ? currentUser.id : null
+    );
   const { data: parentMessageSender, isLoading: isLoadingParentMessageSender } =
     useGetUser(parentMessage?.senderId ? parentMessage.senderId : null);
+  const { data: messageSender, isLoading: isLoadingMessageSender } = useGetUser(
+    message.senderId
+  );
 
   const [isMessageHovered, setIsMessageHovered] = useState(false);
 
@@ -72,9 +79,28 @@ export const Message = ({
             <FaReply className="size-3" />
 
             <p className="">
-              You replied to{" "}
               <span className="font-bold">
-                {currentUser.id === parentMessage?.senderId && "yourself"}
+                {currentUser.id === message.senderId && "You"}
+
+                {currentUser.id !== message.senderId &&
+                  currentUser.id === parentMessage?.senderId &&
+                  messageSender &&
+                  `${messageSender.firstName} ${messageSender.lastName}`}
+
+                {currentUser.id !== message.senderId &&
+                  currentUser.id !== parentMessage?.senderId &&
+                  parentMessageSender &&
+                  `${parentMessageSender.firstName} ${parentMessageSender.lastName}`}
+              </span>{" "}
+              replied to{" "}
+              <span className="font-bold">
+                {currentUser.id === parentMessage?.senderId &&
+                  currentUser.id === message.senderId &&
+                  "yourself"}
+
+                {currentUser.id === parentMessage?.senderId &&
+                  currentUser.id !== message.senderId &&
+                  "you"}
 
                 {currentUser.id !== parentMessage?.senderId &&
                   parentMessageSender &&
@@ -87,7 +113,7 @@ export const Message = ({
 
           <div
             className={
-              "max-w-80 w-fit break-words rounded-xl px-3 pt-1.5 pb-5 bg-[#c9ccd1]/50"
+              "max-w-80 w-fit break-words rounded-xl px-3 pt-1.5 pb-5 bg-[#c9ccd1]/30"
             }
           >
             <p className="text-xs text-muted-foreground">
@@ -96,50 +122,57 @@ export const Message = ({
           </div>
         </div>
       )}
-
-      <div
-        className={cn(
-          "flex items-center justify-start group/message",
-          isCurrentUserMessage && "justify-end"
-        )}
+      <Hint
+        label={messageCreatedAtString}
+        side="top"
+        align={isCurrentUserMessage ? "end" : "start"}
       >
-        {isCurrentUserMessage && isMessageHovered && (
-          <MessageActionToolbar
-            message={message}
-            setIsMessageHovered={setIsMessageHovered}
-          />
-        )}
+        <div
+          className={cn(
+            "flex items-center justify-start group/message",
+            isCurrentUserMessage && "justify-end"
+          )}
+        >
+          {isCurrentUserMessage && isMessageHovered && (
+            <MessageActionToolbar
+              message={message}
+              currentUser={currentUser}
+              setIsMessageHovered={setIsMessageHovered}
+            />
+          )}
 
-        {!message.isEmojiOnly && (
-          <div
-            className={cn(
-              "max-w-[68%] w-fit px-3 py-2 text-sm break-words",
-              isCurrentUserMessage
-                ? "bg-[#1823ab]/90 text-white rounded-l-3xl rounded-r-md"
-                : "bg-[#c9ccd1]/50 rounded-r-3xl rounded-l-md"
-            )}
-          >
-            {message.content?.map((line, idx) => (
-              <p key={idx}>{line}</p>
-            ))}
-          </div>
-        )}
+          {!message.isEmojiOnly && (
+            <div
+              className={cn(
+                "max-w-[68%] w-fit px-3 py-2 text-sm break-words",
+                isCurrentUserMessage
+                  ? "bg-[#1823ab]/90 text-white rounded-l-3xl rounded-r-md"
+                  : "bg-[#c9ccd1] rounded-r-3xl rounded-l-md"
+              )}
+            >
+              {message.content?.map((line, idx) => (
+                <p key={idx}>{line}</p>
+              ))}
+            </div>
+          )}
 
-        {message.isEmojiOnly && (
-          <div className={cn("w-fit text-2xl")}>
-            {message.content?.map((line, idx) => (
-              <p key={idx}>{line}</p>
-            ))}
-          </div>
-        )}
+          {message.isEmojiOnly && (
+            <div className={cn("w-fit text-2xl")}>
+              {message.content?.map((line, idx) => (
+                <p key={idx}>{line}</p>
+              ))}
+            </div>
+          )}
 
-        {!isCurrentUserMessage && isMessageHovered && (
-          <MessageActionToolbar
-            message={message}
-            setIsMessageHovered={setIsMessageHovered}
-          />
-        )}
-      </div>
+          {!isCurrentUserMessage && isMessageHovered && (
+            <MessageActionToolbar
+              message={message}
+              currentUser={currentUser}
+              setIsMessageHovered={setIsMessageHovered}
+            />
+          )}
+        </div>
+      </Hint>
     </div>
   );
 };

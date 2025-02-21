@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Dtos.Message;
+using backend.Dtos.MessageVisibility;
 using backend.Hubs;
 using backend.Interfaces;
 using backend.Mappers.Message;
@@ -24,13 +25,15 @@ namespace backend.Controllers.Message
         private readonly IMessageRepository _messageRepo;
         private readonly IMessageVisibilityRepository _messageVisibilityRepo;
         private readonly IHubContext<ConversationHub> _conversationHubContext;
+        private readonly IHubContext<MessageHub> _messageHubContext;
         public MessageController(
             UserManager<AppUser> userManager,
             IConversationRepository conversationRepo,
             IConversationMemberRepository conversationMemberRepo,
             IMessageRepository messageRepo,
             IMessageVisibilityRepository messageVisibilityRepo,
-            IHubContext<ConversationHub> conversationHubContext
+            IHubContext<ConversationHub> conversationHubContext,
+            IHubContext<MessageHub> messageHubContext
         ){
             _userManager = userManager;
             _conversationRepo = conversationRepo;
@@ -38,6 +41,7 @@ namespace backend.Controllers.Message
             _messageRepo = messageRepo;
             _messageVisibilityRepo = messageVisibilityRepo;
             _conversationHubContext = conversationHubContext;
+            _messageHubContext = messageHubContext;
         }
 
         [HttpPost]
@@ -134,8 +138,8 @@ namespace backend.Controllers.Message
         }
 
         [HttpDelete]
-        [Route("{messageId}")]
-        public async Task<IActionResult> Delete([FromRoute] string messageId){
+        [Route("unsend/{messageId}")]
+        public async Task<IActionResult> Delete(string messageId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
@@ -146,12 +150,36 @@ namespace backend.Controllers.Message
                 return NotFound("Message not found");
             }
 
+
+
             return Ok(new {Message = "message deleted", MessageId = deletedMessage.Id});
         }
 
+        [HttpDelete]
+        [Route("delete-for-user/{messageId}/{userId}/{conversationId}")]
+        public async Task<IActionResult> DeleteForUser(string messageId, string userId, string conversationId){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var deletedVisibility = await _messageVisibilityRepo.DeleteAsync(
+                new DeleteMessageVisibilityDto{
+                    ConversationId = conversationId,
+                    MessageId = messageId,
+                    UserId = userId});
+
+            if(deletedVisibility == null){
+                return NotFound("Message Visibility not found");
+            }
+
+            await _messageHubContext.Clients.All.SendAsync("ReceiveMessageVisibilityDelete", deletedVisibility.MessageId, deletedVisibility.UserId, deletedVisibility.ConversationId);
+
+            return Ok(new {Message = "Message visibility deleted", MessageId = deletedVisibility.MessageId, UserId = deletedVisibility.UserId});
+        }
+
         [HttpGet]
-        [Route("get-by-id/{messageId}")]
-        public async Task<IActionResult> GetById(string messageId){
+        [Route("get-by-id/{messageId}/{userId}")]
+        public async Task<IActionResult> GetById(string messageId, string userId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
@@ -162,12 +190,18 @@ namespace backend.Controllers.Message
                 return Ok(new {Message = existingMessage});
             }
 
+            var userMessageVisibility = _messageVisibilityRepo.GetByMessageIdAndUserID(messageId, userId);
+
+            if(userMessageVisibility == null){
+                return Ok(new {Message = userMessageVisibility});
+            }
+
             return Ok(new {Message = existingMessage});
         }
 
         [HttpGet]
-        [Route("{conversationId}")]
-        public async Task<IActionResult> GetPaginatedByConversationId(string conversationId, int pageNumber = 1, int pageSize = 20){
+        [Route("{conversationId}/{userId}")]
+        public async Task<IActionResult> GetPaginatedByConversationIdAndUserId(string conversationId, string userId, int pageNumber = 1, int pageSize = 20){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
             }
@@ -178,7 +212,7 @@ namespace backend.Controllers.Message
                 return NotFound("Conversation not found");
             }
 
-            var paginatedMessages = await _messageRepo.GetPaginatedByConversationId(conversationId, pageNumber, pageSize);
+            var paginatedMessages = await _messageRepo.GetPaginatedByConversationIdAndUserId(conversationId, userId, pageNumber, pageSize);
 
             return Ok(new {Messages = paginatedMessages.Records, TotalMessages = paginatedMessages.TotalRecords, HasNextPage = paginatedMessages.HasNextPage});
         }

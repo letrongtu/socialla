@@ -39,9 +39,29 @@ namespace backend.Repository
             }
 
             _dbContext.MessageVisibilities.Remove(existingMessageVisibility);
+
+            // if this was the last visibility for the message
+            var remainingVisibilities = await _dbContext.MessageVisibilities
+                .AnyAsync(mv => mv.MessageId == messageVisibilityDto.MessageId);
+
+            if (!remainingVisibilities) // No more visibilities left
+            {
+                var message = await _dbContext.Messages.FirstOrDefaultAsync(m => m.Id == messageVisibilityDto.MessageId);
+                if (message != null)
+                {
+                    _dbContext.Messages.Remove(message);
+
+                }
+            }
+
             await _dbContext.SaveChangesAsync();
 
             return existingMessageVisibility;
+        }
+
+        public Task<MessageVisibility?> GetByMessageIdAndUserID(string messageId, string userId)
+        {
+            return _dbContext.MessageVisibilities.FirstOrDefaultAsync((mv) => mv.MessageId == messageId && mv.UserId == userId);
         }
     }
 }

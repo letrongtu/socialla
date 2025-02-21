@@ -24,7 +24,7 @@ export const MessageList = ({
     isLoadingMore: isLoadingMoreMessages,
     loadMore: loadMoreMessages,
     canLoadMore: canLoadMoreMessages,
-  } = useGetMessages(conversationId);
+  } = useGetMessages(conversationId, currentUser.id ? currentUser.id : null);
 
   const messagesStartRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);

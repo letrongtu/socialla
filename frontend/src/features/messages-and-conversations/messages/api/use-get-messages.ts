@@ -19,7 +19,10 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const useGetMessages = (conversationId: string | null) => {
+export const useGetMessages = (
+  conversationId: string | null,
+  currentUserId: string | null
+) => {
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [canLoadMore, setCanLoadMore] = useState(true);
 
@@ -29,6 +32,7 @@ export const useGetMessages = (conversationId: string | null) => {
 
   const fetchMessages = async (
     conversationId: string,
+    currentUserId: string,
     pageNumber: number,
     options?: Options
   ) => {
@@ -41,7 +45,7 @@ export const useGetMessages = (conversationId: string | null) => {
       }
 
       const response = await axios.get<ResponseType>(
-        `${BASE_URL_API}/messages/${conversationId}`,
+        `${BASE_URL_API}/messages/${conversationId}/${currentUserId}`,
         {
           params: { pageNumber, pageSize: PAGE_SIZE },
         }
@@ -67,14 +71,14 @@ export const useGetMessages = (conversationId: string | null) => {
 
   //fetch the first page when mounted
   useEffect(() => {
-    if (!conversationId) {
+    if (!conversationId || !currentUserId) {
       return;
     }
 
     // prevent -> When one conversation is open, click on another user will keep the old data, then add the new data on top of the old data
     setData([]);
 
-    fetchMessages(conversationId, 1);
+    fetchMessages(conversationId, currentUserId, 1);
 
     const connection = new signalR.HubConnectionBuilder()
       .withUrl(`${BASE_URL}/messageHub`)
@@ -104,6 +108,15 @@ export const useGetMessages = (conversationId: string | null) => {
       }
     });
 
+    connection.on(
+      "ReceiveMessageVisibilityDelete",
+      (messageId: string, userId: string, conversationId: string) => {
+        if (userId === currentUserId && conversationId === conversationId) {
+          setData((prev) => prev.filter((m) => m.id !== messageId));
+        }
+      }
+    );
+
     return () => {
       connection
         .stop()
@@ -116,15 +129,15 @@ export const useGetMessages = (conversationId: string | null) => {
           // console.log("Error stopping SignalR:", error);
         });
     };
-  }, [conversationId]);
+  }, [conversationId, currentUserId]);
 
   const loadMore = async (options?: Options) => {
     // prevent duplicate requests
-    if (!canLoadMore || isLoading || !conversationId) return;
+    if (!canLoadMore || isLoading || !conversationId || !currentUserId) return;
 
     setIsLoadingMore(true);
     const nextPage = currentPageNumber + 1;
-    await fetchMessages(conversationId, nextPage);
+    await fetchMessages(conversationId, currentUserId, nextPage);
     setCurrentPageNumber(nextPage);
   };
 
