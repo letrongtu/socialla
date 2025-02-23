@@ -12,8 +12,8 @@ import { MdEmail } from "react-icons/md";
 import { MdDynamicFeed } from "react-icons/md";
 import { BiSolidMessageSquareDetail } from "react-icons/bi";
 import { UserType } from "@/features/auth/types";
-import { useMessageModal } from "@/features/messages-and-conversations/messages/store/use-message-modal";
-import { useGetDmConversationId } from "@/features/messages-and-conversations/conversations/api/use-get-dm-conversation-id";
+import { useMessageModal } from "@/features/messages/store/use-message-modal";
+import { useGetDmConversationId } from "@/features/conversations/api/use-get-dm-conversation-id";
 
 interface UserHoverCardProps {
   user: UserType;

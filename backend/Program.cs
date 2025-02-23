@@ -112,6 +112,7 @@ builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
 builder.Services.AddScoped<IConversationMemberRepository, ConversatioMemberRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IMessageVisibilityRepository, MessageVisibilityRepository>();
+builder.Services.AddScoped<IMessageReactionRepository, MessageReactionRepository>();
 
 builder.Services.AddSignalR();
 
@@ -143,5 +144,6 @@ app.MapHub<NotificationHub>("/notificationHub");
 app.MapHub<UserStatusHub>("/userStatusHub");
 app.MapHub<ConversationHub>("/conversationHub");
 app.MapHub<MessageHub>("messageHub");
+app.MapHub<MessageReactionHub>("messageReactionHub");
 
 app.Run();

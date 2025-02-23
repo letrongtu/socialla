@@ -4,7 +4,7 @@ import { UserType } from "@/features/auth/types";
 import { SearchUserType } from "@/features/search/types";
 
 import { useMessageModal } from "../../store/use-message-modal";
-import { useGetDmConversationId } from "@/features/messages-and-conversations/conversations/api/use-get-dm-conversation-id";
+import { useGetDmConversationId } from "@/features/conversations/api/use-get-dm-conversation-id";
 
 interface SearchUserCardProps {
   user: SearchUserType;

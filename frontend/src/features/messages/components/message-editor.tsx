@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { Editor, EditorState, getDefaultKeyBinding, Modifier } from "draft-js";
-import "../../../../../node_modules/draft-js/dist/Draft.css";
+import "../../../../node_modules/draft-js/dist/Draft.css";
 
 import { EmojiPopover } from "@/components/emoji-popover";
 import { Button } from "@/components/ui/button";

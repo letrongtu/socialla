@@ -26,7 +26,8 @@ namespace api.Data
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<ConversationMember> ConversationMembers { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<MessageVisibility> MessageVisibilities { get; set;}
+        public DbSet<MessageVisibility> MessageVisibilities { get; set; }
+        public DbSet<MessageReaction> MessageReactions { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -54,6 +55,9 @@ namespace api.Data
 
             //Message Visibilities Table
             builder.Entity<MessageVisibility>().HasKey(mv => new {mv.MessageId, mv.UserId});
+
+            //MEssage Reactions Table
+            builder.Entity<MessageReaction>().HasKey(mr => new {mr.UserId, mr.MessageId});
         }
     }
 }

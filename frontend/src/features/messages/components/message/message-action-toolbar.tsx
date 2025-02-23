@@ -1,13 +1,10 @@
 import { MessageType } from "../../types";
 
-import { Hint } from "@/components/ui/hint";
-import { EmojiPopover } from "@/components/emoji-popover";
 import { ReplyButton } from "./action-buttons/reply-button";
 
-import { FaReply, FaTrash } from "react-icons/fa";
-import { BsEmojiSmile } from "react-icons/bs";
 import { DeleteButton } from "./action-buttons/delete-button";
 import { UserType } from "@/features/auth/types";
+import { MessageReactionButton } from "../../../message-reactions/components/message-reaction-button";
 
 interface MessageActionToolbarProps {
   message: MessageType;
@@ -25,17 +22,11 @@ export const MessageActionToolbar = ({
 
       <ReplyButton message={message} />
 
-      <Hint label="React">
-        <EmojiPopover
-          onEmojiSelect={() => {}}
-          onOpen={() => setIsMessageHovered(true)}
-          onClose={() => setIsMessageHovered(false)}
-        >
-          <div className="p-1.5 rounded-full text-gray-600/90 hover:bg-[#c9ccd1]/50 cursor-pointer">
-            <BsEmojiSmile className="size-3.5" />
-          </div>
-        </EmojiPopover>
-      </Hint>
+      <MessageReactionButton
+        message={message}
+        currentUser={currentUser}
+        setIsMessageHovered={setIsMessageHovered}
+      />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { useGetFriends } from "@/features/friendships/api/use-get-friends";
 import { useCurrentUser } from "@/features/auth/api/use-current-user";
-import { useMessageModal } from "@/features/messages-and-conversations/messages/store/use-message-modal";
+import { useMessageModal } from "@/features/messages/store/use-message-modal";
 
 import { Search } from "lucide-react";
 import { ContactContainer } from "./contact-container";

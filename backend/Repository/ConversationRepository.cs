@@ -14,10 +14,13 @@ namespace backend.Repository
     public class ConversationRepository : IConversationRepository
     {
         private readonly ApplicationDBContext _dbContext;
-
-        public ConversationRepository(ApplicationDBContext dbContext)
+        private readonly IMessageRepository _messageRepo;
+        private readonly IHubContext<ConversationHub> _hubContext;
+        public ConversationRepository(ApplicationDBContext dbContext, IMessageRepository messageRepo, IHubContext<ConversationHub> hubContext)
         {
             _dbContext = dbContext;
+            _messageRepo = messageRepo;
+            _hubContext = hubContext;
         }
 
         public async Task<Conversation> CreateAsync(Conversation conversation)
@@ -36,8 +39,19 @@ namespace backend.Repository
                 return null;
             }
 
+            var messages = await _dbContext.Messages.Where(m => m.ConversationId == convId).ToListAsync();
+
+            foreach(var message in messages){
+                await _messageRepo.DeleteAsync(message.Id);
+            }
+
+            var conversationMembers = await _dbContext.ConversationMembers.Where(m => m.ConversationId == convId).ToListAsync();
+            _dbContext.ConversationMembers.RemoveRange(conversationMembers);
+
             _dbContext.Conversations.Remove(existingConversation);
             await _dbContext.SaveChangesAsync();
+
+            await _hubContext.Clients.All.SendAsync("ReceiveConversationDelete", convId);
 
             return existingConversation;
         }

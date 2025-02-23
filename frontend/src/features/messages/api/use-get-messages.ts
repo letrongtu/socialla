@@ -27,8 +27,10 @@ export const useGetMessages = (
   const [canLoadMore, setCanLoadMore] = useState(true);
 
   const [data, setData] = useState<MessageType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingMore, setIsLoadingMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  console.log(conversationId);
 
   const fetchMessages = async (
     conversationId: string,
@@ -71,12 +73,12 @@ export const useGetMessages = (
 
   //fetch the first page when mounted
   useEffect(() => {
+    // prevent -> When one conversation is open, click on another user will keep the old data, then add the new data on top of the old data
+    setData([]);
+
     if (!conversationId || !currentUserId) {
       return;
     }
-
-    // prevent -> When one conversation is open, click on another user will keep the old data, then add the new data on top of the old data
-    setData([]);
 
     fetchMessages(conversationId, currentUserId, 1);
 
@@ -85,16 +87,17 @@ export const useGetMessages = (
       .withAutomaticReconnect()
       .build();
 
-    connection
-      .start()
-      .then(() => {
-        //TODO: Find a way to handle this
-        // console.log("SignalR connected");
-      })
-      .catch((error) => {
-        //TODO: Find a way to handle this
-        // console.log("SignalR connection error: ", error);
-      });
+    const startConnection = async () => {
+      try {
+        if (connection.state === signalR.HubConnectionState.Disconnected) {
+          await connection.start();
+        }
+      } catch (error) {
+        // console.error("SignalR connection error:", error);
+      }
+    };
+
+    startConnection();
 
     connection.on("ReceiveMessageCreate", (message: MessageType) => {
       if (message.conversationId === conversationId) {
@@ -118,16 +121,17 @@ export const useGetMessages = (
     );
 
     return () => {
-      connection
-        .stop()
-        .then(() => {
-          ////TODO: Find a way to handle this
-          // console.log("SignalR disconnected");
-        })
-        .catch((error) => {
-          //TODO: Find a way to handle this
-          // console.log("Error stopping SignalR:", error);
-        });
+      const stopConnection = async () => {
+        if (connection.state === signalR.HubConnectionState.Connected) {
+          try {
+            await connection.stop();
+          } catch (error) {
+            // console.error("Error stopping SignalR:", error);
+          }
+        }
+      };
+
+      stopConnection();
     };
   }, [conversationId, currentUserId]);
 

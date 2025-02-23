@@ -1,10 +1,7 @@
 import dynamic from "next/dynamic";
 
 const MessageEditor = dynamic(
-  () =>
-    import(
-      "@/features/messages-and-conversations/messages/components/message-editor"
-    ),
+  () => import("@/features/messages/components/message-editor"),
   { ssr: false }
 );
 

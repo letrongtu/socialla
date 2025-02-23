@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ViewProfileButton } from "./view-profile-button";
 import { ChangeEmojiButton } from "../../../conversations/components/change-emoji-button";
-import { ChangeNicknameButton } from "@/features/messages-and-conversations/conversations/components/change-nickname-button";
+import { ChangeNicknameButton } from "@/features/conversations/components/change-nickname-button";
 import { DeleteChatButton } from "../../../conversations/components/delete-chat-button";
 
 import { RiListSettingsLine } from "react-icons/ri";
@@ -39,10 +39,12 @@ export const MessageSettingDropdownMenu = ({
 
           <DropdownMenuSeparator className="bg-[#c9ccd1]/70 my-2" />
 
+          {/*
+          //TODO: Enable this later
           <ChangeEmojiButton user={otherUser} />
-          <ChangeNicknameButton user={otherUser} />
+          <ChangeNicknameButton user={otherUser} /> */}
 
-          <DropdownMenuSeparator className="bg-[#c9ccd1]/70 my-2" />
+          {/* <DropdownMenuSeparator className="bg-[#c9ccd1]/70 my-2" /> */}
 
           <DeleteChatButton user={otherUser} />
         </div>

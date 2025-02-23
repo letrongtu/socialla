@@ -11,5 +11,9 @@ namespace backend.Hubs
         public async Task SendCreateConversation(string conversationId, string[] userIds){
             await Clients.All.SendAsync("ReceiveConversationCreate", conversationId, userIds);
         }
+
+        public async Task SendDeleteConversation(string conversationId){
+            await Clients.All.SendAsync("ReceiveConversationDelete", conversationId);
+        }
     }
 }

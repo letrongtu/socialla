@@ -7,7 +7,7 @@ import { MessageUserButton } from "./message-user-button";
 import { MdClose } from "react-icons/md";
 import { FiMinus } from "react-icons/fi";
 import { Hint } from "@/components/ui/hint";
-import { useGetDmConversationId } from "../../conversations/api/use-get-dm-conversation-id";
+import { useGetDmConversationId } from "@/features/conversations/api/use-get-dm-conversation-id";
 
 interface DisplayMessageModalHeaderProps {
   otherUser: UserType;

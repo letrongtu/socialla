@@ -3,8 +3,8 @@ import { useGetUser } from "@/features/auth/api/use-get-user";
 import { UserButton } from "../user-button";
 import { UserType } from "@/features/auth/types";
 import { getLastActiveTimeString } from "@/utils/helper";
-import { useMessageModal } from "@/features/messages-and-conversations/messages/store/use-message-modal";
-import { useGetDmConversationId } from "@/features/messages-and-conversations/conversations/api/use-get-dm-conversation-id";
+import { useMessageModal } from "@/features/messages/store/use-message-modal";
+import { useGetDmConversationId } from "@/features/conversations/api/use-get-dm-conversation-id";
 
 interface UserContactCardProps {
   userId: string;

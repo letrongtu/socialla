@@ -44,9 +44,13 @@ namespace backend.Repository
 
             _dbContext.Messages.Remove(existingMessage);
 
+            //DELETE Message visibilities
             var allMessageVisibilities = await _dbContext.MessageVisibilities.Where((mv) => mv.MessageId == existingMessage.Id).ToListAsync();
-
             _dbContext.MessageVisibilities.RemoveRange(allMessageVisibilities);
+
+            //DELETE Message reactions
+            var allMessageReactions = await _dbContext.MessageReactions.Where((mr) => mr.MessageId == existingMessage.Id).ToListAsync();
+            _dbContext.MessageReactions.RemoveRange(allMessageReactions);
 
             await _dbContext.SaveChangesAsync();
 

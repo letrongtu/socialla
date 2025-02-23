@@ -201,6 +201,5 @@ namespace backend.Controllers.CommentReaction
 
             return Ok(new {CommentReactions = commentReactionsByReactionValues});
         }
-
     }
 }

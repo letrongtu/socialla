@@ -21,6 +21,7 @@ interface EmojiPopoverProps {
   onEmojiSelect: (emoji: any) => void;
   onOpen?: () => void;
   onClose?: () => void;
+  initialEmoji?: string;
 }
 
 export const EmojiPopover = ({
@@ -29,6 +30,7 @@ export const EmojiPopover = ({
   onEmojiSelect,
   onOpen,
   onClose,
+  initialEmoji,
 }: EmojiPopoverProps) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(false);

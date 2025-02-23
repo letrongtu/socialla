@@ -86,16 +86,17 @@ export const UseGetCommentsByParentCommentId = (
       .withAutomaticReconnect()
       .build();
 
-    connection
-      .start()
-      .then(() => {
-        //TODO: Find a way to handle this
-        // console.log("SignalR connected");
-      })
-      .catch((error) => {
-        //TODO: Find a way to handle this
-        // console.log("SignalR connection error: ", error);
-      });
+    const startConnection = async () => {
+      try {
+        if (connection.state === signalR.HubConnectionState.Disconnected) {
+          await connection.start();
+        }
+      } catch (error) {
+        // console.error("SignalR connection error:", error);
+      }
+    };
+
+    startConnection();
 
     connection.on("ReceivePostCommentCreate", (createdComment: CommentType) => {
       if (createdComment.parentCommentId !== parentCommentId) return;
@@ -138,16 +139,17 @@ export const UseGetCommentsByParentCommentId = (
     });
 
     return () => {
-      connection
-        .stop()
-        .then(() => {
-          ////TODO: Find a way to handle this
-          // console.log("SignalR disconnected");
-        })
-        .catch((error) => {
-          //TODO: Find a way to handle this
-          // console.log("Error stopping SignalR:", error);
-        });
+      const stopConnection = async () => {
+        if (connection.state === signalR.HubConnectionState.Connected) {
+          try {
+            await connection.stop();
+          } catch (error) {
+            console.error("Error stopping SignalR:", error);
+          }
+        }
+      };
+
+      stopConnection();
     };
   }, [parentCommentId, sortBy]);
 

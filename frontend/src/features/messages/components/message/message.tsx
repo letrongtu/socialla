@@ -11,6 +11,8 @@ import { MessageActionToolbar } from "./message-action-toolbar";
 
 import { FaReply } from "react-icons/fa";
 import { UserType } from "@/features/auth/types";
+import { useGetMessageReactions } from "@/features/message-reactions/api/use-get-message-reactions";
+import { MessageReactionDetails } from "@/features/message-reactions/components/message-reaction-details";
 
 interface MessageProps {
   message: MessageType;
@@ -37,6 +39,9 @@ export const Message = ({
   const { data: messageSender, isLoading: isLoadingMessageSender } = useGetUser(
     message.senderId
   );
+
+  const { data: messageReactions, isLoading: isLoadingMessageReactions } =
+    useGetMessageReactions(message.id);
 
   const [isMessageHovered, setIsMessageHovered] = useState(false);
 
@@ -122,6 +127,7 @@ export const Message = ({
           </div>
         </div>
       )}
+
       <Hint
         label={messageCreatedAtString}
         side="top"
@@ -129,8 +135,9 @@ export const Message = ({
       >
         <div
           className={cn(
-            "flex items-center justify-start group/message",
-            isCurrentUserMessage && "justify-end"
+            "relative flex items-center justify-start group/message",
+            isCurrentUserMessage && "justify-end",
+            messageReactions.length !== 0 && "pb-4"
           )}
         >
           {isCurrentUserMessage && isMessageHovered && (
@@ -141,28 +148,36 @@ export const Message = ({
             />
           )}
 
-          {!message.isEmojiOnly && (
-            <div
-              className={cn(
-                "max-w-[68%] w-fit px-3 py-2 text-sm break-words",
-                isCurrentUserMessage
-                  ? "bg-[#1823ab]/90 text-white rounded-l-3xl rounded-r-md"
-                  : "bg-[#c9ccd1] rounded-r-3xl rounded-l-md"
-              )}
-            >
-              {message.content?.map((line, idx) => (
-                <p key={idx}>{line}</p>
-              ))}
-            </div>
-          )}
+          <div className="relative max-w-[68%] w-fit">
+            {!message.isEmojiOnly && (
+              <div
+                className={cn(
+                  "px-3 py-2 text-sm break-words",
+                  isCurrentUserMessage
+                    ? "bg-[#1823ab]/90 text-white rounded-l-3xl rounded-r-md"
+                    : "bg-[#c9ccd1] rounded-r-3xl rounded-l-md"
+                )}
+              >
+                {message.content?.map((line, idx) => (
+                  <p key={idx}>{line}</p>
+                ))}
+              </div>
+            )}
 
-          {message.isEmojiOnly && (
-            <div className={cn("w-fit text-2xl")}>
-              {message.content?.map((line, idx) => (
-                <p key={idx}>{line}</p>
-              ))}
-            </div>
-          )}
+            {message.isEmojiOnly && (
+              <div className={cn("w-fit text-2xl")}>
+                {message.content?.map((line, idx) => (
+                  <p key={idx}>{line}</p>
+                ))}
+              </div>
+            )}
+
+            {messageReactions.length > 0 && (
+              <div className="absolute -bottom-3.5 -right-1">
+                <MessageReactionDetails messageReactions={messageReactions} />
+              </div>
+            )}
+          </div>
 
           {!isCurrentUserMessage && isMessageHovered && (
             <MessageActionToolbar

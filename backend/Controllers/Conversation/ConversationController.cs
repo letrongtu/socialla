@@ -28,5 +28,17 @@ namespace backend.Controllers.Conversation
 
             return Ok(new {ConversationId = conversation?.Id });
         }
+
+        [HttpDelete]
+        [Route("{conversationId}")]
+        public async Task<IActionResult> Delete(string conversationId){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var conversation = await _conversationRepo.DeleteAsync(conversationId);
+
+            return Ok(new {ConversationId = conversation?.Id });
+        }
     }
 }

@@ -150,8 +150,6 @@ namespace backend.Controllers.Message
                 return NotFound("Message not found");
             }
 
-
-
             return Ok(new {Message = "message deleted", MessageId = deletedMessage.Id});
         }
 
