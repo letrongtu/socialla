@@ -114,8 +114,8 @@ const SignInCard = ({ setState }: SignInCardProps) => {
               disabled={isPending}
               variant="transparent"
               type="button"
-              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-              className="absolute right-1"
+              onClick={() => setIsPasswordVisible((prev) => !prev)}
+              className="absolute right-1 bg-[#ffffff] hover:bg-[#ffffff]"
             >
               {isPasswordVisible ? <Eye /> : <EyeClosed />}
             </Button>
@@ -132,7 +132,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
           </Button>
         </form>
 
-        <div className="flex flex-col">
+        <div onClick={() => router.push("/notfound")} className="flex flex-col">
           <p className="text-sm text-sky-700 cursor-pointer hover:underline">
             Forgotten password?
           </p>
@@ -142,7 +142,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
           <div className="flex flex-col gap-y-3 items-center">
             <Button
               disabled={isPending}
-              onClick={() => {}}
+              onClick={() => router.push("/notfound")}
               variant="outline"
               className="w-full h-[50px] relative"
             >
@@ -152,7 +152,7 @@ const SignInCard = ({ setState }: SignInCardProps) => {
 
             <Button
               disabled={isPending}
-              onClick={() => {}}
+              onClick={() => router.push("/notfound")}
               variant="outline"
               className="w-full h-[50px] relative"
             >

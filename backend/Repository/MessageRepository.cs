@@ -59,6 +59,14 @@ namespace backend.Repository
             return existingMessage;
         }
 
+        public async Task<Message?> GetLastMessageByConversationId(string conversationId){
+            return await _dbContext.Messages
+                        .Where(m => m.ConversationId == conversationId)
+                        .OrderByDescending(m => m.CreatedAt)
+                        .FirstOrDefaultAsync();
+
+        }
+
         public async Task<Message?> GetById(string messageId){
             return await _dbContext.Messages.FindAsync(messageId);
         }

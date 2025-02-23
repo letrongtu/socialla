@@ -13,6 +13,7 @@ import { HeaderCurrentUserButton } from "./header-current-user-button";
 import { Home, TvMinimalPlay, Bell } from "lucide-react";
 import { MdGroups } from "react-icons/md";
 import { FiMessageCircle } from "react-icons/fi";
+import { HeaderChatModal } from "@/features/conversations/components/header-chat-modal";
 
 const pages = [
   { label: "Home", icon: Home },
@@ -22,7 +23,7 @@ const pages = [
 
 const utilButtons = [
   //TODO: Enable this if possible { label: "Menu", icon: Layers2, children: <div>Hello</div> },
-  { label: "Messenger", icon: FiMessageCircle, children: <div>Hello</div> },
+  { label: "Messenger", icon: FiMessageCircle, children: <HeaderChatModal /> },
   {
     label: "Notifications",
     icon: Bell,

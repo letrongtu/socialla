@@ -8,9 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ViewProfileButton } from "./view-profile-button";
-import { ChangeEmojiButton } from "../../../conversations/components/change-emoji-button";
-import { ChangeNicknameButton } from "@/features/conversations/components/change-nickname-button";
-import { DeleteChatButton } from "../../../conversations/components/delete-chat-button";
+import { ChangeEmojiButton } from "../../../conversations/components/chat-setting-buttons/change-emoji-button";
+import { ChangeNicknameButton } from "@/features/conversations/components/chat-setting-buttons/change-nickname-button";
+import { DeleteChatButton } from "@/features/conversations/components/chat-setting-buttons/delete-chat-button";
 
 import { RiListSettingsLine } from "react-icons/ri";
 

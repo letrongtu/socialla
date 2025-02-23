@@ -64,7 +64,11 @@ export const HeaderUtilButton = ({
         </DropdownMenuTrigger>
       </Hint>
 
-      <DropdownMenuContent align={label === "Notifications" ? "end" : "center"}>
+      <DropdownMenuContent
+        align={
+          label === "Notifications" || label === "Messenger" ? "end" : "center"
+        }
+      >
         {children}
       </DropdownMenuContent>
     </DropdownMenu>

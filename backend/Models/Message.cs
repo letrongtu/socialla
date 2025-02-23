@@ -14,6 +14,7 @@ namespace backend.Models
         public string[] Content { get; set; } = [];
         public string[]? FileUrls { get; set; } = [];
         public Boolean IsEmojiOnly { get; set; }
+        public Boolean IsRead { get; set; } = false;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

@@ -11,6 +11,16 @@ export const useCurrentUser = () => {
   const [data, setData] = useState<ResponseType>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const handleOffline = async () => {
+    if (hasCookie("userId")) {
+      const userId = getCookie("userId");
+      await axios.post(`${baseURL}/user/active`, {
+        userId,
+        isActive: false,
+      });
+    }
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       if (hasCookie("userId") && hasCookie("token")) {
@@ -35,16 +45,6 @@ export const useCurrentUser = () => {
     fetchUser();
 
     // Mark the user as offline when they leave
-    const handleOffline = async () => {
-      if (hasCookie("userId")) {
-        const userId = getCookie("userId");
-        await axios.post(`${baseURL}/user/active`, {
-          userId,
-          isActive: false,
-        });
-      }
-    };
-
     window.addEventListener("beforeunload", handleOffline);
 
     return () => {
@@ -55,5 +55,6 @@ export const useCurrentUser = () => {
   return {
     data,
     isLoading,
+    handleOffline,
   };
 };

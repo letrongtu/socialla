@@ -40,5 +40,17 @@ namespace backend.Controllers.Conversation
 
             return Ok(new {ConversationId = conversation?.Id });
         }
+
+        [HttpGet]
+        [Route("{userId}")]
+        public async Task<IActionResult> GetPaginatedByUserId(string userId, int pageNumber = 1, int pageSize = 20){
+            if(!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var paginatedConversations = await _conversationRepo.GetPaginatedByUserId(userId, pageNumber, pageSize);
+
+            return Ok(new {conversations = paginatedConversations.Records, TotalConversations = paginatedConversations.TotalRecords, HasNextPage = paginatedConversations.HasNextPage });
+        }
     }
 }

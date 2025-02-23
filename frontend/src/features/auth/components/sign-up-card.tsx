@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SignInFlow } from "../types";
 import { toast } from "sonner";
-import { setCookie } from "cookies-next";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -26,6 +25,8 @@ interface SignUpCardProps {
 }
 
 const SignUpCard = ({ setState }: SignUpCardProps) => {
+  const router = useRouter();
+
   const { signUp, isPending } = UseUserSignUp();
 
   const [firstName, setFirstName] = useState("");
@@ -93,7 +94,9 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
 
             <Button
               disabled={isPending}
-              onClick={() => {}}
+              onClick={() => {
+                router.push("/notfound");
+              }}
               variant="outline"
               className="w-full h-[50px] relative"
             >
@@ -103,7 +106,9 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
 
             <Button
               disabled={isPending}
-              onClick={() => {}}
+              onClick={() => {
+                router.push("/notfound");
+              }}
               variant="outline"
               className="w-full h-[50px] relative"
             >
@@ -192,7 +197,7 @@ const SignUpCard = ({ setState }: SignUpCardProps) => {
                 variant="transparent"
                 type="button"
                 onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                className="absolute right-1"
+                className="absolute right-1 bg-[#ffffff] hover:bg-[#ffffff]"
               >
                 {isPasswordVisible ? <Eye /> : <EyeClosed />}
               </Button>

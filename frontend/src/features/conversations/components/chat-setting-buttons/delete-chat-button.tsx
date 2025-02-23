@@ -4,7 +4,7 @@ import { UserType } from "@/features/auth/types";
 
 import { FiTrash } from "react-icons/fi";
 import { useMessageModal } from "@/features/messages/store/use-message-modal";
-import { UseDeleteConversation } from "../api/use-delete-conversation";
+import { UseDeleteConversation } from "../../api/use-delete-conversation";
 
 interface DeleteChatButtonProps {
   user: UserType;

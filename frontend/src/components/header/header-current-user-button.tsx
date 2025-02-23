@@ -23,7 +23,7 @@ export const HeaderCurrentUserButton = ({
 }: HeaderCurrentUserButtonProps) => {
   const router = useRouter();
 
-  const { data } = useCurrentUser();
+  const { data, handleOffline } = useCurrentUser();
   if (!data) {
     return null;
   }
@@ -33,6 +33,8 @@ export const HeaderCurrentUserButton = ({
   const avatarFallback = firstName?.charAt(0).toUpperCase();
 
   const signOut = () => {
+    handleOffline();
+
     deleteCookie("token");
     deleteCookie("userId");
 
