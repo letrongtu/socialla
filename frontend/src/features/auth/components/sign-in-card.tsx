@@ -132,8 +132,11 @@ const SignInCard = ({ setState }: SignInCardProps) => {
           </Button>
         </form>
 
-        <div onClick={() => router.push("/notfound")} className="flex flex-col">
-          <p className="text-sm text-sky-700 cursor-pointer hover:underline">
+        <div className="flex flex-col">
+          <p
+            onClick={() => router.push("/notfound")}
+            className="text-sm text-sky-700 cursor-pointer hover:underline"
+          >
             Forgotten password?
           </p>
 
