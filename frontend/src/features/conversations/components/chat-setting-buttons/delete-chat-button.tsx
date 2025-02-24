@@ -8,16 +8,20 @@ import { UseDeleteConversation } from "../../api/use-delete-conversation";
 
 interface DeleteChatButtonProps {
   user: UserType;
+  conversationId: string | null;
 }
 
-export const DeleteChatButton = ({ user }: DeleteChatButtonProps) => {
-  const [{ open, userId, conversationId }, setOpen] = useMessageModal();
+export const DeleteChatButton = ({
+  user,
+  conversationId,
+}: DeleteChatButtonProps) => {
+  const [, setOpen] = useMessageModal();
 
   const { mutate, isPending } = UseDeleteConversation();
 
   const handleDeleteConversation = () => {
     mutate(
-      { conversationId },
+      { conversationId: conversationId, userId: user.id ? user.id : null },
       {
         onSuccess: (data) => {
           // console.log(data);
@@ -30,6 +34,7 @@ export const DeleteChatButton = ({ user }: DeleteChatButtonProps) => {
 
     setOpen({ open: false, userId: null, conversationId: null });
   };
+
   return (
     <div
       onClick={handleDeleteConversation}

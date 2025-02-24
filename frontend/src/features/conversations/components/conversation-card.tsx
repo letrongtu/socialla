@@ -1,18 +1,28 @@
+import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { getCreatedDisplayString } from "@/features/posts/helper/helper";
+import { getLastActiveTimeString } from "@/utils/helper";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { ReturnConversationType } from "../types";
-import { getCreatedDisplayString } from "@/features/posts/helper/helper";
-import { getLastActiveTimeString } from "@/utils/helper";
 import { useMessageModal } from "@/features/messages/store/use-message-modal";
-import { cn } from "@/lib/utils";
+import { UserType } from "@/features/auth/types";
+import { ReturnConversationType } from "../types";
+
+import { EditChatButton } from "./edit-chat-button";
+import { UseUpdateReadConversation } from "../api/use-update-read-conversation";
 
 interface ConversationCardProps {
   conversation: ReturnConversationType;
+  currentUser: UserType;
+  setCurrentUtilButton: (currentButton: string) => void;
 }
 
-export const ConversationCard = ({ conversation }: ConversationCardProps) => {
+export const ConversationCard = ({
+  conversation,
+  currentUser,
+  setCurrentUtilButton,
+}: ConversationCardProps) => {
   const [, setOpen] = useMessageModal();
 
   const user = conversation.otherUser;
@@ -35,13 +45,15 @@ export const ConversationCard = ({ conversation }: ConversationCardProps) => {
 
   return (
     <div
-      onClick={() =>
+      onClick={() => {
         setOpen({
           open: true,
           userId: user.id ? user.id : null,
           conversationId: conversation.conversation.id,
-        })
-      }
+        });
+
+        setCurrentUtilButton("");
+      }}
       className="relative py-2 px-2 flex items-center gap-x-2 rounded-md hover:bg-[#c9ccd1]/20 cursor-pointer group/notification"
     >
       <div className="w-full flex items-center gap-x-4 ">
@@ -76,7 +88,7 @@ export const ConversationCard = ({ conversation }: ConversationCardProps) => {
           <p
             className={cn(
               "text-sm text-muted-foreground",
-              !conversation.lastMessage.isRead && "text-black font-medium"
+              !conversation.isLastMessageRead && "text-black font-medium"
             )}
           >
             {truncateContent} &middot;{" "}
@@ -85,13 +97,16 @@ export const ConversationCard = ({ conversation }: ConversationCardProps) => {
         </div>
       </div>
 
-      {!conversation.lastMessage.isRead && (
+      {!conversation.isLastMessageRead && (
         <div className="flex items-center justify-end w-6">
           <div className={"size-3 rounded-full bg-[#1823ab]"} />
         </div>
       )}
 
-      {/* <EditNotificationButton notification={notification} /> */}
+      <EditChatButton
+        currentUser={currentUser}
+        conversation={conversation.conversation}
+      />
     </div>
   );
 };

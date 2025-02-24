@@ -31,7 +31,10 @@ export const DisplayMessageModalHeader = ({
 
   return (
     <div className="w-full flex justify-between items-center p-1 border-b-[1px] border-[#c9ccd1]/30 shadow-sm">
-      <MessageSettingDropdownMenu otherUser={otherUser}>
+      <MessageSettingDropdownMenu
+        currentUser={currentUser}
+        otherUser={otherUser}
+      >
         <MessageUserButton otherUser={otherUser} />
       </MessageSettingDropdownMenu>
 

@@ -10,5 +10,6 @@ namespace backend.Models
         public string ConversationId { get; set; } = string.Empty;
         public string MessageId { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
+        public bool IsRead { get; set; } = false;
     }
 }

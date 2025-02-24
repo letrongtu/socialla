@@ -11,6 +11,7 @@ import { IoSend } from "react-icons/io5";
 import { UseCreateDmMessage } from "../api/use-create-dm-message";
 import { useMessageModal } from "../store/use-message-modal";
 import { useReplyMessage } from "../store/use-reply-message";
+import { UseUpdateReadConversation } from "@/features/conversations/api/use-update-read-conversation";
 
 interface MessageEditorProps {
   senderId: string;
@@ -32,6 +33,8 @@ const MessageEditor = ({
 
   const { mutate: createDmMessage, isPending: isPendingCreateDmMessage } =
     UseCreateDmMessage();
+  const { mutate: readConversation, isPending: isPendingUpdatingRead } =
+    UseUpdateReadConversation();
 
   const [_isEmojiOnly, setIsEmojiOnly] = useState(false);
   const [messageContent, setMessageContent] = useState<string[]>([]);
@@ -142,13 +145,37 @@ const MessageEditor = ({
 
   useEffect(() => {
     if (messageModalOpen || replyingMessage) {
+      const handleReadConversation = () => {
+        readConversation(
+          {
+            conversationId,
+            userId: senderId,
+          },
+          {
+            onSuccess(data) {
+              // console.log(data);
+            },
+            onError(error) {
+              // console.log(error);
+            },
+          }
+        );
+      };
+
       setTimeout(() => {
         if (editorRef.current) {
           editorRef.current.focus();
+          handleReadConversation();
         }
       }, 0);
     }
-  }, [messageModalOpen, replyingMessage]);
+  }, [
+    messageModalOpen,
+    replyingMessage,
+    senderId,
+    conversationId,
+    readConversation,
+  ]);
 
   return (
     <div

@@ -12,8 +12,12 @@ namespace backend.Hubs
             await Clients.All.SendAsync("ReceiveConversationCreate", conversationId, userIds);
         }
 
-        public async Task SendDeleteConversation(string conversationId){
-            await Clients.All.SendAsync("ReceiveConversationDelete", conversationId);
+        public async Task SendDeleteConversation(string conversationId, string userId){
+            await Clients.All.SendAsync("ReceiveConversationDelete", conversationId, userId);
+        }
+
+        public async Task SendUpdateReadConversation(string conversationId, string userId){
+            await Clients.All.SendAsync("ReceiveConversationUpdateRead", conversationId, userId);
         }
     }
 }

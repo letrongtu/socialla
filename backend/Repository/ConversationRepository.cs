@@ -36,7 +36,7 @@ namespace backend.Repository
             return conversation;
         }
 
-        public async Task<Conversation?> DeleteAsync(string convId)
+        public async Task<Conversation?> DeleteAsync(string convId, string userId)
         {
             var existingConversation = await _dbContext.Conversations.FindAsync(convId);
 
@@ -44,19 +44,49 @@ namespace backend.Repository
                 return null;
             }
 
-            var messages = await _dbContext.Messages.Where(m => m.ConversationId == convId).ToListAsync();
+            var userConversationVisibilities = await _dbContext.MessageVisibilities.Where(mv => mv.ConversationId == convId && mv.UserId == userId).ToListAsync();
 
-            foreach(var message in messages){
-                await _messageRepo.DeleteAsync(message.Id);
+            var conversationVisibilitiesCount = await _dbContext.MessageVisibilities.Where(mv => mv.ConversationId == convId).CountAsync();
+
+            // If no more user can see the conversation -> delete the messages from the db
+            if(conversationVisibilitiesCount == userConversationVisibilities.Count){
+                var messages = await _dbContext.Messages.Where(m => m.ConversationId == convId).ToListAsync();
+
+                foreach(var message in messages){
+                    await _messageRepo.DeleteAsync(message.Id);
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                await _hubContext.Clients.All.SendAsync("ReceiveConversationDelete", convId, userId);
+
+                return existingConversation;
             }
 
-            var conversationMembers = await _dbContext.ConversationMembers.Where(m => m.ConversationId == convId).ToListAsync();
-            _dbContext.ConversationMembers.RemoveRange(conversationMembers);
-
-            _dbContext.Conversations.Remove(existingConversation);
+            _dbContext.MessageVisibilities.RemoveRange(userConversationVisibilities);
             await _dbContext.SaveChangesAsync();
 
-            await _hubContext.Clients.All.SendAsync("ReceiveConversationDelete", convId);
+            await _hubContext.Clients.All.SendAsync("ReceiveConversationDelete", convId, userId);
+
+            return existingConversation;
+        }
+
+        public async Task<Conversation?> UpdateReadConversation(string conversationId, string userId){
+            var existingConversation = await _dbContext.Conversations.FindAsync(conversationId);
+
+            if(existingConversation == null){
+                return null;
+            }
+
+            var userUnReadVisibilities = await _dbContext.MessageVisibilities.Where(mv => mv.ConversationId == conversationId && mv.UserId == userId).ToListAsync();
+
+            foreach(var userUnReadVisibility in userUnReadVisibilities){
+                userUnReadVisibility.IsRead = true;
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            await _hubContext.Clients.All.SendAsync("ReceiveConversationUpdateRead", conversationId, userId);
 
             return existingConversation;
         }
@@ -89,16 +119,27 @@ namespace backend.Repository
                             .Select(c => new GetPaginatedConversationsDto
                             {
                                 Conversation = c,
-                                LastMessage = _dbContext.Messages
-                                    .Where(m => m.ConversationId == c.Id)
-                                    .OrderByDescending(m => m.CreatedAt)
-                                    .FirstOrDefault(), // Get the last message
+
                                 OtherUser = _dbContext.Users
                                     .Where(u => _dbContext.ConversationMembers
                                         .Where(cm => cm.ConversationId == c.Id && cm.UserId != userId) // Exclude current user
                                         .Select(cm => cm.UserId)
                                         .Contains(u.Id))
-                                    .FirstOrDefault() // Get the other user
+                                    .FirstOrDefault(), // Get the other user
+
+                                LastMessage = _dbContext.Messages
+                                    .Where(m => m.ConversationId == c.Id)
+                                    .OrderByDescending(m => m.CreatedAt)
+                                    .FirstOrDefault(), // Get the last message
+
+                                IsLastMessageRead = _dbContext.MessageVisibilities
+                                    .Where(mv => mv.ConversationId == c.Id
+                                                && mv.MessageId == _dbContext.Messages
+                                                                    .Where(m => m.ConversationId == c.Id)
+                                                                    .OrderByDescending(m => m.CreatedAt)
+                                                                    .Select(m => m.Id).FirstOrDefault()
+                                                && mv.UserId == userId)
+                                    .Select(mv => mv.IsRead).FirstOrDefault()
                             });
 
             var totalRecords = await query.CountAsync();

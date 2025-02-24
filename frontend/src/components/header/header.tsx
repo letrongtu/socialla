@@ -21,16 +21,6 @@ const pages = [
   { label: "Groups", icon: MdGroups },
 ];
 
-const utilButtons = [
-  //TODO: Enable this if possible { label: "Menu", icon: Layers2, children: <div>Hello</div> },
-  { label: "Messenger", icon: FiMessageCircle, children: <HeaderChatModal /> },
-  {
-    label: "Notifications",
-    icon: Bell,
-    children: <NotificationDisplayModal />,
-  },
-];
-
 export const Header = () => {
   const router = useRouter();
 
@@ -38,6 +28,20 @@ export const Header = () => {
   const [currentUtilButton, setCurrentUtilButton] = useState<string | null>(
     null
   );
+
+  const utilButtons = [
+    //TODO: Enable this if possible { label: "Menu", icon: Layers2, children: <div>Hello</div> },
+    {
+      label: "Messenger",
+      icon: FiMessageCircle,
+      children: <HeaderChatModal setCurrentUtilButton={setCurrentUtilButton} />,
+    },
+    {
+      label: "Notifications",
+      icon: Bell,
+      children: <NotificationDisplayModal />,
+    },
+  ];
 
   return (
     <div className="flex flex-row justify-between bg-[#ffffff] px-5 shadow-md">

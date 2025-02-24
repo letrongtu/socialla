@@ -13,16 +13,21 @@ import { ChangeNicknameButton } from "@/features/conversations/components/chat-s
 import { DeleteChatButton } from "@/features/conversations/components/chat-setting-buttons/delete-chat-button";
 
 import { RiListSettingsLine } from "react-icons/ri";
+import { useMessageModal } from "../../store/use-message-modal";
 
 interface MessageSettingDropdownMenuProps {
   otherUser: UserType;
+  currentUser: UserType;
   children: React.ReactNode;
 }
 
 export const MessageSettingDropdownMenu = ({
   otherUser,
+  currentUser,
   children,
 }: MessageSettingDropdownMenuProps) => {
+  const [{ conversationId }] = useMessageModal();
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger>{children}</DropdownMenuTrigger>
@@ -46,7 +51,10 @@ export const MessageSettingDropdownMenu = ({
 
           {/* <DropdownMenuSeparator className="bg-[#c9ccd1]/70 my-2" /> */}
 
-          <DeleteChatButton user={otherUser} />
+          <DeleteChatButton
+            user={currentUser}
+            conversationId={conversationId}
+          />
         </div>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -88,17 +88,20 @@ export const useGetDmConversationId = (
       }
     );
 
-    connection.on("ReceiveConversationDelete", (conversationId: string) => {
-      if (data === conversationId) {
-        setData(null);
+    connection.on(
+      "ReceiveConversationDelete",
+      (conversationId: string, userId: string) => {
+        if (data === conversationId && userId === currentUserId) {
+          setData(null);
 
-        setOpen({
-          open: false,
-          userId: null,
-          conversationId: null,
-        });
+          setOpen({
+            open: false,
+            userId: null,
+            conversationId: null,
+          });
+        }
       }
-    });
+    );
 
     return () => {
       const stopConnection = async () => {

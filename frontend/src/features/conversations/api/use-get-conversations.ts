@@ -19,7 +19,7 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const useGetConversations = (userId: string | null) => {
+export const useGetConversations = (currentUserId: string | null) => {
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
   const [canLoadMore, setCanLoadMore] = useState(true);
 
@@ -27,7 +27,7 @@ export const useGetConversations = (userId: string | null) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchConversations = async (
-    userId: string,
+    currentUserId: string,
     pageNumber: number,
     options?: Options
   ) => {
@@ -35,7 +35,7 @@ export const useGetConversations = (userId: string | null) => {
       setIsLoading(true);
 
       const response = await axios.get<ResponseType>(
-        `${BASE_URL_API}/conversations/${userId}`,
+        `${BASE_URL_API}/conversations/${currentUserId}`,
         {
           params: { pageNumber, pageSize: PAGE_SIZE },
         }
@@ -57,84 +57,91 @@ export const useGetConversations = (userId: string | null) => {
 
   //fetch the first page when mounted
   useEffect(() => {
-    if (!userId) {
+    if (!currentUserId) {
       return;
     }
 
-    fetchConversations(userId, 1);
+    fetchConversations(currentUserId, 1);
 
-    // const connection = new signalR.HubConnectionBuilder()
-    //   .withUrl(`${BASE_URL}/notificationHub`)
-    //   .withAutomaticReconnect()
-    //   .build();
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl(`${BASE_URL}/conversationHub`)
+      .withAutomaticReconnect()
+      .build();
 
-    // const startConnection = async () => {
-    //   try {
-    //     if (connection.state === signalR.HubConnectionState.Disconnected) {
-    //       await connection.start();
-    //     }
-    //   } catch (error) {
-    //     // console.error("SignalR connection error:", error);
-    //   }
-    // };
+    const startConnection = async () => {
+      try {
+        if (connection.state === signalR.HubConnectionState.Disconnected) {
+          await connection.start();
+        }
+      } catch (error) {
+        console.error("SignalR connection error:", error);
+      }
+    };
 
-    // startConnection();
+    startConnection();
 
     // connection.on(
     //   "ReceiveConversationCreate",
-    //   (notification: ConversationType) => {
-    //     if (notification.receiveUserId === userId) {
-    //       setData((prev) => [notification, ...prev]);
+    //   (conversationId: string, userIds: string[]) => {
+    //     if (userIds.includes(currentUserId) && userIds.includes(otherUserId)) {
+    //       setData(conversationId);
+
+    //       setOpen({
+    //         open: true,
+    //         userId: currentUserId == userIds[0] ? userIds[1] : userIds[0], //This is dm -> the only user
+    //         conversationId: conversationId,
+    //       });
     //     }
     //   }
     // );
 
-    // connection.on(
-    //   "ReceiveConversationDelete",
-    //   (notification: ConversationType) => {
-    //     setData((prev) =>
-    //       prev.filter(
-    //         (existingConversation) =>
-    //           existingConversation.id !== notification.id
-    //       )
-    //     );
-    //   }
-    // );
+    connection.on(
+      "ReceiveConversationDelete",
+      (conversationId: string, userId: string) => {
+        if (currentUserId === userId) {
+          setData((prev) =>
+            prev.filter((c) => c.conversation.id !== conversationId)
+          );
+        }
+      }
+    );
 
-    // connection.on(
-    //   "ReceiveConversationUpdate",
-    //   (notification: ConversationType) => {
-    //     setData((prev) =>
-    //       prev.map((existingConversation) =>
-    //         existingConversation.id === notification.id
-    //           ? { ...existingConversation, isRead: notification.isRead }
-    //           : existingConversation
-    //       )
-    //     );
-    //   }
-    // );
+    connection.on(
+      "ReceiveConversationUpdateRead",
+      (conversationId: string, userId: string) => {
+        if (currentUserId === userId) {
+          setData((prev) =>
+            prev.map((c) =>
+              c.conversation.id === conversationId
+                ? { ...c, isLastMessageRead: true }
+                : c
+            )
+          );
+        }
+      }
+    );
 
-    // return () => {
-    //   const stopConnection = async () => {
-    //     if (connection.state === signalR.HubConnectionState.Connected) {
-    //       try {
-    //         await connection.stop();
-    //       } catch (error) {
-    //         // console.error("Error stopping SignalR:", error);
-    //       }
-    //     }
-    //   };
+    return () => {
+      const stopConnection = async () => {
+        if (connection.state === signalR.HubConnectionState.Connected) {
+          try {
+            await connection.stop();
+          } catch (error) {
+            console.error("Error stopping SignalR:", error);
+          }
+        }
+      };
 
-    //   stopConnection();
-    // };
-  }, [userId]);
+      stopConnection();
+    };
+  }, [currentUserId]);
 
   const loadMore = async (options?: Options) => {
     // prevent duplicate requests
-    if (!canLoadMore || isLoading || !userId) return;
+    if (!canLoadMore || isLoading || !currentUserId) return;
 
     const nextPage = currentPageNumber + 1;
-    await fetchConversations(userId, nextPage);
+    await fetchConversations(currentUserId, nextPage);
     setCurrentPageNumber(nextPage);
   };
 

@@ -11,7 +11,8 @@ namespace backend.Interfaces
     public interface IConversationRepository
     {
         Task<Conversation> CreateAsync(Conversation conversation);
-        Task<Conversation?> DeleteAsync(string convId);
+        Task<Conversation?> DeleteAsync(string convId, string userId);
+        Task<Conversation?> UpdateReadConversation(string conversationId, string userId);
         Task<Conversation?> GetById(string conversationId);
         Task<Conversation?> GetDmConversationByUserIds(string firstUserId, string secondUserId);
         Task<PagedResult<GetPaginatedConversationsDto>> GetPaginatedByUserId(string userId, int pageNumber, int pageSize);

@@ -4,13 +4,13 @@ import { useMemo, useState } from "react";
 const baseURL = "http://localhost:5096/api";
 
 type RequestType = {
-  userId: string | null;
   conversationId: string | null;
+  userId: string | null;
 };
 
 type ResponseType = {
   message: string;
-  conversationId: string;
+  messageId: string;
 } | null;
 
 type Options = {
@@ -19,7 +19,7 @@ type Options = {
   onSettled?: () => void;
 };
 
-export const UseDeleteConversation = () => {
+export const UseUpdateReadConversation = () => {
   const [data, setData] = useState<ResponseType>(null);
   const [error, setError] = useState<AxiosError | null>(null);
   const [status, setStatus] = useState<
@@ -41,7 +41,7 @@ export const UseDeleteConversation = () => {
       setError(null);
       setStatus("pending");
 
-      const response = await axios.delete<ResponseType>(
+      const response = await axios.put<ResponseType>(
         `${baseURL}/conversations/${values.conversationId}/${values.userId}`
       );
 

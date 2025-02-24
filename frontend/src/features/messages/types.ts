@@ -6,6 +6,5 @@ export type MessageType = {
   content: string[] | null;
   fileUrls: string[] | null;
   isEmojiOnly: boolean;
-  isRead: boolean;
   createdAt: Date;
 };

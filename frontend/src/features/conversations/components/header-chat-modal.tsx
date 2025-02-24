@@ -7,7 +7,13 @@ import { HeaderChatEditButton } from "./header-chat-edit-button";
 import { useGetConversations } from "../api/use-get-conversations";
 import { ConversationCard } from "./conversation-card";
 
-export const HeaderChatModal = () => {
+interface HeaderChatModalProps {
+  setCurrentUtilButton: (currentButton: string) => void;
+}
+
+export const HeaderChatModal = ({
+  setCurrentUtilButton,
+}: HeaderChatModalProps) => {
   const router = useRouter();
 
   const { data: currentUser, isLoading: isLoadingCurrentUser } =
@@ -19,6 +25,10 @@ export const HeaderChatModal = () => {
     canLoadMore: canLoadMoreConversations,
     loadMore: loadMoreconversations,
   } = useGetConversations(currentUser?.id ? currentUser.id : null);
+
+  if (!currentUser) {
+    return null;
+  }
 
   const handleLoadMore = () => {
     if (canLoadMoreConversations) {
@@ -32,13 +42,20 @@ export const HeaderChatModal = () => {
         <div className="w-full flex items-center justify-between">
           <p className="text-2xl font-bold">Chats</p>
 
-          <HeaderChatEditButton messages={[]} />
+          {/* TODO: Enable this when possible
+
+          <HeaderChatEditButton messages={[]} /> */}
         </div>
       </div>
 
       <div className="flex flex-col gap-y-3 px-2 max-h-[43rem] overflow-auto custom-scrollbar">
         {conversations.map((conversation, index) => (
-          <ConversationCard key={index} conversation={conversation} />
+          <ConversationCard
+            key={index}
+            conversation={conversation}
+            currentUser={currentUser}
+            setCurrentUtilButton={setCurrentUtilButton}
+          />
         ))}
       </div>
 

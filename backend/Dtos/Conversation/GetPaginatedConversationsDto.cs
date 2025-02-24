@@ -12,5 +12,6 @@ namespace backend.Dtos.Conversation
         public backend.Models.AppUser? OtherUser { get; set; }
 
         public backend.Models.Message? LastMessage { get; set; }
+        public bool IsLastMessageRead { get; set; }
     }
 }

@@ -5,6 +5,7 @@ export type ReturnConversationType = {
   conversation: ConversationType;
   otherUser: UserType;
   lastMessage: MessageType;
+  isLastMessageRead: boolean;
 };
 
 export type ConversationType = {
