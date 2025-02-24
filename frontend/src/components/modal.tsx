@@ -6,14 +6,6 @@ import { PostCommentModal } from "@/features/post-comments/components/post-comme
 import { MessageModal } from "@/features/messages/components/message-modal";
 
 export default function Modal() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
   return (
     <>
       <CreatePostModal />
