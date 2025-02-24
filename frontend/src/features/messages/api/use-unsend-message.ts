@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { useMemo, useState } from "react";
 
-const baseURL = "http://localhost:5096/api";
+const baseURL = "https://socialla.azurewebsites.net/api";
 
 type RequestType = {
   messageId: string;

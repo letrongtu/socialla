@@ -3,7 +3,7 @@ import { useEffect, useState, useMemo } from "react";
 import debounce from "lodash.debounce";
 import { SearchUserType } from "../types";
 
-const BASE_API_URL = "http://localhost:5096/api";
+const BASE_API_URL = "https://socialla.azurewebsites.net/api";
 
 type ResponseType = {
   results: SearchUserType[];

@@ -4,8 +4,8 @@ import { ReactionType } from "@/utils/types";
 
 import * as signalR from "@microsoft/signalr";
 
-const BASE_URL = "http://localhost:5096";
-const BASE_API_URL = "http://localhost:5096/api";
+const BASE_URL = "https://socialla.azurewebsites.net";
+const BASE_API_URL = "https://socialla.azurewebsites.net/api";
 
 type ResponseType = {
   messageReactions: ReactionType[];

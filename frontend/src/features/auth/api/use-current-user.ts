@@ -3,7 +3,7 @@ import axios from "axios";
 import { getCookie, hasCookie } from "cookies-next";
 import { UserType } from "../types";
 
-const baseURL = "http://localhost:5096/api";
+const baseURL = "https://socialla.azurewebsites.net/api";
 
 type ResponseType = UserType | null;
 

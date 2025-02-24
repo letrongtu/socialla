@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { UserType } from "../types";
 import * as signalR from "@microsoft/signalr";
 
-const BASE_URL = "http://localhost:5096";
-const BASE_URL_API = "http://localhost:5096/api";
+const BASE_URL = "https://socialla.azurewebsites.net";
+const BASE_URL_API = "https://socialla.azurewebsites.net/api";
 
 type ResponseType = UserType | null;
 

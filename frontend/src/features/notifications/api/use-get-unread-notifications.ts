@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import { NotificationType } from "../types";
 
-const BASE_URL = "http://localhost:5096";
-const BASE_URL_API = "http://localhost:5096/api";
+const BASE_URL = "https://socialla.azurewebsites.net";
+const BASE_URL_API = "https://socialla.azurewebsites.net/api";
 const PAGE_SIZE = 5;
 
 type ResponseType = {
