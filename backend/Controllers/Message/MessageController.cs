@@ -8,6 +8,7 @@ using backend.Hubs;
 using backend.Interfaces;
 using backend.Mappers.Message;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -45,6 +46,7 @@ namespace backend.Controllers.Message
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(QueryCreateMessageDto queryMessageDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -139,6 +141,7 @@ namespace backend.Controllers.Message
 
         [HttpDelete]
         [Route("unsend/{messageId}")]
+        [Authorize]
         public async Task<IActionResult> Delete(string messageId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -155,6 +158,7 @@ namespace backend.Controllers.Message
 
         [HttpDelete]
         [Route("delete-for-user/{messageId}/{userId}/{conversationId}")]
+        [Authorize]
         public async Task<IActionResult> DeleteForUser(string messageId, string userId, string conversationId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -177,6 +181,7 @@ namespace backend.Controllers.Message
 
         [HttpGet]
         [Route("get-by-id/{messageId}/{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetById(string messageId, string userId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -199,6 +204,7 @@ namespace backend.Controllers.Message
 
         [HttpGet]
         [Route("{conversationId}/{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetPaginatedByConversationIdAndUserId(string conversationId, string userId, int pageNumber = 1, int pageSize = 20){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);

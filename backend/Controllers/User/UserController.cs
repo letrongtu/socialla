@@ -102,6 +102,7 @@ namespace backend.Controllers.User
         }
 
         [HttpPost("active")]
+        [Authorize]
         public async Task<IActionResult> SetIsActive([FromBody] SetActiveStatusDto statusDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);

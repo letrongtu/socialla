@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers.Conversation
@@ -19,6 +20,7 @@ namespace backend.Controllers.Conversation
 
         [HttpGet]
         [Route("{firstUserId}/{secondUserId}")]
+        [Authorize]
         public async Task<IActionResult> GetDmConversation(string firstUserId, string secondUserId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -31,6 +33,7 @@ namespace backend.Controllers.Conversation
 
         [HttpDelete]
         [Route("{conversationId}/{userId}")]
+        [Authorize]
         public async Task<IActionResult> Delete(string conversationId, string userId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -43,6 +46,7 @@ namespace backend.Controllers.Conversation
 
         [HttpPut]
         [Route("{conversationId}/{userId}")]
+        [Authorize]
         public async Task<IActionResult> UpdateReadConversationForUser(string conversationId, string userId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -65,6 +69,7 @@ namespace backend.Controllers.Conversation
 
         [HttpGet]
         [Route("{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetPaginatedByUserId(string userId, int pageNumber = 1, int pageSize = 20){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);

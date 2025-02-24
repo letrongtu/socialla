@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using backend.Dtos.MessageVisibility;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,7 @@ namespace backend.Controllers.MessageVisibility
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> Delete(DeleteMessageVisibilityDto mvDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);

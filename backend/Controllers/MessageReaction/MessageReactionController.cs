@@ -9,6 +9,7 @@ using backend.Interfaces;
 using backend.Mappers.MessageReaction;
 using backend.Mappers.User;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,7 @@ namespace backend.Controllers.MessageReaction
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreateMessageReactionDto messageReactionDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -83,6 +85,7 @@ namespace backend.Controllers.MessageReaction
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Update(UpdateMessageReactionDto messageReactionDto){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -111,6 +114,7 @@ namespace backend.Controllers.MessageReaction
 
         [HttpGet]
         [Route("get-by-id/{messageId}/{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetById(string messageId, string userId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
@@ -135,6 +139,7 @@ namespace backend.Controllers.MessageReaction
 
         [HttpGet]
         [Route("{messageId}")]
+        [Authorize]
         public async Task<IActionResult> GetByMessageId(string messageId){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);

@@ -82,7 +82,7 @@ namespace backend.Controllers.Notification
 
         [HttpGet]
         [Route("{userId}")]
-        // [Authorize]
+        [Authorize]
         public async Task<IActionResult> GetPaginatedByUserId([FromRoute] string userId, [FromQuery] bool isFetchingUnread = false, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20){
             if(!ModelState.IsValid){
                 return BadRequest(ModelState);
