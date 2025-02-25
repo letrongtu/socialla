@@ -21,11 +21,13 @@ namespace backend.Controllers.MediaFiles
         private readonly IWebHostEnvironment _environment;
         private readonly IMediaRepository _mediaRepo;
         private readonly UserManager<AppUser> _userManager;
-        public MediaController(IWebHostEnvironment environment, IMediaRepository mediaRepo, UserManager<AppUser> userManager)
+        private readonly BlobServiceClient _blobServiceClient;
+        public MediaController(IWebHostEnvironment environment, IMediaRepository mediaRepo, UserManager<AppUser> userManager, BlobServiceClient blobServiceClient)
         {
             _environment = environment;
             _mediaRepo = mediaRepo;
             _userManager = userManager;
+            _blobServiceClient = blobServiceClient;
         }
 
         // [HttpPost("upload")]
@@ -170,42 +172,41 @@ namespace backend.Controllers.MediaFiles
             //     uploadResults.Add(publicUrl);
             // }
 
-            // Get Azure Blob Storage connection string from environment variables
-            var connectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString");
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                return StatusCode(500, "Azure Storage Connection String is missing.");
-            }
-
-            var blobServiceClient = new BlobServiceClient(connectionString);
-            var containerClient = blobServiceClient.GetBlobContainerClient("uploads");
-
-            // Ensure the container exists
-            await containerClient.CreateIfNotExistsAsync(PublicAccessType.BlobContainer);
-
             var uploadResults = new List<string>();
 
-            foreach (var file in files)
+            try
             {
-                if (file.Length > 100 * 1024 * 1024)
+                // Create or get container
+                var containerClient = _blobServiceClient.GetBlobContainerClient("uploads");
+                await containerClient.CreateIfNotExistsAsync();
+
+                foreach (var file in files)
                 {
-                    return BadRequest("The file size exceeds the maximum limit of 100MB");
+                    if (file.Length > 100 * 1024 * 1024)
+                    {
+                        return BadRequest("The file size exceeds the maximum limit of 100MB.");
+                    }
+
+                    // Generate a unique filename
+                    var uniqueFileName = $"{userId}/{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+                    var blobClient = containerClient.GetBlobClient(uniqueFileName);
+
+                    // Upload the file
+                    using (var stream = file.OpenReadStream())
+                    {
+                        await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = file.ContentType });
+                    }
+
+                    // Store the public URL of the uploaded file
+                    uploadResults.Add(blobClient.Uri.ToString());
                 }
 
-                // Generate a unique file name
-                var uniqueFileName = $"{userId}/{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-                var blobClient = containerClient.GetBlobClient(uniqueFileName);
-
-                // Upload file to Azure Blob Storage
-                using (var stream = file.OpenReadStream())
-                {
-                    await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = file.ContentType });
-                }
-
-                uploadResults.Add(blobClient.Uri.ToString());
+                return Ok(new { Message = "Files uploaded successfully!", UploadedFileUrls = uploadResults });
             }
-
-            return Ok(new {Message = "Files uploaded successfully!", UploadedFileUrls = uploadResults});
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
 
         //TODO: Add PostID to all URL

@@ -164,3 +164,7 @@ D:\socialla\backend\bin\Debug\net9.0\Newtonsoft.Json.dll
 D:\socialla\backend\bin\Debug\net9.0\Newtonsoft.Json.Bson.dll
 D:\socialla\backend\bin\Debug\net9.0\backend.staticwebassets.runtime.json
 D:\socialla\backend\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll
+D:\socialla\backend\bin\Debug\net9.0\Azure.Storage.Blobs.dll
+D:\socialla\backend\bin\Debug\net9.0\Azure.Storage.Common.dll
+D:\socialla\backend\bin\Debug\net9.0\Microsoft.Extensions.Azure.dll
+D:\socialla\backend\bin\Debug\net9.0\System.IO.Hashing.dll
