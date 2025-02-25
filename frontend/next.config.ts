@@ -5,10 +5,9 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "5096", // Include the port used by your backend
-        pathname: "/Uploads/Users/**", // Allow images from this specific path
+        protocol: "https",
+        hostname: "socialla.azurewebsites.net",
+        pathname: "/Uploads/Users/**",
       },
     ],
   },

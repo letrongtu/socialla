@@ -49,6 +49,7 @@ export const UseMediaLocalUpload = () => {
         formData
       );
 
+      console.log(response);
       options?.onSuccess?.(response.data);
 
       return response;

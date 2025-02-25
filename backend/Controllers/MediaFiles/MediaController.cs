@@ -142,7 +142,7 @@ namespace backend.Controllers.MediaFiles
                 return BadRequest(new{Message="Unsupported file type", InvalidFiles = invalidTypeFiles});
             }
 
-            var uploadResults = new List<string>();
+
 
             // LOCAL STORAGE:
             // foreach(var file in files){
@@ -181,7 +181,9 @@ namespace backend.Controllers.MediaFiles
             var containerClient = blobServiceClient.GetBlobContainerClient("uploads");
 
             // Ensure the container exists
-            await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+            await containerClient.CreateIfNotExistsAsync(PublicAccessType.BlobContainer);
+
+            var uploadResults = new List<string>();
 
             foreach (var file in files)
             {
