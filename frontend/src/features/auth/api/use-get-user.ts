@@ -49,7 +49,7 @@ export const useGetUser = (userId: string | null) => {
           await connection.start();
         }
       } catch (error) {
-        // console.error("SignalR connection error:", error);
+        console.error("SignalR connection error:", error);
       }
     };
 

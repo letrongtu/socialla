@@ -68,7 +68,7 @@ export const useGetCommentReactions = (commentId: string) => {
           await connection.start();
         }
       } catch (error) {
-        // console.error("SignalR connection error:", error);
+        console.error("SignalR connection error:", error);
       }
     };
 
