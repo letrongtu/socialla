@@ -58,7 +58,10 @@ export const useCheckFriendShip = (
     checkIsFriendShip(firstUserId, secondUserId);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/friendshipHub`)
+      .withUrl(`${BASE_URL}/friendshipHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 

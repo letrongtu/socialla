@@ -55,7 +55,10 @@ export const useGetCommentReactions = (commentId: string) => {
     fetchCommentReactions(commentId);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/commentReactionHub`)
+      .withUrl(`${BASE_URL}/commentReactionHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 

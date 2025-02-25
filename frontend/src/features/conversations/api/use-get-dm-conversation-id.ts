@@ -57,7 +57,10 @@ export const useGetDmConversationId = (
     fetchConversationId(otherUserId, currentUserId);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/conversationHub`)
+      .withUrl(`${BASE_URL}/conversationHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 

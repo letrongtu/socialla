@@ -82,7 +82,10 @@ export const UseGetCommentsByParentCommentId = (
   //fetch the first page when mounted
   useEffect(() => {
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/postCommentHub`)
+      .withUrl(`${BASE_URL}/postCommentHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 

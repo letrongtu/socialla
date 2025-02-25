@@ -61,7 +61,10 @@ export const UseGetPosts = (userId: string | null) => {
     fetchPosts(userId, 1);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/postHub`)
+      .withUrl(`${BASE_URL}/postHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 

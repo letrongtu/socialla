@@ -36,7 +36,10 @@ export const useGetUser = (userId: string | null) => {
     fetchData(userId);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/userStatusHub`)
+      .withUrl(`${BASE_URL}/userStatusHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 

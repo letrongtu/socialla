@@ -50,7 +50,10 @@ export const useGetPostReactions = (postId: string | null) => {
     fetchPostReactions(postId);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/postReactionHub`)
+      .withUrl(`${BASE_URL}/postReactionHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 

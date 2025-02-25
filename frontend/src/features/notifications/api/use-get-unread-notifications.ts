@@ -66,7 +66,10 @@ export const useGetUnReadNotifications = (userId: string | null) => {
     fetchNotifications(userId, 1);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/notificationHub`)
+      .withUrl(`${BASE_URL}/notificationHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 

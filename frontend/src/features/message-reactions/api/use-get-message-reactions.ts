@@ -55,7 +55,10 @@ export const useGetMessageReactions = (messageId: string) => {
     fetchMessageReactions(messageId);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/messageReactionHub`)
+      .withUrl(`${BASE_URL}/messageReactionHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 

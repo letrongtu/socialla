@@ -81,7 +81,10 @@ export const useGetMessages = (
     fetchMessages(conversationId, currentUserId, 1);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/messageHub`)
+      .withUrl(`${BASE_URL}/messageHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 

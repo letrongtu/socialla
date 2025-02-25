@@ -62,7 +62,10 @@ export const useGetFriends = (userId: string | null, pageSize: number) => {
     fetchFriends(userId, 1, 20);
 
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${BASE_URL}/friendshipHub`)
+      .withUrl(`${BASE_URL}/friendshipHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
       .withAutomaticReconnect()
       .build();
 
