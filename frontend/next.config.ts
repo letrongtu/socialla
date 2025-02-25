@@ -9,6 +9,11 @@ const nextConfig = {
         hostname: "socialla.azurewebsites.net",
         pathname: "/Uploads/Users/**",
       },
+      {
+        protocol: "https",
+        hostname: "sociallastorage.blob.core.windows.net",
+        pathname: "/**",
+      },
     ],
   },
   async rewrites() {
