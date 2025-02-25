@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -142,29 +144,63 @@ namespace backend.Controllers.MediaFiles
 
             var uploadResults = new List<string>();
 
-            foreach(var file in files){
-                if(file.Length > 100 * 1024 * 1024){
+            // LOCAL STORAGE:
+            // foreach(var file in files){
+            //     if(file.Length > 100 * 1024 * 1024){
+            //         return BadRequest("The file size exceeds the maximum limit of 100MB");
+            //     }
+
+            //     var uploadPath = GetFilePath(userId);
+
+            //     if(!Directory.Exists(uploadPath)){
+            //         Directory.CreateDirectory(uploadPath);
+            //     }
+
+            //     var filePath = Path.Combine(uploadPath, file.FileName);
+
+            //     if(!System.IO.File.Exists(filePath)){
+            //         using (var stream = new FileStream(filePath, FileMode.Create)){
+            //             await file.CopyToAsync(stream);
+            //         }
+            //     }
+
+            //     var hostUrl= $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
+            //     var publicUrl = hostUrl  + "/Uploads/Users/" + userId + "/" + file.FileName;
+
+            //     uploadResults.Add(publicUrl);
+            // }
+
+            // Get Azure Blob Storage connection string from environment variables
+            var connectionString = Environment.GetEnvironmentVariable("AzureStorageConnectionString");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                return StatusCode(500, "Azure Storage Connection String is missing.");
+            }
+
+            var blobServiceClient = new BlobServiceClient(connectionString);
+            var containerClient = blobServiceClient.GetBlobContainerClient("uploads");
+
+            // Ensure the container exists
+            await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+
+            foreach (var file in files)
+            {
+                if (file.Length > 100 * 1024 * 1024)
+                {
                     return BadRequest("The file size exceeds the maximum limit of 100MB");
                 }
 
-                var uploadPath = GetFilePath(userId);
+                // Generate a unique file name
+                var uniqueFileName = $"{userId}/{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+                var blobClient = containerClient.GetBlobClient(uniqueFileName);
 
-                if(!Directory.Exists(uploadPath)){
-                    Directory.CreateDirectory(uploadPath);
+                // Upload file to Azure Blob Storage
+                using (var stream = file.OpenReadStream())
+                {
+                    await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = file.ContentType });
                 }
 
-                var filePath = Path.Combine(uploadPath, file.FileName);
-
-                if(!System.IO.File.Exists(filePath)){
-                    using (var stream = new FileStream(filePath, FileMode.Create)){
-                        await file.CopyToAsync(stream);
-                    }
-                }
-
-                var hostUrl= $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
-                var publicUrl = hostUrl  + "/Uploads/Users/" + userId + "/" + file.FileName;
-
-                uploadResults.Add(publicUrl);
+                uploadResults.Add(blobClient.Uri.ToString());
             }
 
             return Ok(new {Message = "Files uploaded successfully!", UploadedFileUrls = uploadResults});
